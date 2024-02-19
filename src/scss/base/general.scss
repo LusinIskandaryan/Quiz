@@ -1,0 +1,65 @@
+* {
+  margin: 0;
+}
+
+html,
+body {
+  min-height: 100vh;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  color: #08162A;
+}
+
+app-root {
+  min-height: 100vh;
+}
+
+app-root,
+main,
+app-public,
+app-sign-up,
+app-welcome,
+app-sign-in {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  color: #08162A;
+}
+
+.link {
+    margin-left: 5px;
+    color: blue;
+}
+
+.centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.auth-container {
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2509803922);
+  background-color: #fff;
+  padding: 20px;
+}
+
+.sml-txt {
+  display: flex;
+  justify-content: center;
+  font-size: 12px;
+}

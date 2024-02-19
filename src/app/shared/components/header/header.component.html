@@ -1,0 +1,13 @@
+<header>
+  <div class="container">
+    <a href="/">
+      <img alt='quiz' src="assets/img/logo.jpg" height="40" class="mr-2" />
+    </a>
+    <div>User Name</div>
+    <div>EMAIL</div>
+    <div (click)="logOut()">Log out</div>
+  </div>
+  <div>
+    <p-tabMenu [model]="items" [activeItem]="activeItem" (activeItemChange)="onActiveItemChange($event)" />
+  </div>
+</header>

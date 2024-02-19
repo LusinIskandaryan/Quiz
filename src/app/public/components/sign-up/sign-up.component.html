@@ -1,0 +1,65 @@
+<div class="centered">
+  <div class="auth-container">
+    <form [formGroup]="form" (ngSubmit)="signUp()">
+      <img alt='quiz' src="assets/img/logo.jpg" height="40" />
+      <h3>Sign Up</h3>
+      <div class="formgrid">
+        <div class="field">
+          <label for="fullName">Full Name</label>
+          <input
+            class="w-full"
+            type="text"
+            pInputText
+            formControlName="fullName"
+          />
+          <div></div>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input
+            class="w-full"
+            type="email"
+            pInputText
+            formControlName="email"
+          />
+          <div></div>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <p-password
+            class="w-full"
+            formControlName="password"
+            [toggleMask]="true"
+          />
+          <div></div>
+        </div>
+        <div class="field">
+          <label for="confirmPassword">Confirm Password</label>
+          <p-password
+            class="w-full"
+            formControlName="confirmPassword"
+            [toggleMask]="true"
+          />
+          <div></div>
+        </div>
+        <div class="field-checkbox">
+          <p-checkbox
+            formControlName="isAdmin"
+            [binary]="true"
+            inputId="binary"
+          ></p-checkbox>
+          <label for="admin">Sign up as admin</label>
+          <div></div>
+        </div>
+        <div class="field flex justify-content-center">
+          <p-button
+            label="Sign Up"
+            icon="pi pi-user-plus"
+            styleClass="p-button-success w-10rem"
+          ></p-button>
+        </div>
+      </div>
+    </form>
+    <p class="sml-txt">Already have an account? <a class="link" [routerLink]="['/login']">Sign In</a></p>
+  </div>
+</div>

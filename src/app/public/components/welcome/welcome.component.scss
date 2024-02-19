@@ -1,0 +1,17 @@
+h3 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+ul {
+  display: flex;
+
+  li {
+    ~li {
+      &:before {
+        content: "/";
+        padding: 0 4px;
+      }
+
+    }
+  }
+}
