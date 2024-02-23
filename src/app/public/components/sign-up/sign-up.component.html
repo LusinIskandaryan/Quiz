@@ -12,7 +12,9 @@
             pInputText
             formControlName="fullName"
           />
-          <div></div>
+          @if (formCtrl.fullName.errors) {
+            <app-validation-messages [control]="formCtrl.fullName" [value]="formCtrl.fullName.value" />
+          }
         </div>
         <div class="field">
           <label for="email">Email</label>
@@ -22,7 +24,9 @@
             pInputText
             formControlName="email"
           />
-          <div></div>
+          @if (formCtrl.email.errors) {
+            <app-validation-messages [control]="formCtrl.email" [value]="formCtrl.email.value" />
+          }
         </div>
         <div class="field">
           <label for="password">Password</label>
@@ -31,7 +35,9 @@
             formControlName="password"
             [toggleMask]="true"
           />
-          <div></div>
+          @if (formCtrl.password.errors) {
+            <app-validation-messages [control]="formCtrl.password" [value]="formCtrl.password.value" />
+          }
         </div>
         <div class="field">
           <label for="confirmPassword">Confirm Password</label>
@@ -40,8 +46,13 @@
             formControlName="confirmPassword"
             [toggleMask]="true"
           />
-          <div></div>
+          @if (formCtrl.confirmPassword.errors) {
+            <app-validation-messages [control]="formCtrl.confirmPassword" [value]="formCtrl.confirmPassword.value" />
+          }
         </div>
+        @if (form.errors) {
+          <app-validation-messages [form]="form" [value]="null"/>
+        }
         <div class="field-checkbox">
           <p-checkbox
             formControlName="isAdmin"
@@ -56,6 +67,7 @@
             label="Sign Up"
             icon="pi pi-user-plus"
             styleClass="p-button-success w-10rem"
+            type="submit"
           ></p-button>
         </div>
       </div>

@@ -7,15 +7,15 @@
         <div class="field">
           <label for="email">Email</label>
           <input class="w-full" type="email" formControlName="email" pInputText />
-          @if (controls.email.errors) {
-            <app-validation-messages [control]="controls.email"/>
+          @if (formCtrl.email.errors) {
+            <app-validation-messages [control]="formCtrl.email" [value]="formCtrl.email.value" />
           }
         </div>
         <div class="field">
           <label for="password">Password</label>
           <p-password class="w-full" formControlName="password" [toggleMask]="true" />
-          @if (controls.password.errors) {
-            <app-validation-messages [control]="controls.password" />
+          @if (formCtrl.password.errors) {
+            <app-validation-messages [control]="formCtrl.password" [value]="formCtrl.password.value" />
           }
         </div>
         <div class="field flex justify-content-center">
@@ -23,6 +23,7 @@
             label="Sign In"
             icon="pi pi-user-plus"
             styleClass="p-button-success w-10rem"
+            type="submit"
           ></p-button>
         </div>
       </div>
