@@ -7,15 +7,18 @@ import { catchError, map, of, switchMap } from 'rxjs';
 
 import { UserService } from 'src/app/private/services';
 import { UserActions } from '../actions';
-import { userFeature } from '../features';
+import { appFeature, userFeature } from '../features';
 
 export const getUserList$ = createEffect(
-  (actions = inject(Actions), service = inject(UserService)) => {
+  (store = inject(Store), actions = inject(Actions), service = inject(UserService)) => {
     return actions.pipe(
       ofType(UserActions.getUserList),
-      switchMap(() =>
+      concatLatestFrom(() => store.select(appFeature.selectCurrentUser)),
+      switchMap(([, currentUser]) =>
         service.getUserList().pipe(
-          map((res) => UserActions.getUserListSuccess(res)),
+          map((res) => {
+            const data = res.data.filter(user => user.id !== currentUser?.id);
+            return UserActions.getUserListSuccess({...res, data})}),
           catchError((error) => of(UserActions.getUserListError({ error })))
         )
       )
@@ -44,7 +47,7 @@ export const updateUserSuccess$ = createEffect(
     return actions.pipe(
       ofType(UserActions.updateUserSuccess),
       concatLatestFrom(() => store.select(userFeature.selectUserId)),
-      map(([ , userId]) => UserActions.getUser({ userId }))
+      map(([, userId]) => UserActions.getUser({ userId }))
     );
   },
   { functional: true }
@@ -64,3 +67,4 @@ export const getUser$ = createEffect(
   },
   { functional: true }
 );
+

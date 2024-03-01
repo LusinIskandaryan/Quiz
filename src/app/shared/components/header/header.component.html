@@ -1,13 +1,18 @@
 <header>
   <div class="container">
-    <a href="/">
-      <img alt='quiz' src="assets/img/logo.jpg" height="40" class="mr-2" />
-    </a>
-    <div>User Name</div>
-    <div>EMAIL</div>
-    <div (click)="logOut()">Log out</div>
-  </div>
-  <div>
-    <p-tabMenu [model]="items" [activeItem]="activeItem" (activeItemChange)="onActiveItemChange($event)" />
+    <nav>
+      <a class="logo" [routerLink]="['/quiz']">
+        <img alt='quiz' src="assets/img/logo.jpg" height="40" class="mr-2" />
+      </a>
+      <ul>
+        <li>
+          <p><span>user:</span>{{currentUser()?.firstName}}</p>
+        </li>
+        <li>
+          <p><span>email:</span> {{currentUser()?.email}}</p>
+        </li>
+        <li> <em class="pi pi-sign-out" (click)="logOut()"></em></li>
+      </ul>
+    </nav>
   </div>
 </header>

@@ -9,7 +9,7 @@ import { ErrorMessages } from 'src/app/shared/consts';
   standalone: true,
   imports: [],
   templateUrl: './validation-messages.component.html',
-  styleUrl: './validation-messages.component.css',
+  styleUrl: './validation-messages.component.scss',
 })
 export class ValidationMessagesComponent {
   control = input<FormControl | null>(null);

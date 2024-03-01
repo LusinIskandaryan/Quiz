@@ -3,4 +3,5 @@ export enum Features {
   User = 'User',
   Quiz = 'Quiz',
   Register = 'Register',
+  Login = 'Login',
 }

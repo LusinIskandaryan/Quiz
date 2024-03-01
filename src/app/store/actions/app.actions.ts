@@ -6,6 +6,8 @@ import { httpErrorProps, httpSuccessProps } from "src/app/shared/functions";
 export const AppActions = createActionGroup({
   source: 'App',
   events: {
+    'Aplication Init': emptyProps(),
+
     'Get Current User': emptyProps(),
     'Get Current User Success': httpSuccessProps<User>(),
     'Get Current User Error': httpErrorProps(),

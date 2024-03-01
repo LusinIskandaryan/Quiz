@@ -3,7 +3,7 @@ import { immerOn } from 'ngrx-immer/store';
 
 import { Features } from 'src/app/shared/enums';
 import { initialUserState } from '../states';
-import { UserActions } from '../actions';
+import { QuizActions, UserActions } from '../actions';
 
 export const userReducer = createReducer(
   initialUserState,
@@ -32,17 +32,28 @@ export const userReducer = createReducer(
     state.loading = true;
   }),
 
+  immerOn(QuizActions.getQuizLookups, (state) => {
+    state.loading = true;
+  }),
+
   immerOn(
     UserActions.getUserListSuccess,
     UserActions.getUserListError,
     UserActions.getUserError,
     UserActions.updateUserSuccess,
     UserActions.updateUserError,
+    QuizActions.getQuizLookupsSuccess,
+    QuizActions.getQuizListError,
     (state) => {
       state.loading = false;
     }
-  )
+  ),
+
+  immerOn(QuizActions.getQuizLookups, (state) => {
+    state.loading = true;
+  }),
 );
+
 
 export const userFeature = createFeature({
   name: Features.User,

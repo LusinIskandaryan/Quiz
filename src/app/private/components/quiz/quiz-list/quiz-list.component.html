@@ -1,1 +1,93 @@
-<p>quiz-list works!</p>
+<app-tab-menu />
+<div class="card">
+  <p-table
+    [value]="vm().quizList"
+    [totalRecords]="vm().quizList.length"
+    [columns]="quizListColumns()"
+    [paginator]="!!vm().quizList.length"
+    [rows]="rows"
+    [first]="first"
+    [lazy]="true"
+    [rowHover]="true"
+    [showFirstLastIcon]="true"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    (onPage)="onPageChange($event)"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [loading]="vm().loading"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex">
+        <div class="align-items-center justify-content-between title">
+          <h4 class="m-0">Quiz List</h4>
+        </div>
+        @if (isUserAdmin()) {
+          <a
+            pButton
+            class="p-button-rounded p-button-success"
+            [routerLink]="['/quiz/create']"
+          >
+            Create Quiz
+        </a>
+        }
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        @for (col of columns; track col) {
+          <th scope="col">{{ col.header }}</th>
+        }
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData>
+      <tr [pSelectableRow]="rowData">
+        @for (col of quizListColumns(); track col; let i = $index){
+        <td>
+          @switch (col.field) { @case (tableFieldType.Edit) {
+          <a
+            pButton
+            pRipple
+            icon="pi pi-pencil"
+            class="p-button-rounded p-button-success mr-2"
+            [routerLink]="['/quiz', rowData.id]"
+          ></a>
+          } @case (tableFieldType.Delete) {
+          <button
+            pButton
+            pRipple
+            icon="pi pi-trash"
+            class="p-button-rounded p-button-danger"
+            (click)="deleteQuiz(rowData)"
+          ></button>
+          } @case (tableFieldType.Status) { @if (rowData.result ===
+          rowData.passWalue) {
+
+          <i class="pi pi-check"></i>
+          } @else {
+          <a
+            pButton
+            pRipple
+            class="p-button-rounded p-button-warning"
+            [routerLink]="['/quiz/start', rowData.id]"
+          >
+            Start quiz
+          </a>
+          } } @default {
+          <span>{{ rowData[col.field] }}</span>
+          }}
+        </td>
+        }
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td
+          [attr.colspan]="quizListColumns().length"
+          class="text-center empty-message"
+        >
+          There are no data to show.
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

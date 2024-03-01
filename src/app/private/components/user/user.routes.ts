@@ -10,5 +10,5 @@ export const userRoutes: Routes = [
     redirectTo: 'list',
   },
   { path: 'list', loadComponent: userList },
-  { path: ':userId', loadComponent: userDetail },
+  { path: ':userId', loadComponent: userDetail }
 ];

@@ -5,5 +5,5 @@ export interface User {
   email: string;
   role: UserRole;
   firstName: string;
-  quizId: number[];
+  quizIds: string[];
 }

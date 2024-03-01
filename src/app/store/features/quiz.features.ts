@@ -27,6 +27,10 @@ export const quizReducer = createReducer(
     state.quiz = data;
   }),
 
+  immerOn(QuizActions.getQuizLookupsSuccess, (state, { data }) => {
+    state.quizLookups = data;
+  }),
+
   immerOn(
     QuizActions.updateQuiz,
     QuizActions.createQuiz,

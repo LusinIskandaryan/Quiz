@@ -1,31 +1,23 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
-import { MenuItem } from 'primeng/api/menuitem';
-import { TabMenuModule } from 'primeng/tabmenu';
+import { Store } from '@ngrx/store';
+
+import { AuthActions } from 'src/app/store/actions';
+import { appFeature } from 'src/app/store/features';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [
-    TabMenuModule,
-  ],
+  imports: [ RouterLink ],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.css'
+  styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-  items: MenuItem[] = [
-    { label: 'Users', url: '/user/list', visible: true },
-    { label: 'Quize', url: '/quiz/list', visible: true },
-  ];
-
-  activeItem = signal<MenuItem>(this.items[0]);
-
-  onActiveItemChange(event: MenuItem): void {
-    this.activeItem.set(event);
-  }
+  private readonly store = inject(Store);
+  currentUser = this.store.selectSignal(appFeature.selectCurrentUser);
 
   logOut(): void {
-    
+    this.store.dispatch(AuthActions.logout());
   }
-
 }

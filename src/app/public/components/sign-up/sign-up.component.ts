@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+
+import { Store } from '@ngrx/store';
 
 import { PasswordModule } from 'primeng/password';
 import { InputTextModule } from 'primeng/inputtext';
@@ -9,6 +11,9 @@ import { ButtonModule } from 'primeng/button';
 
 import { confirmPasswordValidator, emailValidator } from 'src/app/public/validators';
 import { ValidationMessagesComponent } from 'src/app/shared/components';
+import { RegisterActions } from 'src/app/store/actions';
+import { UserRole } from 'src/app/private/enums';
+import { UserRegister } from '../../interfaces';
 
 @Component({
   selector: 'app-sign-up',
@@ -26,17 +31,19 @@ import { ValidationMessagesComponent } from 'src/app/shared/components';
   styleUrl: './sign-up.component.scss'
 })
 export class SignUpComponent {
+  private readonly store = inject(Store);
   formCtrl = {
-    fullName: new FormControl('', [ Validators.required, Validators.minLength(2), Validators.maxLength(15) ]),
-    email: new FormControl('', [ Validators.required, emailValidator ]),
-    password: new FormControl('', [ Validators.required, Validators.minLength(5), Validators.maxLength(10) ]),
-    confirmPassword: new FormControl('', [ Validators.required, Validators.minLength(5), Validators.maxLength(10) ]),
+    fullName: new FormControl('', { validators: [Validators.required, Validators.minLength(2), Validators.maxLength(15)] }),
+    email: new FormControl('', { validators: [ Validators.required, emailValidator ] }),
+    password: new FormControl('', { validators: [ Validators.required, Validators.minLength(5), Validators.maxLength(10) ] }),
+    confirmPassword: new FormControl('', { validators: [ Validators.required, Validators.minLength(5), Validators.maxLength(10) ] }),
     isAdmin: new FormControl(false),
   };
   form = new FormGroup(this.formCtrl, { validators: confirmPasswordValidator });
 
   signUp(): void {
-    console.log(this.form)
+    const data = {...this.form.value, isAdmin: this.form.value.isAdmin ? UserRole.admin : UserRole.user} as UserRegister;
+    this.store.dispatch(RegisterActions.registerUser({ data }))
   }
 
 }

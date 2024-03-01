@@ -1,6 +1,6 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
-import { Quiz } from 'src/app/private/interfaces';
+import { Quiz, QuizLookups } from 'src/app/private/interfaces';
 import { httpErrorProps, httpSuccessProps } from 'src/app/shared/functions';
 
 export const QuizActions = createActionGroup({
@@ -21,6 +21,10 @@ export const QuizActions = createActionGroup({
     'Pass Quiz': props<{ data: Quiz }>(),
     'Pass Quiz Success': httpSuccessProps<string>(),
     'Pass Quiz Error': httpErrorProps(),
+
+    'Get Quiz Lookups': emptyProps(),
+    'Get Quiz Lookups Success': httpSuccessProps<QuizLookups[]>(),
+    'Get Quiz Lookups Error': httpErrorProps(),
 
     'Get Quiz': props<{ quizId: string }>(),
     'Get Quiz Success': httpSuccessProps<Quiz>(),

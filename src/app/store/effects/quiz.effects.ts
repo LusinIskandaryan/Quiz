@@ -7,16 +7,24 @@ import { Store } from '@ngrx/store';
 import { catchError, exhaustMap, map, of, switchMap, tap } from 'rxjs';
 
 import { QuizService } from 'src/app/private/services';
-import { QuizActions } from '../actions';
+import { UserRole } from 'src/app/private/enums';
+import { QuizActions, UserActions } from '../actions';
 import { quizFeature } from '../features/quiz.features';
+import { appFeature } from '../features';
 
 export const getQuizList$ = createEffect(
-  (actions = inject(Actions), service = inject(QuizService)) => {
+  (actions = inject(Actions), store = inject(Store), service = inject(QuizService)) => {
     return actions.pipe(
       ofType(QuizActions.getQuizList),
-      switchMap(() =>
+      concatLatestFrom(() => store.select(appFeature.selectCurrentUser)),
+      switchMap(([ ,currentUser, ]) =>
         service.getQuizList().pipe(
-          map((res) => QuizActions.getQuizListSuccess(res)),
+          map((res) => {
+            if (currentUser?.role === UserRole.user) {
+              const data = res.data.filter(quiz => currentUser.quizIds.includes(quiz.id));
+              return QuizActions.getQuizListSuccess({...res, data})
+            }
+            return QuizActions.getQuizListSuccess(res)}),
           catchError((error) => of(QuizActions.getQuizListError({ error })))
         )
       )
@@ -134,14 +142,39 @@ export const passQuiz$ = createEffect(
 );
 
 export const passQuizSuccess$ = createEffect(
-  (actions = inject(Actions), router = inject(Router)) => {
+  (actions = inject(Actions), router = inject(Router), store = inject(Store)) => {
     return actions.pipe(
       ofType(QuizActions.passQuizSuccess),
-      tap(() => {
-        router.navigate([`/quiz/summary`]);
+      concatLatestFrom(() => store.select(quizFeature.selectQuizId)),
+      tap(([, quizId]) => {
+        router.navigate([`/quiz/result/${quizId}`]);
       })
     );
   },
   { functional: true, dispatch: false }
 );
 
+export const getQuizLookups$ = createEffect(
+  (actions = inject(Actions)) => {
+    return actions.pipe(
+      ofType(UserActions.getUser),
+      map(() => QuizActions.getQuizLookups())
+    );
+  },
+  { functional: true }
+);
+
+export const getQuizLookupsSuccess$ = createEffect(
+  (actions = inject(Actions), service = inject(QuizService)) => {
+    return actions.pipe(
+      ofType(QuizActions.getQuizLookups),
+      switchMap(() =>
+        service.getQuizLookups().pipe(
+          map((data) => QuizActions.getQuizLookupsSuccess(data)),
+          catchError((error) => of(QuizActions.getQuizLookupsError({ error })))
+        )
+      )
+    );
+  },
+  { functional: true }
+);

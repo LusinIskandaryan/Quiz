@@ -5,5 +5,6 @@ export interface Quiz {
   name: string;
   timer: number;
   passWalue: number;
+  result?: number;
   questions: Question[];
 }

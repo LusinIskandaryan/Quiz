@@ -1,1 +1,51 @@
-<p>user-list works!</p>
+<app-tab-menu />
+<div class="card ng-star-inserted">
+  <p-table
+    [value]="vm().userList"
+    [totalRecords]="vm().userList.length"
+    [columns]="userListColumns"
+    [paginator]="!!vm().userList.length"
+    [rows]="rows"
+    [first]="first"
+    [lazy]="true"
+    [rowHover]="true"
+    [showFirstLastIcon]="true"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    (onPage)="onPageChange($event)"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [loading]="vm().loading"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex align-items-center justify-content-between">
+        <h4 class="m-0">User List</h4>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        @for (col of columns; track col) {
+        <th scope="col">{{ col.header }}</th>
+        }
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData>
+      <tr [pSelectableRow]="rowData" [routerLink]="['/user', rowData.id]">
+        @for (col of userListColumns; track col; let i = $index){
+        <td>
+          <span>{{ rowData[col.field] }}</span>
+        </td>
+        }
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td
+          [attr.colspan]="userListColumns.length"
+          class="text-center empty-message"
+        >
+          There are no data to show.
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

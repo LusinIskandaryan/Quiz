@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './start-quiz.component.html',
-  styleUrl: './start-quiz.component.css'
+  styleUrl: './start-quiz.component.scss'
 })
 export class StartQuizComponent {
 
