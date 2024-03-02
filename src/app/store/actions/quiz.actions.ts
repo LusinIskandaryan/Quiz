@@ -1,11 +1,19 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
-import { Quiz, QuizLookups } from 'src/app/private/interfaces';
+import { Quiz } from 'src/app/private/interfaces';
 import { httpErrorProps, httpSuccessProps } from 'src/app/shared/functions';
 
 export const QuizActions = createActionGroup({
   source: 'Quiz',
   events: {
+    'Get Quiz List': emptyProps(),
+    'Get Quiz List Success': httpSuccessProps<Quiz[]>(),
+    'Get Quiz List Error': httpErrorProps(),
+
+    'Get Quiz': props<{ quizId: string }>(),
+    'Get Quiz Success': httpSuccessProps<Quiz>(),
+    'Get Quiz Error': httpErrorProps(),
+
     'Create Quiz': props<{ data: Quiz }>(),
     'Create Quiz Success': httpSuccessProps<string>(),
     'Create Quiz Error': httpErrorProps(),
@@ -21,17 +29,5 @@ export const QuizActions = createActionGroup({
     'Pass Quiz': props<{ data: Quiz }>(),
     'Pass Quiz Success': httpSuccessProps<string>(),
     'Pass Quiz Error': httpErrorProps(),
-
-    'Get Quiz Lookups': emptyProps(),
-    'Get Quiz Lookups Success': httpSuccessProps<QuizLookups[]>(),
-    'Get Quiz Lookups Error': httpErrorProps(),
-
-    'Get Quiz': props<{ quizId: string }>(),
-    'Get Quiz Success': httpSuccessProps<Quiz>(),
-    'Get Quiz Error': httpErrorProps(),
-
-    'Get Quiz List': emptyProps(),
-    'Get Quiz List Success': httpSuccessProps<Quiz[]>(),
-    'Get Quiz List Error': httpErrorProps(),
   },
 });

@@ -1,18 +1,38 @@
+@if (vm().loading) {
+  <p-progressSpinner ariaLabel="loading" />
+} @else {
 <p-card subheader="Quiz list">
   <ng-template pTemplate="header">
     <ul>
       <li>
-        <p>{{vm().user?.firstName}}</p>
+        <p>{{ vm().user?.firstName }}</p>
       </li>
       <li>
-        <p>{{vm().user?.email}}</p>
+        <p>{{ vm().user?.email }}</p>
       </li>
     </ul>
   </ng-template>
-  <p class="m-0">
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed
-    consequuntur error repudiandae numquam deserunt quisquam repellat libero
-    asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate
-    neque quas!
-  </p>
+  <ul>
+    @for (quiz of vm().userQuizList; track quiz.id) {
+    <li>
+      <span>{{ quiz.name }}</span>
+      <button
+        pButton
+        pRipple
+        icon="pi pi-trash"
+        class="p-button-rounded p-button-danger"
+        (click)="deleteQuiz($event, quiz)"
+      ></button>
+    </li>
+    }
+  </ul>
+  <p-multiSelect
+    #multiSelect
+    [options]="vm().lookups"
+    placeholder="Assign Quiz"
+    [showClear]="true"
+    (onPanelHide)="assignQuiz(multiSelect.value)"
+    [resetFilterOnHide]="true"
+  ></p-multiSelect>
 </p-card>
+}

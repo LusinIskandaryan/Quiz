@@ -21,7 +21,7 @@ export class UserService {
       data: {
         id: '1',
         email: 'lusi@gmail.com',
-        role: 1,
+        role: 0,
         firstName: 'Lusy',
         quizIds: ['1', '3'],
       },

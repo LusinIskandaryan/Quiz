@@ -8,7 +8,7 @@ import { catchError, exhaustMap, map, of, switchMap, tap } from 'rxjs';
 
 import { QuizService } from 'src/app/private/services';
 import { UserRole } from 'src/app/private/enums';
-import { QuizActions, UserActions } from '../actions';
+import { QuizActions } from '../actions';
 import { quizFeature } from '../features/quiz.features';
 import { appFeature } from '../features';
 
@@ -17,7 +17,7 @@ export const getQuizList$ = createEffect(
     return actions.pipe(
       ofType(QuizActions.getQuizList),
       concatLatestFrom(() => store.select(appFeature.selectCurrentUser)),
-      switchMap(([ ,currentUser, ]) =>
+      switchMap(([ ,currentUser]) =>
         service.getQuizList().pipe(
           map((res) => {
             if (currentUser?.role === UserRole.user) {
@@ -152,29 +152,4 @@ export const passQuizSuccess$ = createEffect(
     );
   },
   { functional: true, dispatch: false }
-);
-
-export const getQuizLookups$ = createEffect(
-  (actions = inject(Actions)) => {
-    return actions.pipe(
-      ofType(UserActions.getUser),
-      map(() => QuizActions.getQuizLookups())
-    );
-  },
-  { functional: true }
-);
-
-export const getQuizLookupsSuccess$ = createEffect(
-  (actions = inject(Actions), service = inject(QuizService)) => {
-    return actions.pipe(
-      ofType(QuizActions.getQuizLookups),
-      switchMap(() =>
-        service.getQuizLookups().pipe(
-          map((data) => QuizActions.getQuizLookupsSuccess(data)),
-          catchError((error) => of(QuizActions.getQuizLookupsError({ error })))
-        )
-      )
-    );
-  },
-  { functional: true }
 );

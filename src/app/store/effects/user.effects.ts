@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 
 import { catchError, map, of, switchMap } from 'rxjs';
 
-import { UserService } from 'src/app/private/services';
+import { QuizService, UserService } from 'src/app/private/services';
 import { UserActions } from '../actions';
 import { appFeature, userFeature } from '../features';
 
@@ -27,27 +27,12 @@ export const getUserList$ = createEffect(
   { functional: true }
 );
 
-export const updateUser$ = createEffect(
-  (actions = inject(Actions), service = inject(UserService)) => {
+export const initUser$ = createEffect(
+  (actions = inject(Actions)) => {
     return actions.pipe(
-      ofType(UserActions.updateUser),
-      switchMap(({ data }) =>
-        service.updateUser(data).pipe(
-          map((res) => UserActions.updateUserSuccess(res)),
-          catchError((error) => of(UserActions.updateUserError({ error })))
-        )
+      ofType(UserActions.userInit),
+      map(({ userId }) => UserActions.getUser({userId})
       )
-    );
-  },
-  { functional: true }
-);
-
-export const updateUserSuccess$ = createEffect(
-  (actions = inject(Actions), store = inject(Store)) => {
-    return actions.pipe(
-      ofType(UserActions.updateUserSuccess),
-      concatLatestFrom(() => store.select(userFeature.selectUserId)),
-      map(([, userId]) => UserActions.getUser({ userId }))
     );
   },
   { functional: true }
@@ -68,3 +53,76 @@ export const getUser$ = createEffect(
   { functional: true }
 );
 
+export const getUserSuccess$ = createEffect(
+  (actions = inject(Actions), service = inject(QuizService)) => {
+    return actions.pipe(
+      ofType(UserActions.getUserSuccess),
+      switchMap(({data}) =>
+      service.getQuizList().pipe(
+        map((res) => {
+          const quizList = res.data.filter(quiz => data.quizIds.includes(quiz.id));
+          return UserActions.getQuizListSuccess({...res, data: quizList});
+        }),
+        catchError((error) => of(UserActions.getQuizListError({ error })))
+      ))
+    );
+  },
+  { functional: true }
+);
+
+export const getLookUps$ = createEffect(
+  (actions = inject(Actions)) => {
+    return actions.pipe(
+      ofType(UserActions.getUserSuccess),
+      map(() => UserActions.getLookups())
+    );
+  },
+  { functional: true }
+);
+
+export const getLookupsSuccess$ = createEffect(
+  (actions = inject(Actions), store = inject(Store), service = inject(QuizService)) => {
+    return actions.pipe(
+      ofType(UserActions.getLookups),
+      concatLatestFrom(() => store.select(userFeature.selectUser)),
+      switchMap(([ ,user]) =>
+        service.getQuizLookups().pipe(
+          map((res) => {
+            const data = res.data.filter(item => !user?.quizIds.includes(`${item.id}`));
+            console.log(user, res, data);
+            return UserActions.getLookupsSuccess({...res, data})
+          }),
+          catchError((error) => of(UserActions.getLookupsError({ error })))
+        )
+      )
+    );
+  },
+  { functional: true }
+);
+
+
+export const updateUser$ = createEffect(
+  (actions = inject(Actions), service = inject(UserService)) => {
+    return actions.pipe(
+      ofType(UserActions.updateUser),
+      switchMap(({ data }) =>
+        service.updateUser(data).pipe(
+          map((res) => UserActions.updateUserSuccess(res)),
+          catchError((error) => of(UserActions.updateUserError({ error })))
+        )
+      )
+    );
+  },
+  { functional: true }
+);
+
+export const updateUserSuccess$ = createEffect(
+  (actions = inject(Actions), store = inject(Store)) => {
+    return actions.pipe(
+      ofType(UserActions.updateUserSuccess),
+      concatLatestFrom(() => store.select(userFeature.selectUserId)),
+      map(([, userId]) => UserActions.userInit({ userId }))
+    );
+  },
+  { functional: true }
+);

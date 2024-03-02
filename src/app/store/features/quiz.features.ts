@@ -27,10 +27,6 @@ export const quizReducer = createReducer(
     state.quiz = data;
   }),
 
-  immerOn(QuizActions.getQuizLookupsSuccess, (state, { data }) => {
-    state.quizLookups = data;
-  }),
-
   immerOn(
     QuizActions.updateQuiz,
     QuizActions.createQuiz,
@@ -44,6 +40,7 @@ export const quizReducer = createReducer(
   immerOn(
     QuizActions.getQuizListSuccess,
     QuizActions.getQuizListError,
+    QuizActions.getQuizSuccess,
     QuizActions.getQuizError,
     QuizActions.updateQuizSuccess,
     QuizActions.updateQuizError,
@@ -51,6 +48,7 @@ export const quizReducer = createReducer(
     QuizActions.createQuizError,
     QuizActions.deleteQuizSuccess,
     QuizActions.deleteQuizError,
+    QuizActions.passQuizSuccess,
     QuizActions.passQuizError,
     (state) => {
       state.loading = false;

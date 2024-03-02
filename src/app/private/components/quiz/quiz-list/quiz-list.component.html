@@ -57,7 +57,7 @@
             pRipple
             icon="pi pi-trash"
             class="p-button-rounded p-button-danger"
-            (click)="deleteQuiz(rowData)"
+            (click)="deleteQuiz($event, rowData)"
           ></button>
           } @case (tableFieldType.Status) { @if (rowData.result ===
           rowData.passWalue) {

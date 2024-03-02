@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 
 import { BASE_URL } from 'src/app/shared/api/tokens';
 import { RequestResponse } from 'src/app/shared/interfaces';
-import { Quiz, QuizLookups } from '../interfaces';
+import { Quiz, Lookups } from '../interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -30,9 +30,9 @@ export class QuizService {
     });
   }
 
-  getQuizLookups(): Observable<RequestResponse<QuizLookups[]>> {
+  getQuizLookups(): Observable<RequestResponse<Lookups[]>> {
     const url = `${this.baseUrl}/quiz/lookups`;
-    // return this.http.get<RequestResponse<QuizLookups[]>>(url);
+    // return this.http.get<RequestResponse<Lookups[]>>(url);
     return of({
       data: [
         {

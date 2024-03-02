@@ -56,7 +56,8 @@ export class QuizListComponent implements OnInit {
     this.rows = event.rows!;
   }
 
-  deleteQuiz(quiz: Quiz): void {
+  deleteQuiz(event: MouseEvent, quiz: Quiz): void {
+    event.stopPropagation();
     this.store.dispatch(QuizActions.deleteQuiz({ quizId: quiz.id }));
   }
 }
