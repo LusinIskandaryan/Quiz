@@ -33,11 +33,11 @@ import { UserRegister } from '../../interfaces';
 export class SignUpComponent {
   private readonly store = inject(Store);
   formCtrl = {
-    fullName: new FormControl('', { validators: [Validators.required, Validators.minLength(2), Validators.maxLength(15)] }),
-    email: new FormControl('', { validators: [ Validators.required, emailValidator ] }),
-    password: new FormControl('', { validators: [ Validators.required, Validators.minLength(5), Validators.maxLength(10) ] }),
-    confirmPassword: new FormControl('', { validators: [ Validators.required, Validators.minLength(5), Validators.maxLength(10) ] }),
-    isAdmin: new FormControl(false),
+    fullName: new FormControl<string | null>(null, { validators: [Validators.required, Validators.minLength(2), Validators.maxLength(15)] }),
+    email: new FormControl<string | null>(null, { validators: [ Validators.required, emailValidator ] }),
+    password: new FormControl<string | null>(null, { validators: [ Validators.required, Validators.minLength(5), Validators.maxLength(10) ] }),
+    confirmPassword: new FormControl<string | null>(null, { validators: [ Validators.required, Validators.minLength(5), Validators.maxLength(10) ] }),
+    isAdmin: new FormControl<boolean>(false),
   };
   form = new FormGroup(this.formCtrl, { validators: confirmPasswordValidator });
 

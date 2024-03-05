@@ -1,9 +1,9 @@
-import { AnswerType } from "../enums";
+import { QuestionType } from "../enums";
 import { Answer } from "./answer.interface";
 
 export interface Question {
   id: number,
-  name: string;
-  type: AnswerType;
+  question: string;
+  type: QuestionType;
   answers: Answer[];
 }

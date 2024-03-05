@@ -1,12 +1,12 @@
 <app-tab-menu />
 <div class="card">
   <p-table
-    [value]="vm().quizList"
-    [totalRecords]="vm().quizList.length"
+    [value]="vm().quizList.items"
+    [totalRecords]="vm().quizList.totalCount"
     [columns]="quizListColumns()"
-    [paginator]="!!vm().quizList.length"
-    [rows]="rows"
-    [first]="first"
+    [paginator]="!!vm().quizList.totalCount"
+    [rows]="vm().quizList.pageSize"
+    [first]="vm().quizList.pageSize * (vm().quizList.pageNumber - 1)"
     [lazy]="true"
     [rowHover]="true"
     [showFirstLastIcon]="true"

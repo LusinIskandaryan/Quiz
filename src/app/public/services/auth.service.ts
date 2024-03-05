@@ -17,12 +17,12 @@ export class AuthService {
   login(data: UserLogin): Observable<RequestResponse<string>> {
     const url = `${this.baseUrl}/user/login`;
     // return this.http.post<RequestResponse<string>>(url, data);
-    return of({data: 'true', message: 'You are successfully login'});
+    return of({data: 'true', message: ''});
   }
 
   logout(): Observable<RequestResponse<string>> {
     const url = `${this.baseUrl}/user/logout`;
     // return this.http.get<RequestResponse<string>>(url);
-    return of({data: 'true', message: 'You are successfully logout'});
+    return of({data: 'true', message: ''});
   }
 }

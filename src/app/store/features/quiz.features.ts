@@ -10,7 +10,22 @@ export const quizReducer = createReducer(
   initialQuizState,
   immerOn(QuizActions.getQuizList, (state) => {
     state.loading = true;
-    state.quizList = [];
+    state.quizList = {
+      ...state.paginationData,
+      totalCount: 0,
+      items: [],
+    };
+  }),
+
+  immerOn(QuizActions.initializePage, (state) => {
+    state.paginationData = {
+      pageNumber: 1,
+      pageSize: 5,
+    };
+  }),
+
+  immerOn(QuizActions.applyPagination, (state, { data }) => {
+    state.paginationData = data;
   }),
 
   immerOn(QuizActions.getQuizListSuccess, (state, { data }) => {

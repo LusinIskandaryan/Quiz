@@ -1,1 +1,10 @@
 <router-outlet />
+<p-toast></p-toast>
+<p-confirmDialog #cd [style]="{ width: '400px' }" [closable]="false">
+  <ng-template pTemplate="footer">
+    <div class="button-wrapper justify-content-end">
+      <button class="btn-outline-secondary" (click)="cd.reject()">No</button>
+      <button class="button-primary" (click)="cd.accept()">Yes</button>
+    </div>
+  </ng-template>
+</p-confirmDialog>

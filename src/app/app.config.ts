@@ -14,7 +14,7 @@ import {
 import { provideState, provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 import * as AppEffects from 'src/app/store/effects/app.effects';
 import { environment } from 'src/environments/environment';
@@ -55,6 +55,7 @@ export const appConfig: ApplicationConfig = {
       provide: BASE_URL,
       useValue: environment.baseUrl,
     },
-    MessageService
+    MessageService,
+    ConfirmationService,
   ],
 };

@@ -9,7 +9,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { Lookups, Quiz, User } from 'src/app/private/interfaces';
 import { UserActions } from 'src/app/store/actions';
-import { userFeature } from 'src/app/store/features';
+import { quizFeature, userFeature } from 'src/app/store/features';
 
 @Component({
   selector: 'app-user-detail',
@@ -22,6 +22,7 @@ export class UserDetailComponent implements OnInit {
   @Input() userId = '';
   private readonly store = inject(Store);
   vm = this.store.selectSignal(userFeature.selectUserState);
+  selectQuizList = this.store.selectSignal(quizFeature.selectQuizList);
 
   ngOnInit(): void {
     this.store.dispatch(UserActions.getUser({ userId: this.userId }));

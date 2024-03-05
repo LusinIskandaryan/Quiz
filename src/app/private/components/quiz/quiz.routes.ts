@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { isAdminGuard } from '../../guards';
+import { isAdminGuard, unsavedChangesGuard } from 'src/app/private/guards';
 
 const quizList = () => import('../index').then((m) => m.QuizListComponent);
 const createQuiz = () => import('../index').then((m) => m.CreateQuizComponent);
@@ -14,8 +14,8 @@ export const quizRoutes: Routes = [
     redirectTo: 'list',
   },
   { path: 'list', loadComponent: quizList },
-  { path: 'create', loadComponent: createQuiz, canMatch: [isAdminGuard] },
-  { path: ':quizId', loadComponent: createQuiz, canMatch: [isAdminGuard] },
+  { path: 'create', loadComponent: createQuiz, canMatch: [isAdminGuard], canDeactivate: [unsavedChangesGuard] },
+  { path: ':quizId', loadComponent: createQuiz, canMatch: [isAdminGuard], canDeactivate: [unsavedChangesGuard] },
   { path: 'start/:quizId', loadComponent: startQuiz },
   { path: 'result/:quizId', loadComponent: result },
 ];

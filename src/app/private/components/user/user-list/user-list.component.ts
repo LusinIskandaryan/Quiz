@@ -12,6 +12,7 @@ import { userFeature } from 'src/app/store/features';
 import { UserActions } from 'src/app/store/actions';
 import { TableColumn } from 'src/app/private/interfaces';
 import { TabMenuComponent } from 'src/app/private/components/tab-menu/tab-menu.component';
+import { BaseTable } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-user-list',
@@ -30,11 +31,14 @@ export class UserListComponent {
   rows: number = 10;
 
   ngOnInit(): void {
-    this.store.dispatch(UserActions.getUserList());
+    this.store.dispatch(UserActions.initializePage());
   }
 
   onPageChange(event: LazyLoadEvent): void {
-    this.first = event.first!;
-    this.rows = event.rows!;
+    const data = {
+      pageNumber: 1 + event.first! / event.rows!,
+      pageSize: event.rows!,
+    } as BaseTable;
+    this.store.dispatch(UserActions.applyPagination({data}));
   }
 }

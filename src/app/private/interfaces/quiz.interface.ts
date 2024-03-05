@@ -4,7 +4,7 @@ export interface Quiz {
   id: string,
   name: string;
   timer: number;
-  passWalue: number;
+  passValue: number;
   result?: number;
   questions: Question[];
 }

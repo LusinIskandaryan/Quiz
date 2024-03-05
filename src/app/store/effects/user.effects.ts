@@ -9,15 +9,28 @@ import { QuizService, UserService } from 'src/app/private/services';
 import { UserActions } from '../actions';
 import { appFeature, userFeature } from '../features';
 
+
+export const initializePage$ = createEffect(
+  (actions = inject(Actions)) => {
+    return actions.pipe(
+      ofType(UserActions.initializePage, UserActions.applyPagination),
+      map(() => UserActions.getUserList()
+      )
+    );
+  },
+  { functional: true }
+);
+
 export const getUserList$ = createEffect(
   (store = inject(Store), actions = inject(Actions), service = inject(UserService)) => {
     return actions.pipe(
       ofType(UserActions.getUserList),
-      concatLatestFrom(() => store.select(appFeature.selectCurrentUser)),
-      switchMap(([, currentUser]) =>
-        service.getUserList().pipe(
+      concatLatestFrom(() => [store.select(userFeature.selectPaginationData), store.select(appFeature.selectCurrentUser)]),
+      switchMap(([, paginationData, currentUser]) =>
+        service.getUserList(paginationData).pipe(
           map((res) => {
-            const data = res.data.filter(user => user.id !== currentUser?.id);
+            const items = res.data.items.filter(user => user.id !== currentUser?.id);
+            const data = {...res.data, items};
             return UserActions.getUserListSuccess({...res, data})}),
           catchError((error) => of(UserActions.getUserListError({ error })))
         )
@@ -53,17 +66,18 @@ export const getUser$ = createEffect(
   { functional: true }
 );
 
-export const getUserSuccess$ = createEffect(
-  (actions = inject(Actions), service = inject(QuizService)) => {
+export const getUserSuccess$ = createEffect(                                     // TODO check
+  (actions = inject(Actions), store = inject(Store), service = inject(QuizService)) => {
     return actions.pipe(
       ofType(UserActions.getUserSuccess),
-      switchMap(({data}) =>
-      service.getQuizList().pipe(
+      concatLatestFrom(() => store.select(userFeature.selectPaginationData)),
+      switchMap(([{data}, paginationData]) =>
+      service.getQuizList(paginationData).pipe(
         map((res) => {
-          const quizList = res.data.filter(quiz => data.quizIds.includes(quiz.id));
-          return UserActions.getQuizListSuccess({...res, data: quizList});
+          const items = res.data.items.filter(quiz => data.quizIds.includes(quiz.id));
+          return UserActions.getUserQuizListSuccess({ data: items });
         }),
-        catchError((error) => of(UserActions.getQuizListError({ error })))
+        catchError((error) => of(UserActions.getUserQuizListError({ error })))
       ))
     );
   },

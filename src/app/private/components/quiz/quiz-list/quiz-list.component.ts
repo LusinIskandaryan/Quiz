@@ -12,7 +12,7 @@ import { Quiz, TableColumn } from 'src/app/private/interfaces';
 import { appFeature, quizFeature } from 'src/app/store/features';
 import { QuizActions } from 'src/app/store/actions';
 import { TableFieldType, UserRole } from 'src/app/private/enums';
-import { TabMenuComponent } from '../../tab-menu/tab-menu.component';
+import { TabMenuComponent } from 'src/app/private/components/tab-menu/tab-menu.component';
 
 @Component({
   selector: 'app-quiz-list',
@@ -26,7 +26,7 @@ export class QuizListComponent implements OnInit {
 
   currentUser = this.store.selectSignal(appFeature.selectCurrentUser);
   isUserAdmin = computed(() => this.currentUser()?.role === UserRole.admin);
-  
+
   vm = this.store.selectSignal(quizFeature.selectQuizState);
   quizListColumns = computed<TableColumn[]>(() => {
     if (this.isUserAdmin()) {
@@ -48,12 +48,15 @@ export class QuizListComponent implements OnInit {
   rows: number = 10;
 
   ngOnInit(): void {
-    this.store.dispatch(QuizActions.getQuizList());
+    this.store.dispatch(QuizActions.initializePage());
   }
 
   onPageChange(event: LazyLoadEvent): void {
-    this.first = event.first!;
-    this.rows = event.rows!;
+    const data = {
+      pageNumber: 1 + event.first! / event.rows!,
+      pageSize: event.rows!,
+    };
+    this.store.dispatch(QuizActions.applyPagination({data}));
   }
 
   deleteQuiz(event: MouseEvent, quiz: Quiz): void {

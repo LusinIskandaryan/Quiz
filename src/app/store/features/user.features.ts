@@ -9,7 +9,12 @@ export const userReducer = createReducer(
   initialUserState,
   immerOn(UserActions.getUserList, (state) => {
     state.loading = true;
-    state.userList = [];
+    state.userList = {
+      pageNumber: 1,
+      pageSize: 5,
+      totalCount: 0,
+      items: [],
+    };
   }),
 
   immerOn(UserActions.getUserListSuccess, (state, { data }) => {
@@ -28,7 +33,7 @@ export const userReducer = createReducer(
     state.user = data;
   }),
 
-  immerOn(UserActions.getQuizListSuccess, (state, { data }) => {
+  immerOn(UserActions.getUserQuizListSuccess, (state, { data }) => {
     state.userQuizList = data;
   }),
 
@@ -49,8 +54,8 @@ export const userReducer = createReducer(
     UserActions.getUserListError,
     UserActions.getUserSuccess,
     UserActions.getUserError,
-    UserActions.getQuizListSuccess,
-    UserActions.getQuizListError,
+    UserActions.getUserQuizListSuccess,
+    UserActions.getUserQuizListError,
     UserActions.updateUserSuccess,
     UserActions.updateUserError,
     UserActions.getLookupsSuccess,
@@ -58,9 +63,8 @@ export const userReducer = createReducer(
     (state) => {
       state.loading = false;
     }
-  ),
+  )
 );
-
 
 export const userFeature = createFeature({
   name: Features.User,

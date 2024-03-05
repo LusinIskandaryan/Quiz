@@ -36,8 +36,8 @@ import { UserLogin } from '../../interfaces';
 export class SignInComponent {
   private readonly store = inject(Store);
   formCtrl = {
-    email: new FormControl('', { validators: [Validators.required, emailValidator] }),
-    password: new FormControl('', { validators: [Validators.required] }),
+    email: new FormControl<string | null>(null, { validators: [Validators.required, emailValidator] }),
+    password: new FormControl<string | null>(null, { validators: [Validators.required] }),
   };
   form = new FormGroup(this.formCtrl);
 

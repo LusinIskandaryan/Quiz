@@ -12,16 +12,28 @@ import { QuizActions } from '../actions';
 import { quizFeature } from '../features/quiz.features';
 import { appFeature } from '../features';
 
+export const initializePage$ = createEffect(
+  (actions = inject(Actions)) => {
+    return actions.pipe(
+      ofType(QuizActions.initializePage, QuizActions.applyPagination),
+      map(() => QuizActions.getQuizList()
+      )
+    );
+  },
+  { functional: true }
+);
+
 export const getQuizList$ = createEffect(
   (actions = inject(Actions), store = inject(Store), service = inject(QuizService)) => {
     return actions.pipe(
       ofType(QuizActions.getQuizList),
-      concatLatestFrom(() => store.select(appFeature.selectCurrentUser)),
-      switchMap(([ ,currentUser]) =>
-        service.getQuizList().pipe(
+      concatLatestFrom(() => [store.select(quizFeature.selectPaginationData), store.select(appFeature.selectCurrentUser)]),
+      switchMap(([ , paginationData, currentUser]) =>
+        service.getQuizList(paginationData).pipe(
           map((res) => {
             if (currentUser?.role === UserRole.user) {
-              const data = res.data.filter(quiz => currentUser.quizIds.includes(quiz.id));
+              const items = res.data.items.filter(quiz => currentUser.quizIds.includes(quiz.id));
+              const data = {...res.data, items};
               return QuizActions.getQuizListSuccess({...res, data})
             }
             return QuizActions.getQuizListSuccess(res)}),
