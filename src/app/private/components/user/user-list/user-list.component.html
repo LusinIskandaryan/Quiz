@@ -1,18 +1,11 @@
 <app-tab-menu />
 <div class="card ng-star-inserted">
   <p-table
-    [value]="vm().userList.items"
-    [totalRecords]="vm().userList.totalCount"
+    [value]="vm().userList"
+    [totalRecords]="vm().userList.length"
     [columns]="userListColumns"
-    [paginator]="!!vm().userList.totalCount"
-    [rows]="vm().userList.pageSize"
-    [first]="vm().userList.pageSize * (vm().userList.pageNumber - 1)"
     [lazy]="true"
     [rowHover]="true"
-    [showFirstLastIcon]="true"
-    [showCurrentPageReport]="true"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-    (onPage)="onPageChange($event)"
     [tableStyle]="{ 'min-width': '50rem' }"
     [loading]="vm().loading"
   >

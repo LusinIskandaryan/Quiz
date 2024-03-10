@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 
 import { BASE_URL } from 'src/app/shared/api';
 import { RequestResponse } from 'src/app/shared/interfaces';
+import { User } from 'src/app/private/interfaces';
 import { UserLogin } from '../interfaces';
 
 @Injectable({
@@ -14,15 +15,12 @@ export class AuthService {
   private http = inject(HttpClient);
   private baseUrl = inject(BASE_URL);
 
-  login(data: UserLogin): Observable<RequestResponse<string>> {
-    const url = `${this.baseUrl}/user/login`;
-    // return this.http.post<RequestResponse<string>>(url, data);
-    return of({data: 'true', message: ''});
+  login(data: UserLogin): Observable<User[]> {
+    const url = `${this.baseUrl}/users?email=${data.email}&password=${data.password}`;
+    return this.http.get<User[]>(url);
   }
 
   logout(): Observable<RequestResponse<string>> {
-    const url = `${this.baseUrl}/user/logout`;
-    // return this.http.get<RequestResponse<string>>(url);
     return of({data: 'true', message: ''});
   }
 }

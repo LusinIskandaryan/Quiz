@@ -3,7 +3,7 @@ import { immerOn } from 'ngrx-immer/store';
 
 import { Features } from 'src/app/shared/enums';
 import { initialAppState } from '../states';
-import { AppActions } from '../actions';
+import { AppActions, AuthActions } from '../actions';
 
 export const appReducer = createReducer(
   initialAppState,
@@ -22,7 +22,13 @@ export const appReducer = createReducer(
   immerOn(AppActions.getCurrentUserError, (state) => {
     localStorage.clear();
     state.loading = false;
-  })
+  }),
+
+  immerOn(AuthActions.loginSuccess, (state, { data }) => {
+    state.currrentUserId = data.id;
+    localStorage.setItem("currentUserId", data.id);
+  }),
+
 );
 
 export const appFeature = createFeature({

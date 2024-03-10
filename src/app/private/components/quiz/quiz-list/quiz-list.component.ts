@@ -5,8 +5,6 @@ import { Store } from '@ngrx/store';
 
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
-import { PaginatorModule } from 'primeng/paginator';
-import { LazyLoadEvent } from 'primeng/api';
 
 import { Quiz, TableColumn } from 'src/app/private/interfaces';
 import { appFeature, quizFeature } from 'src/app/store/features';
@@ -17,7 +15,7 @@ import { TabMenuComponent } from 'src/app/private/components/tab-menu/tab-menu.c
 @Component({
   selector: 'app-quiz-list',
   standalone: true,
-  imports: [RouterLink, TableModule, ButtonModule, PaginatorModule, TabMenuComponent],
+  imports: [RouterLink, TableModule, ButtonModule, TabMenuComponent],
   templateUrl: './quiz-list.component.html',
   styleUrl: './quiz-list.component.scss',
 })
@@ -44,19 +42,9 @@ export class QuizListComponent implements OnInit {
     return list;
   });
   tableFieldType = TableFieldType;
-  first: number = 0;
-  rows: number = 10;
 
   ngOnInit(): void {
-    this.store.dispatch(QuizActions.initializePage());
-  }
-
-  onPageChange(event: LazyLoadEvent): void {
-    const data = {
-      pageNumber: 1 + event.first! / event.rows!,
-      pageSize: event.rows!,
-    };
-    this.store.dispatch(QuizActions.applyPagination({data}));
+    this.store.dispatch(QuizActions.getQuizList());
   }
 
   deleteQuiz(event: MouseEvent, quiz: Quiz): void {

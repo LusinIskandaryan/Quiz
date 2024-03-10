@@ -5,7 +5,7 @@
   <ng-template pTemplate="header">
     <ul>
       <li>
-        <p>{{ vm().user?.firstName }}</p>
+        <p>{{ vm().user?.name }}</p>
       </li>
       <li>
         <p>{{ vm().user?.email }}</p>
@@ -13,7 +13,7 @@
     </ul>
   </ng-template>
   <ul>
-    @for (quiz of vm().userQuizList; track quiz.id) {
+    @for (quiz of selectUserQuizList(); track quiz.id) {
     <li>
       <span>{{ quiz.name }}</span>
       <button
@@ -28,7 +28,7 @@
   </ul>
   <p-multiSelect
     #multiSelect
-    [options]="vm().lookups"
+    [options]="selectUserQuizLookups()"
     placeholder="Assign Quiz"
     [showClear]="true"
     (onPanelHide)="assignQuiz(multiSelect.value)"

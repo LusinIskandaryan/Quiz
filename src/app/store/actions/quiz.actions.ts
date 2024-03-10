@@ -2,17 +2,12 @@ import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
 import { Quiz } from 'src/app/private/interfaces';
 import { httpErrorProps, httpSuccessProps } from 'src/app/shared/functions';
-import { BaseTable, List } from 'src/app/shared/interfaces';
 
 export const QuizActions = createActionGroup({
   source: 'Quiz',
   events: {
-    'Initialize Page': emptyProps(),
-
-    'Apply Pagination': props<{data: BaseTable}>(),
-
     'Get Quiz List': emptyProps(),
-    'Get Quiz List Success': httpSuccessProps<List<Quiz[]>>(),
+    'Get Quiz List Success': httpSuccessProps<Quiz[]>(),
     'Get Quiz List Error': httpErrorProps(),
 
     'Get Quiz': props<{ quizId: string }>(),

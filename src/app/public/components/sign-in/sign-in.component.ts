@@ -41,10 +41,14 @@ export class SignInComponent {
   };
   form = new FormGroup(this.formCtrl);
 
-  signIn(): void {
-    const data = this.form.value as UserLogin;
-    this.store.dispatch(
-      AuthActions.login({ data })
-    );
+  signIn(event: MouseEvent): void {
+    event.stopPropagation();
+    this.form.markAllAsTouched();
+    if (this.form.valid) {
+      const data = this.form.value as UserLogin;
+      this.store.dispatch(
+        AuthActions.login({ data })
+      );
+    }
   }
 }

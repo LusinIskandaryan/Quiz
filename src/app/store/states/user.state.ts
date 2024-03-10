@@ -1,12 +1,9 @@
-import { Lookups, Quiz, User } from "src/app/private/interfaces";
-import { BaseTable, List } from "src/app/shared/interfaces";
+import { Lookups, User } from "src/app/private/interfaces";
 
 export type UserState = {
   userId: string;
   user: User | null;
-  userQuizList: Quiz[];
-  userList:  List<User[]>;
-  paginationData: BaseTable,
+  userList:  User[];
   lookups: Lookups[];
   loading: boolean,
 };
@@ -14,17 +11,7 @@ export type UserState = {
 export const initialUserState: UserState = {
   userId: '',
   user: null,
-  userQuizList: [],
-  userList: {
-    pageNumber: 1,
-    pageSize: 5,
-    totalCount: 0,
-    items: []
-  },
-  paginationData: {
-    pageNumber: 1,
-    pageSize: 5,
-  },
+  userList: [],
   lookups: [],
   loading: false,
 };

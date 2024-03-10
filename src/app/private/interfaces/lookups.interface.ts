@@ -1,4 +1,4 @@
 export interface Lookups {
-  id: number,
+  id: string,
   label: string;
 }

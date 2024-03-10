@@ -6,7 +6,7 @@
         <div class="field">
           <label for="name">Quiz Name</label>
           <input class="w-full" type="text" formControlName="name" pInputText />
-          @if (formCtrl.name.errors) {
+          @if (formCtrl.name.errors && formCtrl.name.touched) {
             <app-validation-messages [control]="formCtrl.name" [value]="formCtrl.name.value" />
           }
         </div>
@@ -18,7 +18,7 @@
                   [useGrouping]="false"
                   (onInput)="changeNumber($event.value, formCtrl.timer)"
                 ></p-inputNumber>
-          @if (formCtrl.name.errors) {
+          @if (formCtrl.timer.errors && formCtrl.timer.touched) {
             <app-validation-messages [control]="formCtrl.timer" [value]="formCtrl.timer.value" />
           }
         </div>
@@ -30,7 +30,7 @@
                   [useGrouping]="false"
                   (onInput)="changeNumber($event.value, formCtrl.passValue)"
                 ></p-inputNumber>
-          @if (formCtrl.name.errors) {
+          @if (formCtrl.passValue.errors && formCtrl.passValue.touched) {
             <app-validation-messages [control]="formCtrl.passValue" [value]="formCtrl.passValue.value" />
           }
         </div>

@@ -57,7 +57,6 @@ export class CreateQuizComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    debugger;
     if (this.quizId()) {
       this.store.dispatch(QuizActions.getQuiz({ quizId: this.quizId()}));
       const quiz = this.vm().quiz as Quiz;

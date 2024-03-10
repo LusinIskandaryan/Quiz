@@ -4,6 +4,6 @@ export interface User {
   id: string,
   email: string;
   role: UserRole;
-  firstName: string;
+  name: string;
   quizIds: string[];
 }

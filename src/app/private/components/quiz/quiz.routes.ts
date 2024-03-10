@@ -15,7 +15,7 @@ export const quizRoutes: Routes = [
   },
   { path: 'list', loadComponent: quizList },
   { path: 'create', loadComponent: createQuiz, canMatch: [isAdminGuard], canDeactivate: [unsavedChangesGuard] },
-  { path: ':quizId', loadComponent: createQuiz, canMatch: [isAdminGuard], canDeactivate: [unsavedChangesGuard] },
   { path: 'start/:quizId', loadComponent: startQuiz },
   { path: 'result/:quizId', loadComponent: result },
+  { path: ':quizId', loadComponent: createQuiz, canMatch: [isAdminGuard], canDeactivate: [unsavedChangesGuard] },
 ];

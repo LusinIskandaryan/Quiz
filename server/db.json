@@ -1,0 +1,440 @@
+{
+  "quiz": [
+    {
+      "id": "1",
+      "name": "React",
+      "timer": 1000,
+      "passValue": 900,
+      "result": 700,
+      "questions": [
+        {
+          "id": 1,
+          "question": "console.log(null || 'string')",
+          "type": 0,
+          "answers": [
+            {
+              "id": 1,
+              "answer": true,
+              "correctAnswer": false
+            },
+            {
+              "id": 2,
+              "answer": false,
+              "correctAnswer": false
+            },
+            {
+              "id": 3,
+              "answer": "string",
+              "correctAnswer": true
+            },
+            {
+              "id": 4,
+              "answer": "null",
+              "correctAnswer": false
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "question": "React is a JavaScript library for building ___.",
+          "type": 0,
+          "answers": [
+            {
+              "id": 1,
+              "answer": "User interface",
+              "correctAnswer": true
+            },
+            {
+              "id": 2,
+              "answer": "Connectivity",
+              "correctAnswer": false
+            },
+            {
+              "id": 3,
+              "answer": "Database",
+              "correctAnswer": false
+            },
+            {
+              "id": 4,
+              "answer": "Design Platform",
+              "correctAnswer": false
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "question": "A React component takes in parameters called ___?",
+          "type": 0,
+          "answers": [
+            {
+              "id": 1,
+              "answer": "Attributes",
+              "correctAnswer": false
+            },
+            {
+              "id": 2,
+              "answer": "Props",
+              "correctAnswer": true
+            },
+            {
+              "id": 3,
+              "answer": "Events",
+              "correctAnswer": false
+            },
+            {
+              "id": 4,
+              "answer": "Children",
+              "correctAnswer": false
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "question": "To write HTML in react we make use of ___?",
+          "type": 0,
+          "answers": [
+            {
+              "id": 1,
+              "answer": "React.CreateElement()",
+              "correctAnswer": false
+            },
+            {
+              "id": 2,
+              "answer": "JSX",
+              "correctAnswer": true
+            },
+            {
+              "id": 3,
+              "answer": "XML",
+              "correctAnswer": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "name": "JS",
+      "timer": 800,
+      "passValue": 600,
+      "result": 600,
+      "questions": [
+        {
+          "id": 1,
+          "question": "Inside which HTML element do we put the JavaScript?",
+          "type": 0,
+          "answers": [
+            {
+              "id": 1,
+              "answer": "<js>",
+              "correctAnswer": false
+            },
+            {
+              "id": 2,
+              "answer": "<script>",
+              "correctAnswer": true
+            },
+            {
+              "id": 3,
+              "answer": "<scripting>",
+              "correctAnswer": false
+            },
+            {
+              "id": 4,
+              "answer": "<javascript>",
+              "correctAnswer": false
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "question": "console.log(1 +  '2' + '2')",
+          "type": 0,
+          "answers": [
+            {
+              "id": 1,
+              "answer": 122,
+              "correctAnswer": true
+            },
+            {
+              "id": 2,
+              "answer": 32,
+              "correctAnswer": false
+            },
+            {
+              "id": 3,
+              "answer": "NaN2",
+              "correctAnswer": false
+            },
+            {
+              "id": 4,
+              "answer": "NaN",
+              "correctAnswer": false
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "question": "console.log(false == '0');",
+          "type": 0,
+          "answers": [
+            {
+              "id": 1,
+              "answer": false,
+              "correctAnswer": false
+            },
+            {
+              "id": 2,
+              "answer": true,
+              "correctAnswer": true
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "question": "console.log(3 > 2 > 1);",
+          "type": 0,
+          "answers": [
+            {
+              "id": 1,
+              "answer": true,
+              "correctAnswer": false
+            },
+            {
+              "id": 2,
+              "answer": false,
+              "correctAnswer": true
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "question": "console.log(typeof NaN);",
+          "type": 0,
+          "answers": [
+            {
+              "id": 1,
+              "answer": "NaN",
+              "correctAnswer": false
+            },
+            {
+              "id": 2,
+              "answer": "null",
+              "correctAnswer": false
+            },
+            {
+              "id": 3,
+              "answer": "number",
+              "correctAnswer": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "name": "Angular",
+      "timer": 800,
+      "passValue": 1200,
+      "result": 1200,
+      "questions": [
+        {
+          "id": 1,
+          "question": "How do you bind data to an attribute in Angular?",
+          "type": 0,
+          "answers": [
+            {
+              "id": 1,
+              "answer": "{{variable}}",
+              "correctAnswer": false
+            },
+            {
+              "id": 2,
+              "answer": "(variable)",
+              "correctAnswer": false
+            },
+            {
+              "id": 3,
+              "answer": "=variable=",
+              "correctAnswer": false
+            },
+            {
+              "id": 4,
+              "answer": "[variable]",
+              "correctAnswer": true
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "question": "Which Angular decorator is used to listen to DOM events?",
+          "type": 0,
+          "answers": [
+            {
+              "id": 1,
+              "answer": "@HostListener()",
+              "correctAnswer": true
+            },
+            {
+              "id": 2,
+              "answer": "@Input()",
+              "correctAnswer": false
+            },
+            {
+              "id": 3,
+              "answer": "@Event()",
+              "correctAnswer": false
+            },
+            {
+              "id": 4,
+              "answer": "@Output()",
+              "correctAnswer": false
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "question": "What does a pipe do in Angular?",
+          "type": 0,
+          "answers": [
+            {
+              "id": 1,
+              "answer": "Connects two components",
+              "correctAnswer": false
+            },
+            {
+              "id": 2,
+              "answer": "Transforms data in the template",
+              "correctAnswer": true
+            },
+            {
+              "id": 3,
+              "answer": "Merges streams of data",
+              "correctAnswer": false
+            },
+            {
+              "id": 4,
+              "answer": "Opens a direct connection to the server",
+              "correctAnswer": false
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "question": "Which decorators in Angular is used to get data from a parent component and allows communication from a child component to its parent?",
+          "type": 1,
+          "answers": [
+            {
+              "id": 1,
+              "answer": "@Input",
+              "correctAnswer": true
+            },
+            {
+              "id": 2,
+              "answer": "@ViewChild",
+              "correctAnswer": false
+            },
+            {
+              "id": 3,
+              "answer": "@GetData",
+              "correctAnswer": false
+            },
+            {
+              "id": 4,
+              "answer": "@Output",
+              "correctAnswer": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "lookups": [
+    {
+      "id": "1",
+      "label": "React"
+    },
+    {
+      "id": "2",
+      "label": "JS"
+    },
+    {
+      "id": "3",
+      "label": "Angular"
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "name": "ann",
+      "email": "ann@gmail.com",
+      "role": 0,
+      "password": "Aa!12345",
+      "confirmPassword": "Aa!12345",
+      "quizIds": [
+        "1",
+        "2",
+        "3"
+      ]
+    },
+    {
+      "id": "2",
+      "name": "may",
+      "email": "may@gmail.com",
+      "role": 0,
+      "password": "Mm!12345",
+      "confirmPassword": "Mm!12345",
+      "quizIds": [
+        "1",
+        "3",
+        "2"
+      ]
+    },
+    {
+      "id": "3",
+      "name": "kara",
+      "email": "kara@gmail.com",
+      "role": 0,
+      "password": "Kk!12345",
+      "confirmPassword": "Kk!12345",
+      "quizIds": [
+        "1"
+      ]
+    },
+    {
+      "id": "4",
+      "name": "sara",
+      "email": "sara@gmail.com",
+      "role": 1,
+      "password": "Ss!12345",
+      "confirmPassword": "Ss!12345",
+      "quizIds": [
+        "1",
+        "2",
+        "3"
+      ]
+    },
+    {
+      "id": "5",
+      "name": "zara",
+      "email": "zara@gmail.com",
+      "role": 1,
+      "password": "Zz!12345",
+      "confirmPassword": "Zz!12345",
+      "quizIds": []
+    },
+    {
+      "id": "9e21",
+      "name": "lili",
+      "email": "lili@gmail.com",
+      "password": "Ll!12345",
+      "confirmPassword": "Ll!12345",
+      "role": 0,
+      "quizIds": [
+        "1",
+        "2",
+        "3"
+      ]
+    }
+  ]
+}

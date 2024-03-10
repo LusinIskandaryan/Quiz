@@ -6,7 +6,6 @@ import { UserRole } from '../enums';
 export const isAdminGuard: CanActivateFn = () => {
   const router = inject(Router);
   const currentUser = JSON.parse(localStorage.getItem('currentUser') ?? '{}');
-
   if (currentUser?.role === UserRole.admin) {
     return true;
   }

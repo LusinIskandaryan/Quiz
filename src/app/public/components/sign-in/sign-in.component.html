@@ -1,20 +1,20 @@
 <div class="centered">
   <div class="auth-container">
-    <form [formGroup]="form" (ngSubmit)="signIn()">
+    <form [formGroup]="form" (ngSubmit)="signIn($event)">
       <img alt='quiz' src="assets/img/logo.jpg" height="40" />
       <h3>Sign In</h3>
       <div class="formgrid">
         <div class="field">
           <label for="email">Email</label>
           <input class="w-full" type="email" formControlName="email" pInputText />
-          @if (formCtrl.email.errors) {
+          @if (formCtrl.email.errors && formCtrl.email.touched) {
             <app-validation-messages [control]="formCtrl.email" [value]="formCtrl.email.value" />
           }
         </div>
         <div class="field">
           <label for="password">Password</label>
           <p-password class="w-full" formControlName="password" [toggleMask]="true" />
-          @if (formCtrl.password.errors) {
+          @if (formCtrl.password.errors && formCtrl.password.touched) {
             <app-validation-messages [control]="formCtrl.password" [value]="formCtrl.password.value" />
           }
         </div>

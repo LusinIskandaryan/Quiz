@@ -6,6 +6,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, exhaustMap, map, of, tap } from "rxjs";
 
 import { RegisterService } from "src/app/public/services";
+import { HttpResponseSuccessModel } from "src/app/shared/models";
 import { RegisterActions } from "../actions";
 
 export const registerUser$ = createEffect(
@@ -14,7 +15,10 @@ export const registerUser$ = createEffect(
       ofType(RegisterActions.registerUser),
       exhaustMap(({ data }) =>
       service.registerUser(data).pipe(
-          map((res) => RegisterActions.registerUserSuccess(res)),
+          map((res) => {
+            const resData = new HttpResponseSuccessModel(res, 'You are successfully registered');
+            return RegisterActions.registerUserSuccess(resData)
+          }),
           catchError((error) =>
             of(RegisterActions.registerUserError({ error }))
           )

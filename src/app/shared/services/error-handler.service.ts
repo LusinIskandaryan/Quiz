@@ -8,7 +8,7 @@ import { AuthActions } from 'src/app/store/actions';
 import { ToastService } from './toast.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ErrorHandlerService extends ErrorHandler {
   private readonly toastService = inject(ToastService);
@@ -23,14 +23,15 @@ export class ErrorHandlerService extends ErrorHandler {
       }
       switch (error.status) {
         case HttpStatusCode.Unauthorized:
-          this.store.dispatch(
-            AuthActions.logout()
-          );
+          this.store.dispatch(AuthActions.logout());
           break;
         case HttpStatusCode.NotFound:
-            this.router.navigate(['/non-found']);
+          this.router.navigate(['/non-found']);
           break;
       }
+    }
+    if (this.router.url.includes('login') && error?.message) {
+      this.toastService.error(error.message, messageTitle);
     }
   }
 }

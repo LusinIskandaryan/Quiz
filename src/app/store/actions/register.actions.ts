@@ -7,7 +7,7 @@ export const RegisterActions = createActionGroup({
   source: 'Register',
   events: {
     'Register User': props<{ data: UserRegister }>(),
-    'Register User Success': httpSuccessProps<string>(),
+    'Register User Success': httpSuccessProps<UserRegister>(),
     'Register User Error': httpErrorProps(),
   },
 });

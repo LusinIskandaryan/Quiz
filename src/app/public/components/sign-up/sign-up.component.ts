@@ -33,17 +33,21 @@ import { UserRegister } from '../../interfaces';
 export class SignUpComponent {
   private readonly store = inject(Store);
   formCtrl = {
-    fullName: new FormControl<string | null>(null, { validators: [Validators.required, Validators.minLength(2), Validators.maxLength(15)] }),
+    name: new FormControl<string | null>(null, { validators: [Validators.required, Validators.minLength(2), Validators.maxLength(15)] }),
     email: new FormControl<string | null>(null, { validators: [ Validators.required, emailValidator ] }),
     password: new FormControl<string | null>(null, { validators: [ Validators.required, Validators.minLength(5), Validators.maxLength(10) ] }),
     confirmPassword: new FormControl<string | null>(null, { validators: [ Validators.required, Validators.minLength(5), Validators.maxLength(10) ] }),
-    isAdmin: new FormControl<boolean>(false),
+    role: new FormControl<boolean>(false),
   };
   form = new FormGroup(this.formCtrl, { validators: confirmPasswordValidator });
 
   signUp(): void {
-    const data = {...this.form.value, isAdmin: this.form.value.isAdmin ? UserRole.admin : UserRole.user} as UserRegister;
-    this.store.dispatch(RegisterActions.registerUser({ data }))
+    this.form.markAllAsTouched();
+    console.log(this.form);
+    if (this.form.valid) {
+      const data = {...this.form.value, role: this.form.value.role ? UserRole.admin : UserRole.user} as UserRegister;
+      this.store.dispatch(RegisterActions.registerUser({ data }))
+    }
   }
 
 }

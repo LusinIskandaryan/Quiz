@@ -8,7 +8,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { Lookups, Quiz, User } from 'src/app/private/interfaces';
-import { UserActions } from 'src/app/store/actions';
+import { QuizActions, UserActions } from 'src/app/store/actions';
 import { quizFeature, userFeature } from 'src/app/store/features';
 
 @Component({
@@ -22,7 +22,15 @@ export class UserDetailComponent implements OnInit {
   @Input() userId = '';
   private readonly store = inject(Store);
   vm = this.store.selectSignal(userFeature.selectUserState);
+  selectUserQuizList = this.store.selectSignal(userFeature.selectUserQuizList);
   selectQuizList = this.store.selectSignal(quizFeature.selectQuizList);
+  selectUserQuizLookups = this.store.selectSignal(userFeature.selectUserQuizLookup);
+
+  constructor() {
+    if (!this.selectQuizList().length) {
+      this.store.dispatch(QuizActions.getQuizList());
+    }
+  }
 
   ngOnInit(): void {
     this.store.dispatch(UserActions.getUser({ userId: this.userId }));
@@ -30,15 +38,16 @@ export class UserDetailComponent implements OnInit {
 
   deleteQuiz(event: MouseEvent, quiz: Quiz): void {
     event.stopPropagation();
-    const quizIds = [...this.vm().user!.quizIds].filter(id => id !== quiz.id);
-    const data = {...this.vm().user, quizIds} as User;
+    const quizIds = [...this.vm().user!.quizIds].filter((id) => id !== quiz.id);
+    const data = { ...this.vm().user, quizIds } as User;
     this.store.dispatch(UserActions.updateUser({ data }));
   }
 
   assignQuiz(value: Lookups[]): void {
-    const quizIds = [...this.vm().user!.quizIds];
-    value.forEach(item => quizIds.push(`${item.id}`));
-    const data = {...this.vm().user, quizIds} as User;
+    const ids = this.vm().user?.quizIds;
+    const quizIds = ids ? [...ids] : [];
+    value.forEach((item) => quizIds.push(item.id));
+    const data = { ...this.vm().user, quizIds } as User;
     this.store.dispatch(UserActions.updateUser({ data }));
   }
 }

@@ -1,20 +1,20 @@
-import { createFeature, createReducer } from '@ngrx/store';
+import {
+  createFeature,
+  createFeatureSelector,
+  createReducer,
+  createSelector,
+} from '@ngrx/store';
 import { immerOn } from 'ngrx-immer/store';
 
 import { Features } from 'src/app/shared/enums';
-import { initialUserState } from '../states';
+import { QuizState, initialUserState } from '../states';
 import { UserActions } from '../actions';
 
 export const userReducer = createReducer(
   initialUserState,
   immerOn(UserActions.getUserList, (state) => {
     state.loading = true;
-    state.userList = {
-      pageNumber: 1,
-      pageSize: 5,
-      totalCount: 0,
-      items: [],
-    };
+    state.userList = [];
   }),
 
   immerOn(UserActions.getUserListSuccess, (state, { data }) => {
@@ -24,17 +24,12 @@ export const userReducer = createReducer(
   immerOn(UserActions.getUser, (state) => {
     state.userId = '';
     state.user = null;
-    state.userQuizList = [];
     state.loading = true;
   }),
 
   immerOn(UserActions.getUserSuccess, (state, { data }) => {
     state.userId = data.id;
     state.user = data;
-  }),
-
-  immerOn(UserActions.getUserQuizListSuccess, (state, { data }) => {
-    state.userQuizList = data;
   }),
 
   immerOn(UserActions.updateUser, (state) => {
@@ -54,8 +49,6 @@ export const userReducer = createReducer(
     UserActions.getUserListError,
     UserActions.getUserSuccess,
     UserActions.getUserError,
-    UserActions.getUserQuizListSuccess,
-    UserActions.getUserQuizListError,
     UserActions.updateUserSuccess,
     UserActions.updateUserError,
     UserActions.getLookupsSuccess,
@@ -66,7 +59,32 @@ export const userReducer = createReducer(
   )
 );
 
+const quizSelector = createFeatureSelector<QuizState>(Features.Quiz);
+
+const createquizSelectorMap = <T>(mapping: (state: QuizState) => T) =>
+  createSelector(quizSelector, mapping);
+
+const selectQuizList = createquizSelectorMap((state) => state.quizList);
+
 export const userFeature = createFeature({
   name: Features.User,
   reducer: userReducer,
+  extraSelectors: ({ selectUser, selectLookups }) => ({
+    selectUserQuizList: createSelector(
+      selectUser,
+      selectQuizList,
+      (user, quizList) =>
+        user?.quizIds
+          ? quizList.filter((quiz) => user?.quizIds.includes(quiz.id))
+          : []
+    ),
+    selectUserQuizLookup: createSelector(
+      selectUser,
+      selectLookups,
+      (user, lookups) =>
+        user?.quizIds
+          ? lookups.filter((item) => !user?.quizIds.includes(item.id))
+          : lookups
+    ),
+  }),
 });

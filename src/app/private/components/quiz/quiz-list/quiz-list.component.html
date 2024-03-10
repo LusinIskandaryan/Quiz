@@ -1,18 +1,11 @@
 <app-tab-menu />
 <div class="card">
   <p-table
-    [value]="vm().quizList.items"
-    [totalRecords]="vm().quizList.totalCount"
+    [value]="vm().quizList"
+    [totalRecords]="vm().quizList.length"
     [columns]="quizListColumns()"
-    [paginator]="!!vm().quizList.totalCount"
-    [rows]="vm().quizList.pageSize"
-    [first]="vm().quizList.pageSize * (vm().quizList.pageNumber - 1)"
     [lazy]="true"
     [rowHover]="true"
-    [showFirstLastIcon]="true"
-    [showCurrentPageReport]="true"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-    (onPage)="onPageChange($event)"
     [tableStyle]="{ 'min-width': '50rem' }"
     [loading]="vm().loading"
   >
@@ -60,7 +53,7 @@
             (click)="deleteQuiz($event, rowData)"
           ></button>
           } @case (tableFieldType.Status) { @if (rowData.result ===
-          rowData.passWalue) {
+          rowData.passValue) {
 
           <i class="pi pi-check"></i>
           } @else {

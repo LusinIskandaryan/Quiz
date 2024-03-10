@@ -5,15 +5,15 @@
       <h3>Sign Up</h3>
       <div class="formgrid">
         <div class="field">
-          <label for="fullName">Full Name</label>
+          <label for="name">Full Name</label>
           <input
             class="w-full"
             type="text"
             pInputText
-            formControlName="fullName"
+            formControlName="name"
           />
-          @if (formCtrl.fullName.errors) {
-            <app-validation-messages [control]="formCtrl.fullName" [value]="formCtrl.fullName.value" />
+          @if (formCtrl.name.errors && formCtrl.name.touched) {
+            <app-validation-messages [control]="formCtrl.name" [value]="formCtrl.name.value" />
           }
         </div>
         <div class="field">
@@ -24,7 +24,7 @@
             pInputText
             formControlName="email"
           />
-          @if (formCtrl.email.errors) {
+          @if (formCtrl.email.errors && formCtrl.email.touched) {
             <app-validation-messages [control]="formCtrl.email" [value]="formCtrl.email.value" />
           }
         </div>
@@ -35,7 +35,7 @@
             formControlName="password"
             [toggleMask]="true"
           />
-          @if (formCtrl.password.errors) {
+          @if (formCtrl.password.errors && formCtrl.password.touched) {
             <app-validation-messages [control]="formCtrl.password" [value]="formCtrl.password.value" />
           }
         </div>
@@ -46,7 +46,7 @@
             formControlName="confirmPassword"
             [toggleMask]="true"
           />
-          @if (formCtrl.confirmPassword.errors) {
+          @if (formCtrl.confirmPassword.errors && formCtrl.confirmPassword.touched) {
             <app-validation-messages [control]="formCtrl.confirmPassword" [value]="formCtrl.confirmPassword.value" />
           }
         </div>
@@ -55,7 +55,7 @@
         }
         <div class="field-checkbox">
           <p-checkbox
-            formControlName="isAdmin"
+            formControlName="role"
             [binary]="true"
             inputId="binary"
           ></p-checkbox>
