@@ -1,5 +1,5 @@
 import { Component, OnInit, computed, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 import { Store } from '@ngrx/store';
 
@@ -11,6 +11,7 @@ import { appFeature, quizFeature } from 'src/app/store/features';
 import { QuizActions } from 'src/app/store/actions';
 import { TableFieldType, UserRole } from 'src/app/private/enums';
 import { TabMenuComponent } from 'src/app/private/components/tab-menu/tab-menu.component';
+import { PageMode } from 'src/app/shared/enums';
 
 @Component({
   selector: 'app-quiz-list',
@@ -21,6 +22,7 @@ import { TabMenuComponent } from 'src/app/private/components/tab-menu/tab-menu.c
 })
 export class QuizListComponent implements OnInit {
   private readonly store = inject(Store);
+  private readonly router = inject(Router);
 
   currentUser = this.store.selectSignal(appFeature.selectCurrentUser);
   isUserAdmin = computed(() => this.currentUser()?.role === UserRole.admin);
@@ -42,9 +44,15 @@ export class QuizListComponent implements OnInit {
     return list;
   });
   tableFieldType = TableFieldType;
+  pageMode = PageMode;
 
   ngOnInit(): void {
     this.store.dispatch(QuizActions.getQuizList());
+  }
+
+  changePageMode(event: MouseEvent, mode: PageMode): void {
+    event.stopPropagation();
+    this.store.dispatch(QuizActions.changePageMode({ mode }));
   }
 
   deleteQuiz(event: MouseEvent, quiz: Quiz): void {

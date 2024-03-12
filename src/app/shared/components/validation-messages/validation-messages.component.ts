@@ -22,13 +22,9 @@ export class ValidationMessagesComponent {
       () => {
         const control = this.control() ?? this.form();
         if (this.value() && control) {
-          if (this.isControlInvalid(control)) {
-            this.setValidationMessage(control);
-          } else {
-            this.errorMessage.set(null);
-          }
+          this.setValidationMessage(control);
         }
-        if (!this.value() && control && this.isControlInvalid(control)) {
+        if (!this.value() && control) {
           this.setValidationMessage(control);
         }
       },
@@ -43,13 +39,9 @@ export class ValidationMessagesComponent {
       const key: ErrorType = Object.keys(error)[0] as ErrorType;
       const requiredLength = error[key]['requiredLength'] || null;
       errorMessage = ErrorMessages.get(key)?.getMessage(requiredLength);
-    } else if (!this.value() && this.control()){
+    } else if (!this.value() && this.control()) {
       errorMessage = ErrorMessages.get(ErrorType.required)?.getMessage();
     }
     this.errorMessage.set(errorMessage);
-  }
-
-  isControlInvalid(control: FormControl | FormGroup): boolean {
-    return !!(control.errors && (control.touched || control.dirty));
   }
 }

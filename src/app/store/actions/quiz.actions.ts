@@ -1,6 +1,7 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
 import { Quiz } from 'src/app/private/interfaces';
+import { PageMode } from 'src/app/shared/enums';
 import { httpErrorProps, httpSuccessProps } from 'src/app/shared/functions';
 
 export const QuizActions = createActionGroup({
@@ -29,5 +30,7 @@ export const QuizActions = createActionGroup({
     'Pass Quiz': props<{ data: Quiz }>(),
     'Pass Quiz Success': httpSuccessProps<string>(),
     'Pass Quiz Error': httpErrorProps(),
+
+    'Change Page Mode': props<{ mode: PageMode }>(),
   },
 });

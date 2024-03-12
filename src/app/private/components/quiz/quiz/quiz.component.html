@@ -1,0 +1,199 @@
+@if (vm().loading) {
+<p-progressSpinner ariaLabel="loading" />
+} @else {
+<div class="centered">
+  <div class="auth-container">
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <h3>{{ title() }}</h3>
+      @if(viewMode()) {
+      <a
+        pButton
+        class="p-button-rounded p-button-success"
+        (click)="changePageMode($event, pageMode.Edit)"
+      >
+        Edit
+      </a>
+      }
+      <div class="formgrid">
+        <div class="field">
+          <label for="name">Quiz Name</label>
+          <input class="w-full" type="text" formControlName="name" pInputText />
+          @if (formCtrl.name.errors && (formCtrl.name.touched ||
+          formCtrl.name.dirty)) {
+          <app-validation-messages
+            [control]="formCtrl.name"
+            [value]="formCtrl.name.value"
+          />
+          }
+        </div>
+        <div class="field">
+          <label for="timer">Timer</label>
+          <p-inputNumber
+            mode="decimal"
+            formControlName="timer"
+            [useGrouping]="false"
+            (onInput)="changeNumber($event.value, formCtrl.timer)"
+          />
+          @if (formCtrl.timer.errors && (formCtrl.timer.touched ||
+          formCtrl.timer.dirty)) {
+          <app-validation-messages
+            [control]="formCtrl.timer"
+            [value]="formCtrl.timer.value"
+          />
+          }
+        </div>
+        <div class="field">
+          <label for="passValue">Pass Value</label>
+          <p-inputNumber
+            mode="decimal"
+            formControlName="passValue"
+            [useGrouping]="false"
+            (onInput)="changeNumber($event.value, formCtrl.passValue)"
+          />
+          @if (formCtrl.passValue.errors && (formCtrl.passValue.touched ||
+          formCtrl.passValue.dirty)) {
+          <app-validation-messages
+            [control]="formCtrl.passValue"
+            [value]="formCtrl.passValue.value"
+          />
+          }
+        </div>
+        <div formArrayName="questions">
+          @for ( questionItem of questions.controls; track questionItem; let
+          questionIndex = $index) {
+          <p-card class="field" [formGroupName]="questionIndex">
+            <div>
+              <label for="question">Question</label>
+              @if(questions.controls.length > 1) {
+              <button
+                pButton
+                pRipple
+                icon="pi pi-trash"
+                class="p-button-rounded p-button-danger"
+                (click)="removeQuestion(questionIndex)"
+              ></button>
+              }
+              <input
+                class="w-full"
+                type="text"
+                formControlName="question"
+                appValueTrim
+                pInputText
+              />
+              @if (questionItem.get('question')?.errors &&
+              (questionItem.get('question')?.touched ||
+              questionItem.get('question')?.dirty)) {
+              <app-validation-messages
+                [control]="questionGroupControl(questionIndex, 'question')"
+                [value]="questionItem.get('question')?.value"
+              />
+              }
+            </div>
+            <div>
+              <label for="type">Question Type</label>
+              @for (questionType of questionTypes; track questionType.key) {
+              <label [for]="questionType.key" class="ml-2">{{
+                questionType.name
+              }}</label>
+              <p-radioButton
+                [inputId]="questionType.key"
+                [value]="questionType.value"
+                name="type+{{ questionIndex }}"
+                [formControl]="questionGroupControl(questionIndex, 'type')"
+                (onClick)="changeQuestionType($event, questionIndex)"
+              ></p-radioButton>
+              }
+            </div>
+            <div formArrayName="answers">
+              <label for="question">Answers</label>
+              @for ( answersItem of questionAnswers(questionIndex).controls;
+              track answersItem; let answerIndex = $index ) {
+              <div class="field" [formGroupName]="answerIndex">
+                <div>
+                  <p-checkbox
+                    [label]="isAdmin() ? 'Correct Answer' : answersItem.get('answer')?.value + ''"
+                    name="answer+{{ answerIndex }}"
+                    [binary]="true"
+                    [formControl]="
+                      questionAnswersControl(
+                        questionIndex,
+                        answerIndex,
+                        'value'
+                      )
+                    "
+                    (onChange)="
+                      changeAnswer(
+                        $event,
+                        questionAnswersControl(
+                          questionIndex,
+                          answerIndex,
+                          'value'
+                        )
+                      )
+                    "
+                  />
+                </div>
+                @if (isAdmin()) {
+                  <div>
+                    <input
+                      class="w-full"
+                      type="text"
+                      formControlName="answer"
+                      appValueTrim
+                      pInputText
+                    />
+                    @if (answersItem.get('answer')?.errors &&
+                    (answersItem.get('answer')?.touched ||
+                    answersItem.get('answer')?.dirty)) {
+                    <app-validation-messages
+                      [control]="
+                        questionAnswersControl(questionIndex, answerIndex, 'answer')
+                      "
+                      [value]="answersItem.get('answer')?.value"
+                    />
+                    }
+                  </div>
+                }
+                @if(questionAnswers(questionIndex).controls.length > 1) {
+                <button
+                  pButton
+                  pRipple
+                  icon="pi pi-trash"
+                  class="p-button-rounded p-button-danger"
+                  (click)="removeQuestionAnswer(questionIndex, answerIndex)"
+                ></button>
+                }
+              </div>
+              }
+              <button
+            pButton
+            pRipple
+            class="p-button-rounded p-button-success"
+            (click)="addAnswer(questionIndex)"
+          >
+            Add Answer
+          </button>
+            </div>
+          </p-card>
+          }
+          <button
+            pButton
+            pRipple
+            class="p-button-rounded p-button-success"
+            (click)="addQuastion()"
+          >
+            Add Question
+          </button>
+        </div>
+        <div class="field flex justify-content-center">
+          <p-button
+            label="Save"
+            styleClass="p-button-success w-10rem"
+            type="submit"
+          />
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+}

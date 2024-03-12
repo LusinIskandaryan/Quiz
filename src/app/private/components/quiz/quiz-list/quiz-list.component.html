@@ -18,6 +18,7 @@
           <a
             pButton
             class="p-button-rounded p-button-success"
+            (click)="changePageMode($event, pageMode.Create)"
             [routerLink]="['/quiz/create']"
           >
             Create Quiz
@@ -42,6 +43,7 @@
             pRipple
             icon="pi pi-pencil"
             class="p-button-rounded p-button-success mr-2"
+            (click)="changePageMode($event, pageMode.Edit)"
             [routerLink]="['/quiz', rowData.id]"
           ></a>
           } @case (tableFieldType.Delete) {

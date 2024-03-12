@@ -18,6 +18,7 @@ import { emailValidator } from 'src/app/public/validators';
 import { ValidationMessagesComponent } from 'src/app/shared/components';
 import { AuthActions } from 'src/app/store/actions/auth.actions';
 import { UserLogin } from '../../interfaces';
+import { ValueTrimDirective } from 'src/app/shared/directives';
 @Component({
   selector: 'app-sign-in',
   standalone: true,
@@ -29,6 +30,7 @@ import { UserLogin } from '../../interfaces';
     CheckboxModule,
     ButtonModule,
     ValidationMessagesComponent,
+    ValueTrimDirective
   ],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.scss',

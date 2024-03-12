@@ -1,7 +1,22 @@
-ul {
-  display: flex;
+.quiz-list {
   li {
     display: flex;
+    align-items: center;
     padding: 10px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #e5e7eb;
+
+    button {
+      margin-left: auto;
+    }
+  }
+}
+.personal-info {
+  li {
+    display: flex;
+    span {
+      margin-right: 5px;
+      font-style: italic;
+    }
   }
 }

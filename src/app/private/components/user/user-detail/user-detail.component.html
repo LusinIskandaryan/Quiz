@@ -3,16 +3,16 @@
 } @else {
 <p-card subheader="Quiz list">
   <ng-template pTemplate="header">
-    <ul>
+    <ul class="personal-info">
       <li>
-        <p>{{ vm().user?.name }}</p>
+        <p><span>Name:</span>{{ vm().user?.name }}</p>
       </li>
       <li>
-        <p>{{ vm().user?.email }}</p>
+        <p><span>Email:</span>{{ vm().user?.email }}</p>
       </li>
     </ul>
   </ng-template>
-  <ul>
+  <ul class="quiz-list">
     @for (quiz of selectUserQuizList(); track quiz.id) {
     <li>
       <span>{{ quiz.name }}</span>
@@ -33,6 +33,6 @@
     [showClear]="true"
     (onPanelHide)="assignQuiz(multiSelect.value)"
     [resetFilterOnHide]="true"
-  ></p-multiSelect>
+  />
 </p-card>
 }

@@ -11,8 +11,9 @@
             type="text"
             pInputText
             formControlName="name"
+            appValueTrim
           />
-          @if (formCtrl.name.errors && formCtrl.name.touched) {
+          @if (formCtrl.name.errors && (formCtrl.name.touched || formCtrl.name.dirty)) {
             <app-validation-messages [control]="formCtrl.name" [value]="formCtrl.name.value" />
           }
         </div>
@@ -23,8 +24,9 @@
             type="email"
             pInputText
             formControlName="email"
+            appValueTrim
           />
-          @if (formCtrl.email.errors && formCtrl.email.touched) {
+          @if (formCtrl.email.errors && (formCtrl.email.touched || formCtrl.email.dirty)) {
             <app-validation-messages [control]="formCtrl.email" [value]="formCtrl.email.value" />
           }
         </div>
@@ -35,7 +37,7 @@
             formControlName="password"
             [toggleMask]="true"
           />
-          @if (formCtrl.password.errors && formCtrl.password.touched) {
+          @if (formCtrl.password.errors && (formCtrl.password.touched || formCtrl.password.dirty)) {
             <app-validation-messages [control]="formCtrl.password" [value]="formCtrl.password.value" />
           }
         </div>
@@ -46,7 +48,7 @@
             formControlName="confirmPassword"
             [toggleMask]="true"
           />
-          @if (formCtrl.confirmPassword.errors && formCtrl.confirmPassword.touched) {
+          @if (formCtrl.confirmPassword.errors && (formCtrl.confirmPassword.touched || formCtrl.confirmPassword.dirty)) {
             <app-validation-messages [control]="formCtrl.confirmPassword" [value]="formCtrl.confirmPassword.value" />
           }
         </div>
@@ -58,7 +60,7 @@
             formControlName="role"
             [binary]="true"
             inputId="binary"
-          ></p-checkbox>
+          />
           <label for="admin">Sign up as admin</label>
           <div></div>
         </div>
@@ -67,7 +69,7 @@
             label="Sign Up"
             styleClass="p-button-success w-10rem"
             type="submit"
-          ></p-button>
+          />
         </div>
       </div>
     </form>

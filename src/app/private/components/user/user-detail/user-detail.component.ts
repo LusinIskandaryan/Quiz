@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, computed, inject } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 
@@ -22,6 +22,7 @@ export class UserDetailComponent implements OnInit {
   @Input() userId = '';
   private readonly store = inject(Store);
   vm = this.store.selectSignal(userFeature.selectUserState);
+  quizIds = computed(() => this.vm().user?.quizIds);
   selectUserQuizList = this.store.selectSignal(userFeature.selectUserQuizList);
   selectQuizList = this.store.selectSignal(quizFeature.selectQuizList);
   selectUserQuizLookups = this.store.selectSignal(userFeature.selectUserQuizLookup);
@@ -38,14 +39,13 @@ export class UserDetailComponent implements OnInit {
 
   deleteQuiz(event: MouseEvent, quiz: Quiz): void {
     event.stopPropagation();
-    const quizIds = [...this.vm().user!.quizIds].filter((id) => id !== quiz.id);
+    const quizIds = [...this.quizIds()!].filter((id) => id !== quiz.id);
     const data = { ...this.vm().user, quizIds } as User;
     this.store.dispatch(UserActions.updateUser({ data }));
   }
 
   assignQuiz(value: Lookups[]): void {
-    const ids = this.vm().user?.quizIds;
-    const quizIds = ids ? [...ids] : [];
+    const quizIds = this.quizIds() ? [...this.quizIds()!] : [];
     value.forEach((item) => quizIds.push(item.id));
     const data = { ...this.vm().user, quizIds } as User;
     this.store.dispatch(UserActions.updateUser({ data }));

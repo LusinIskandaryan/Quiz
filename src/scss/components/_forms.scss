@@ -12,3 +12,15 @@ p-password  {
     font-size: 14px;
   }
 }
+
+
+p-password ,
+.p-inputtext {
+  &.ng-invalid.ng-dirty ,
+  &.ng-invalid.ng-touched  {
+    .p-inputtext {
+      border-color: red;
+    }
+   }
+}
+  
