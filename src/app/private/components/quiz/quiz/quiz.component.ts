@@ -1,7 +1,6 @@
 import {
   Component,
   Input,
-  OnDestroy,
   OnInit,
   WritableSignal,
   computed,
@@ -28,7 +27,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { QuestionType, UserRole } from 'src/app/private/enums';
 import { ValidationMessagesComponent } from 'src/app/shared/components';
 import { PageMode } from 'src/app/shared/enums';
-import { QuizActions } from 'src/app/store/actions';
+import { PassQuizActions, QuizActions } from 'src/app/store/actions';
 import { appFeature, quizFeature } from 'src/app/store/features';
 import { ValueTrimDirective } from 'src/app/shared/directives';
 import { Quiz } from 'src/app/private/interfaces';
@@ -53,11 +52,13 @@ import { Quiz } from 'src/app/private/interfaces';
 export class QuizComponent implements OnInit {
   // TODO form error class
   // TODO add view mode class, for disable imputs, for hide icons
-  // TODO discard changes
-  // TODO refresh page navigate to quiz  list
-  // TODO mtacel quiz Type changi xndir@
-  // TODO remove question@ submita anum
-  // TODO start
+  // TODO refresh page navigate to quiz  list                         ***
+  // TODO mtacel quiz Type changi, add Answer, removeAnswer, Add Quiz, remove Quiz xndir@
+  // TODO create quizi zamanak id-ner@ set anel, hima null a           ***
+  // TODO create quiz anelis quizneri lookup@ update anel               ***
+  // TODO change all components to OnPush
+   // TODO discard changes
+
   @Input() quizId: string = '';
   private readonly store = inject(Store);
   vm = this.store.selectSignal(quizFeature.selectQuizState);
@@ -78,19 +79,20 @@ export class QuizComponent implements OnInit {
   );
   viewMode = computed(() => this.vm().pageMode === PageMode.View);
   pageMode = PageMode;
+  quizResult = {};
   questionTypes = [
     { name: 'Single', key: 'single', value: QuestionType.single },
     { name: 'Multiple', key: 'multiple', value: QuestionType.multiple },
   ];
   type = QuestionType;
   formCtrl = {
-    // id: new FormControl<string | null>(null),
     name: new FormControl<string | null>(null, {
       validators: [Validators.required, Validators.maxLength(15)],
     }),
     timer: new FormControl<number | null>(null, {
       validators: [Validators.required, Validators.min(1)],
     }),
+    result: new FormControl<number | null>(null),
     passValue: new FormControl<number | null>(null, {
       validators: [Validators.required, Validators.min(1)],
     }),
@@ -132,6 +134,7 @@ export class QuizComponent implements OnInit {
   constructor() {
     effect(
       () => {
+        console.log('asdsadsa');
         const quiz = this.quiz();
         const questions = quiz?.questions || [];
         if (quiz && this.quizId) {
@@ -161,25 +164,25 @@ export class QuizComponent implements OnInit {
             });
           });
           this.questionsLength.set(this.questions.length);
-          this.questionIndex.set(0);
           this.initialFormValue = this.form.value;
-          this.initialAnswersValue =
-            this.initialFormValue.questions![0].answers;
-          if (!this.quizTimer()) {
-            this.save();
-          }
+          this.initialAnswersValue = this.initialFormValue.questions![0].answers;
         }
       },
       { allowSignalWrites: true }
     );
+
+    effect(
+      () => {
+        if (!this.quizTimer()) {
+          console.log(this.quizTimer());
+          this.save();
+        }
+      })
   }
 
   ngOnInit(): void {
     if (this.quizId) {
       this.store.dispatch(QuizActions.getQuiz({ quizId: this.quizId }));
-      if (!this.isAdmin()) {
-        this.store.dispatch(QuizActions.startTimer());
-      }
     }
   }
 
@@ -207,9 +210,18 @@ export class QuizComponent implements OnInit {
   removeQuestion(event: MouseEvent): void {
     event.stopPropagation();
     this.questions.removeAt(this.questionIndex());
-    this.form.updateValueAndValidity();
     this.questionsLength.set(this.questions.length);
     this.questionIndex.update((value) => value - 1);
+    this.form.updateValueAndValidity();
+  }
+
+  addNewQuastion(event: MouseEvent): void {
+    event.stopPropagation();
+    const questionIndex = (this.questions.length + 1).toString();
+    this.addQuastion(questionIndex);
+    this.questionsLength.set(this.questions.length);
+    this.form.updateValueAndValidity();
+    // this.initialAnswersValue = this.form.value.questions![this.questionIndex()].answers;
   }
 
   newAnswers(answerIndex?: string): FormGroup {
@@ -234,17 +246,7 @@ export class QuizComponent implements OnInit {
     // this.initialAnswersValue = this.form.value.questions![this.questionIndex()].answers;
   }
 
-  addNewQuastion(event: MouseEvent): void {
-    event.stopPropagation();
-    const questionIndex = (this.questions.length + 1).toString();
-    this.addQuastion(questionIndex);
-    this.questionsLength.set(this.questions.length);
-    this.form.updateValueAndValidity();
-    // this.initialAnswersValue = this.form.value.questions![this.questionIndex()].answers;
-  }
-
   addNewAnswer(event: MouseEvent): void {
-    debugger;
     event?.stopPropagation();
     const answerIndex = (
       this.questionAnswers(this.questionIndex()).length + 1
@@ -284,14 +286,33 @@ export class QuizComponent implements OnInit {
   }
 
   changeQuestionAnswer(answerIndex: number) {
-    const answers = this.questionAnswers(this.questionIndex()).value.map(
-      (el: any, index: number) =>
-        answerIndex === index
-          ? { ...el, correctAnswer: true }
-          : { ...el, correctAnswer: false }
-    );
-    console.log(answers, 'changeQuestionAnswer');
-    this.questionAnswers(this.questionIndex()).setValue(answers);
+    const questionType = this.questionGroupControl(
+      this.questionIndex(),
+      'type'
+    ).value;
+    if (!this.isAdmin()) {
+      const correctAnswer =
+        this.quiz()?.questions[this.questionIndex()].answers[answerIndex]
+          .correctAnswer;
+      if (correctAnswer) {
+        const value = this.questionGroupControl(
+          this.questionIndex(),
+          'value'
+        ).value;
+        this.quizResult = { ...this.quizResult, [this.questionIndex()]: value };
+      } else {
+        this.quizResult = { ...this.quizResult, [this.questionIndex()]: 0 };
+      }
+    }
+    if (questionType === QuestionType.single) {
+      const answers = this.questionAnswers(this.questionIndex()).value.map(
+        (el: any, index: number) =>
+          answerIndex === index
+            ? { ...el, correctAnswer: true }
+            : { ...el, correctAnswer: false }
+      );
+      this.questionAnswers(this.questionIndex()).setValue(answers);
+    }
   }
 
   changeQuestionType(): void {
@@ -313,10 +334,15 @@ export class QuizComponent implements OnInit {
         } else {
           this.store.dispatch(QuizActions.createQuiz({ data }));
         }
+        this.questionIndex.set(0);
       } else {
-        console.log('save');
-        data.id = this.quizId;
-        this.store.dispatch(QuizActions.passQuiz({ data }));
+        const data = { ...this.quiz() } as Quiz;
+        const quizResult = Object.values(this.quizResult).reduce(
+          (a: number, b: any) => a + b,
+          0
+        );
+        data.result = quizResult;
+        this.store.dispatch(PassQuizActions.passQuiz({ data }));
       }
     }
   }

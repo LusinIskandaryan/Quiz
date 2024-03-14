@@ -3,4 +3,7 @@ export * from './app.effects';
 export * from './register.effects';
 export * from './auth.effects';
 export * from './user.effects';
+export * from './user-list.effects';
 export * from './quiz.effects';
+export * from './quiz-list.effects';
+export * from './pass-quiz.effects';

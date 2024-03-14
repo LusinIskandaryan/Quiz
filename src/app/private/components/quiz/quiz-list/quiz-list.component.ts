@@ -7,8 +7,8 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 
 import { Quiz, TableColumn } from 'src/app/private/interfaces';
-import { appFeature, quizFeature } from 'src/app/store/features';
-import { QuizActions } from 'src/app/store/actions';
+import { appFeature, quizListFeature } from 'src/app/store/features';
+import { QuizActions, QuizListActions } from 'src/app/store/actions';
 import { TableFieldType, UserRole } from 'src/app/private/enums';
 import { TabMenuComponent } from 'src/app/private/components/tab-menu/tab-menu.component';
 import { PageMode } from 'src/app/shared/enums';
@@ -27,7 +27,7 @@ export class QuizListComponent implements OnInit {
   currentUser = this.store.selectSignal(appFeature.selectCurrentUser);
   isUserAdmin = computed(() => this.currentUser()?.role === UserRole.admin);
 
-  vm = this.store.selectSignal(quizFeature.selectQuizState);
+  vm = this.store.selectSignal(quizListFeature.selectQuizListState);
   quizListColumns = computed<TableColumn[]>(() => {
     if (this.isUserAdmin()) {
       const list = [
@@ -47,7 +47,7 @@ export class QuizListComponent implements OnInit {
   pageMode = PageMode;
 
   ngOnInit(): void {
-    this.store.dispatch(QuizActions.getQuizList());
+    this.store.dispatch(QuizListActions.getQuizList());
   }
 
   changePageMode(event: MouseEvent, mode: PageMode): void {

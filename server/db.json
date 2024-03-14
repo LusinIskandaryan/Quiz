@@ -3,6 +3,7 @@
     {
       "name": "React",
       "timer": 10,
+      "result": 400,
       "passValue": 900,
       "questions": [
         {
@@ -14,22 +15,22 @@
             {
               "id": "1",
               "answer": true,
-              "correctAnswer": null
+              "correctAnswer": false
             },
             {
               "id": "2",
               "answer": false,
-              "correctAnswer": null
+              "correctAnswer": false
             },
             {
               "id": "3",
               "answer": "string",
-              "correctAnswer": null
+              "correctAnswer": true
             },
             {
               "id": "4",
               "answer": "null",
-              "correctAnswer": null
+              "correctAnswer": false
             }
           ]
         },
@@ -42,22 +43,22 @@
             {
               "id": "1",
               "answer": "User interface",
-              "correctAnswer": null
+              "correctAnswer": true
             },
             {
               "id": "2",
               "answer": "Connectivity",
-              "correctAnswer": null
+              "correctAnswer": false
             },
             {
               "id": "3",
               "answer": "Database",
-              "correctAnswer": null
+              "correctAnswer": false
             },
             {
               "id": "4",
               "answer": "Design Platform",
-              "correctAnswer": null
+              "correctAnswer": false
             }
           ]
         },
@@ -70,22 +71,22 @@
             {
               "id": "1",
               "answer": "Arrtibute",
-              "correctAnswer": null
+              "correctAnswer": false
             },
             {
               "id": "2",
               "answer": "Component",
-              "correctAnswer": null
+              "correctAnswer": false
             },
             {
               "id": "3",
               "answer": "Props",
-              "correctAnswer": null
+              "correctAnswer": true
             },
             {
               "id": "4",
               "answer": "Prop",
-              "correctAnswer": null
+              "correctAnswer": false
             }
           ]
         },
@@ -98,17 +99,17 @@
             {
               "id": "1",
               "answer": "React.CreateElement()",
-              "correctAnswer": null
+              "correctAnswer": true
             },
             {
               "id": "2",
               "answer": "JSX",
-              "correctAnswer": null
+              "correctAnswer": false
             },
             {
               "id": "3",
               "answer": "XML",
-              "correctAnswer": null
+              "correctAnswer": false
             }
           ]
         }
@@ -361,52 +362,22 @@
       ]
     },
     {
-      "id": "d211",
-      "name": "dfds",
-      "timer": 5000,
-      "passValue": 1500,
+      "id": "ac9f",
+      "name": "nm,mn,",
+      "timer": 2000,
+      "result": null,
+      "passValue": 200,
       "questions": [
         {
           "id": null,
-          "question": "grgrg",
-          "value": 300,
+          "question": "m,gjkjhk",
+          "value": 200,
           "type": 0,
           "answers": [
             {
               "id": null,
-              "answer": "rrgrgrdf",
-              "correctAnswer": false
-            },
-            {
-              "id": "2",
-              "answer": "hffgf",
+              "answer": "m,c,m.k..",
               "correctAnswer": true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "0635",
-      "name": "eee",
-      "timer": 2500,
-      "passValue": 1200,
-      "questions": [
-        {
-          "id": null,
-          "question": "fefef",
-          "value": 1200,
-          "type": 0,
-          "answers": [
-            {
-              "id": null,
-              "answer": "fefrfef",
-              "correctAnswer": true
-            },
-            {
-              "id": "2",
-              "answer": "wefwefe",
-              "correctAnswer": false
             }
           ]
         }

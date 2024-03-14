@@ -8,8 +8,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { Lookups, Quiz, User } from 'src/app/private/interfaces';
-import { QuizActions, UserActions } from 'src/app/store/actions';
-import { quizFeature, userFeature } from 'src/app/store/features';
+import { QuizListActions, UserActions } from 'src/app/store/actions';
+import { quizListFeature, userFeature } from 'src/app/store/features';
 
 @Component({
   selector: 'app-user-detail',
@@ -24,12 +24,12 @@ export class UserDetailComponent implements OnInit {
   vm = this.store.selectSignal(userFeature.selectUserState);
   quizIds = computed(() => this.vm().user?.quizIds);
   selectUserQuizList = this.store.selectSignal(userFeature.selectUserQuizList);
-  selectQuizList = this.store.selectSignal(quizFeature.selectQuizList);
+  selectQuizList = this.store.selectSignal(quizListFeature.selectQuizList);
   selectUserQuizLookups = this.store.selectSignal(userFeature.selectUserQuizLookup);
 
   constructor() {
     if (!this.selectQuizList().length) {
-      this.store.dispatch(QuizActions.getQuizList());
+      this.store.dispatch(QuizListActions.getQuizList());
     }
   }
 

@@ -17,7 +17,7 @@ export class ResultComponent implements OnInit {
   @Input() quizId = '';
   private readonly store = inject(Store);
   quiz = this.store.selectSignal(quizFeature.selectQuiz);
-  succeed = computed(() => (this.quiz()!.result! >= +this.quiz()!.passValue));
+  succeed = computed(() => (this.quiz()?.result! >= +this.quiz()!.passValue));
 
   ngOnInit(): void {
     this.store.dispatch(QuizActions.getQuiz({quizId: this.quizId}))

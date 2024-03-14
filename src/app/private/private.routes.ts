@@ -4,9 +4,18 @@ import { provideEffects } from '@ngrx/effects';
 import { provideState } from '@ngrx/store';
 
 import * as UserEffects from 'src/app/store/effects/user.effects';
+import * as UserListEffects from 'src/app/store/effects/user-list.effects';
 import * as QuizEffects from 'src/app/store/effects/quiz.effects';
+import * as QuizListEffects from 'src/app/store/effects/quiz-list.effects';
+import * as PassQuizEffects from 'src/app/store/effects/pass-quiz.effects';
 import { PrivateComponent } from './private.component';
-import { userFeature, quizFeature } from '../store/features';
+import {
+  userFeature,
+  quizFeature,
+  userListFeature,
+  quizListFeature,
+  passQuizFeature,
+} from '../store/features';
 import { isAdminGuard } from './guards';
 
 const quizRoutes = () =>
@@ -24,13 +33,22 @@ export const privateRoutes: Routes = [
       {
         path: 'user',
         loadChildren: userRoutes,
-        canMatch: [ isAdminGuard ]
+        canMatch: [isAdminGuard],
       },
     ],
     providers: [
-      provideEffects([UserEffects, QuizEffects]),
+      provideEffects([
+        UserEffects,
+        UserListEffects,
+        QuizEffects,
+        QuizListEffects,
+        PassQuizEffects,
+      ]),
       provideState(userFeature),
+      provideState(userListFeature),
       provideState(quizFeature),
+      provideState(quizListFeature),
+      provideState(passQuizFeature),
     ],
   },
 ];

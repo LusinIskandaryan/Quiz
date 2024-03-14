@@ -73,6 +73,7 @@
               <button
                 pButton
                 pRipple
+                type="button"
                 icon="pi pi-trash"
                 class="p-button-rounded p-button-danger"
                 (click)="removeQuestion($event)"
@@ -155,6 +156,7 @@
                     "
                     name="answer+{{ answerIndex }}"
                     [binary]="true"
+                    (onChange)="changeQuestionAnswer(answerIndex)"
                     [formControl]="
                       questionAnswersControl(
                         questionIndex(),
@@ -222,6 +224,7 @@
                 <button
                   pButton
                   pRipple
+                  type="button"
                   icon="pi pi-trash"
                   class="p-button-rounded p-button-danger"
                   (click)="
@@ -234,6 +237,7 @@
               <button
                 pButton
                 pRipple
+                type="button"
                 class="p-button-rounded p-button-success"
                 (click)="addNewAnswer($event)"
               >
@@ -246,6 +250,7 @@
           <button
             pButton
             pRipple
+            type="button"
             class="p-button-rounded p-button-success"
             (click)="addNewQuastion($event)"
           >

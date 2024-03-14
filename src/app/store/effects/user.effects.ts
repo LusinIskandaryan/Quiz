@@ -8,30 +8,7 @@ import { catchError, map, of, switchMap } from 'rxjs';
 import { QuizService, UserService } from 'src/app/private/services';
 import { HttpResponseSuccessModel } from 'src/app/shared/models';
 import { UserActions } from '../actions';
-import { appFeature, userFeature } from '../features';
-
-export const getUserList$ = createEffect(
-  (
-    store = inject(Store),
-    actions = inject(Actions),
-    service = inject(UserService)
-  ) => {
-    return actions.pipe(
-      ofType(UserActions.getUserList),
-      concatLatestFrom(() => store.select(appFeature.selectCurrentUser)),
-      switchMap(([, currentUser]) =>
-        service.getUserList(currentUser!.id).pipe(
-          map((res) => {
-            const resData = new HttpResponseSuccessModel(res, '');
-            return UserActions.getUserListSuccess(resData);
-          }),
-          catchError((error) => of(UserActions.getUserListError({ error })))
-        )
-      )
-    );
-  },
-  { functional: true }
-);
+import { userFeature } from '../features';
 
 export const getUser$ = createEffect(
   (actions = inject(Actions), service = inject(UserService)) => {

@@ -4,19 +4,15 @@ import { PageMode } from "src/app/shared/enums";
 export type QuizState = {
   quizId: string;
   quiz: Quiz | null;
-  quizList: Quiz[];
   loading: boolean,
   pageMode: PageMode;
-  timerRunning: boolean;
   quizTimer: number
 };
 
 export const initialQuizState: QuizState = {
   quizId: '',
   quiz: null,
-  quizList: [],
   loading: false,
   pageMode: PageMode.View,
-  timerRunning: false,
   quizTimer: 1,
 };

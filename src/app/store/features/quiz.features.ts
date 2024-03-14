@@ -4,24 +4,15 @@ import { immerOn } from 'ngrx-immer/store';
 
 import { Features, PageMode } from 'src/app/shared/enums';
 import { initialQuizState } from '../states';
-import { QuizActions } from '../actions';
+import { PassQuizActions, QuizActions } from '../actions';
 
 export const quizReducer = createReducer(
   initialQuizState,
-  immerOn(QuizActions.getQuizList, (state) => {
-    state.loading = true;
-    state.quizList = [];
-  }),
-
-  immerOn(QuizActions.getQuizListSuccess, (state, { data }) => {
-    state.quizList = data;
-  }),
 
   immerOn(QuizActions.getQuiz, (state) => {
     state.quizId = '';
     state.quiz = null;
     state.loading = true;
-    state.quizTimer = 1;
   }),
 
   immerOn(QuizActions.getQuizSuccess, (state, { data }) => {
@@ -37,29 +28,23 @@ export const quizReducer = createReducer(
   immerOn(QuizActions.updateQuizSuccess, (state) => {
     state.pageMode = PageMode.View;
   }),
-  immerOn(QuizActions.startTimer, (state) => {
-    state.timerRunning = true;
-  }),
-  immerOn(QuizActions.stopTimer, (state) => {
-    state.timerRunning = false;
-  }),
   immerOn(QuizActions.tick, (state) => {
     state.quizTimer = state.quizTimer > 0 ? state.quizTimer - 1 : 0;
+  }),
+  immerOn(PassQuizActions.passQuiz, (state) => {
+    state.quizTimer = 1;
   }),
 
   immerOn(
     QuizActions.updateQuiz,
     QuizActions.createQuiz,
     QuizActions.deleteQuiz,
-    QuizActions.passQuiz,
     (state) => {
       state.loading = true;
     }
   ),
 
   immerOn(
-    QuizActions.getQuizListSuccess,
-    QuizActions.getQuizListError,
     QuizActions.getQuizSuccess,
     QuizActions.getQuizError,
     QuizActions.updateQuizSuccess,
@@ -68,8 +53,6 @@ export const quizReducer = createReducer(
     QuizActions.createQuizError,
     QuizActions.deleteQuizSuccess,
     QuizActions.deleteQuizError,
-    QuizActions.passQuizSuccess,
-    QuizActions.passQuizError,
     (state) => {
       state.loading = false;
     }

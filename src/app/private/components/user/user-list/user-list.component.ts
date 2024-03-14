@@ -6,8 +6,8 @@ import { Store } from '@ngrx/store';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 
-import { userFeature } from 'src/app/store/features';
-import { UserActions } from 'src/app/store/actions';
+import { userListFeature } from 'src/app/store/features';
+import { UserListActions } from 'src/app/store/actions';
 import { TableColumn } from 'src/app/private/interfaces';
 import { TabMenuComponent } from 'src/app/private/components/tab-menu/tab-menu.component';
 @Component({
@@ -19,12 +19,12 @@ import { TabMenuComponent } from 'src/app/private/components/tab-menu/tab-menu.c
 })
 export class UserListComponent {
   private readonly store = inject(Store);
-  vm = this.store.selectSignal(userFeature.selectUserState);
+  vm = this.store.selectSignal(userListFeature.selectUserListState);
   userListColumns: TableColumn[] = [
     { field: 'name', header: 'Name' },
   ];
 
   ngOnInit(): void {
-    this.store.dispatch(UserActions.getUserList());
+    this.store.dispatch(UserListActions.getUserList());
   }
 }

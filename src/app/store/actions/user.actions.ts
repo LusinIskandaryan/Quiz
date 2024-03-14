@@ -6,10 +6,6 @@ import { httpErrorProps, httpSuccessProps } from 'src/app/shared/functions';
 export const UserActions = createActionGroup({
   source: 'User',
   events: {
-    'Get User List': emptyProps(),
-    'Get User List Success': httpSuccessProps<User[]>(),
-    'Get User List Error': httpErrorProps(),
-
     'Get User': props<{ userId: string }>(),
     'Get User Success': httpSuccessProps<User>(),
     'Get User Error': httpErrorProps(),

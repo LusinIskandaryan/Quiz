@@ -1,4 +1,4 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import {
   provideRouter,
@@ -51,6 +51,7 @@ export const appConfig: ApplicationConfig = {
         onSameUrlNavigation: 'reload',
       })
     ),
+    provideZoneChangeDetection({ eventCoalescing: true }),
     {
       provide: BASE_URL,
       useValue: environment.baseUrl,

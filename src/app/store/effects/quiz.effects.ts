@@ -7,6 +7,7 @@ import { Store } from '@ngrx/store';
 import {
   catchError,
   exhaustMap,
+  filter,
   interval,
   map,
   of,
@@ -18,35 +19,9 @@ import {
 import { HttpResponseSuccessModel } from 'src/app/shared/models';
 import { UserRole } from 'src/app/private/enums';
 import { QuizService } from 'src/app/private/services';
-import { QuizActions } from '../actions';
+import { PassQuizActions, QuizActions, QuizListActions } from '../actions';
 import { quizFeature } from '../features/quiz.features';
 import { appFeature } from '../features';
-
-export const getQuizList$ = createEffect(
-  (
-    actions = inject(Actions),
-    store = inject(Store),
-    service = inject(QuizService)
-  ) => {
-    return actions.pipe(
-      ofType(QuizActions.getQuizList),
-      concatLatestFrom(() => store.select(appFeature.selectCurrentUser)),
-      switchMap(([, currentUser]) =>
-        service.getQuizList().pipe(
-          map((res) => {
-            if (currentUser?.role === UserRole.user) {
-              res = res.filter((quiz) => currentUser.quizIds.includes(quiz.id));
-            }
-            const resData = new HttpResponseSuccessModel(res, '');
-            return QuizActions.getQuizListSuccess(resData);
-          }),
-          catchError((error) => of(QuizActions.getQuizListError({ error })))
-        )
-      )
-    );
-  },
-  { functional: true }
-);
 
 export const getQuiz$ = createEffect(
   (actions = inject(Actions), service = inject(QuizService)) => {
@@ -66,21 +41,17 @@ export const getQuiz$ = createEffect(
   { functional: true }
 );
 
-// export const getQuizSuccess$ = createEffect(
-//   (actions = inject(Actions), state = inject(Store)) => {
-//     return actions.pipe(
-//       ofType(QuizActions.getQuiz),
-//       concatLatestFrom(() => state.select(appFeature.selectCurrentUser)),
-//       map(([{ quizId }, user]) => {
-//         if (quizId && user?.role !== UserRole.admin) {
-//           return QuizActions.startTimer();
-//         }
-//         return QuizActions.stopTimer();
-//       })
-//     );
-//   },
-//   { functional: true }
-// );
+export const getQuizSuccess$ = createEffect(
+  (actions = inject(Actions), state = inject(Store)) => {
+    return actions.pipe(
+      ofType(QuizActions.getQuizSuccess),
+      concatLatestFrom(() => state.select(appFeature.selectCurrentUser)),
+      filter(([, currentUser]) => currentUser?.role === UserRole.user),
+      map(() => QuizActions.startTimer())
+    );
+  },
+  { functional: true }
+);
 
 export const deleteQuiz$ = createEffect(
   (actions = inject(Actions), service = inject(QuizService)) => {
@@ -107,7 +78,7 @@ export const deleteQuizSuccess$ = createEffect(
   (actions = inject(Actions)) => {
     return actions.pipe(
       ofType(QuizActions.deleteQuizSuccess),
-      map(() => QuizActions.getQuizList())
+      map(() => QuizListActions.getQuizList())
     );
   },
   { functional: true }
@@ -197,41 +168,10 @@ export const startTimer$ = createEffect(
 export const stopTimer$ = createEffect(
   (actions = inject(Actions)) => {
     return actions.pipe(
-      ofType(QuizActions.stopTimer, QuizActions.passQuizSuccess, QuizActions.passQuizError),
+      ofType(PassQuizActions.passQuizError, PassQuizActions.passQuizSuccess),
       map(() => QuizActions.stopTimer())
     );
   },
   { functional: true }
 );
 
-export const passQuiz$ = createEffect(
-  (actions = inject(Actions), service = inject(QuizService)) => {
-    return actions.pipe(
-      ofType(QuizActions.passQuiz),
-      exhaustMap(({ data }) =>
-        service.passQuiz(data).pipe(
-          map((res) => QuizActions.passQuizSuccess(res)),
-          catchError((error) => of(QuizActions.passQuizError({ error })))
-        )
-      )
-    );
-  },
-  { functional: true }
-);
-
-export const passQuizSuccess$ = createEffect(
-  (
-    actions = inject(Actions),
-    router = inject(Router),
-    store = inject(Store)
-  ) => {
-    return actions.pipe(
-      ofType(QuizActions.passQuizSuccess),
-      concatLatestFrom(() => store.select(quizFeature.selectQuizId)),
-      tap(([, quizId]) => {
-        router.navigate([`/quiz/result/${quizId}`]);
-      })
-    );
-  },
-  { functional: true, dispatch: false }
-);

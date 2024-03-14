@@ -7,10 +7,6 @@ import { httpErrorProps, httpSuccessProps } from 'src/app/shared/functions';
 export const QuizActions = createActionGroup({
   source: 'Quiz',
   events: {
-    'Get Quiz List': emptyProps(),
-    'Get Quiz List Success': httpSuccessProps<Quiz[]>(),
-    'Get Quiz List Error': httpErrorProps(),
-
     'Get Quiz': props<{ quizId: string }>(),
     'Get Quiz Success': httpSuccessProps<Quiz>(),
     'Get Quiz Error': httpErrorProps(),
@@ -30,10 +26,6 @@ export const QuizActions = createActionGroup({
     'Start Timer': emptyProps(),
     'Tick': emptyProps(),
     'Stop Timer': emptyProps(),
-
-    'Pass Quiz': props<{ data: Quiz }>(),
-    'Pass Quiz Success': httpSuccessProps<string>(),
-    'Pass Quiz Error': httpErrorProps(),
 
     'Change Page Mode': props<{ mode: PageMode }>(),
   },

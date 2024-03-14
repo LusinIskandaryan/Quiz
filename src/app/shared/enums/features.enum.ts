@@ -1,7 +1,10 @@
 export enum Features {
   App = 'App',
-  User = 'User',
-  Quiz = 'Quiz',
   Register = 'Register',
   Login = 'Login',
+  User = 'User',
+  UserList = 'UserList',
+  Quiz = 'Quiz',
+  QuizList = 'QuizList',
+  PassQuiz = 'PassQuiz',
 }

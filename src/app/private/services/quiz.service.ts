@@ -4,7 +4,6 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { BASE_URL } from 'src/app/shared/api/tokens';
-import { RequestResponse } from 'src/app/shared/interfaces';
 import { Quiz, Lookups } from '../interfaces';
 
 @Injectable({
@@ -44,10 +43,9 @@ export class QuizService {
     return this.http.post<Quiz>(url, data);
   }
 
-  passQuiz(data: Quiz): Observable<RequestResponse<string>> {
-    console.log(data);
-    const url = `${this.baseUrl}/quizs/${data.id}`;
-    return this.http.put<RequestResponse<string>>(url, data);
+  passQuiz(data: Quiz): Observable<Quiz> {
+    const url = `${this.baseUrl}/quiz/${data.id}`;
+    return this.http.put<Quiz>(url, data);
   }
 
 }

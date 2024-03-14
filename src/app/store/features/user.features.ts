@@ -7,20 +7,11 @@ import {
 import { immerOn } from 'ngrx-immer/store';
 
 import { Features } from 'src/app/shared/enums';
-import { QuizState, initialUserState } from '../states';
+import { QuizListState, initialUserState } from '../states';
 import { UserActions } from '../actions';
 
 export const userReducer = createReducer(
   initialUserState,
-  immerOn(UserActions.getUserList, (state) => {
-    state.loading = true;
-    state.userList = [];
-  }),
-
-  immerOn(UserActions.getUserListSuccess, (state, { data }) => {
-    state.userList = data;
-  }),
-
   immerOn(UserActions.getUser, (state) => {
     state.userId = '';
     state.user = null;
@@ -45,8 +36,6 @@ export const userReducer = createReducer(
   }),
 
   immerOn(
-    UserActions.getUserListSuccess,
-    UserActions.getUserListError,
     UserActions.getUserSuccess,
     UserActions.getUserError,
     UserActions.updateUserSuccess,
@@ -59,10 +48,10 @@ export const userReducer = createReducer(
   )
 );
 
-const quizSelector = createFeatureSelector<QuizState>(Features.Quiz);
+const quizListSelector = createFeatureSelector<QuizListState>(Features.QuizList);
 
-const createquizSelectorMap = <T>(mapping: (state: QuizState) => T) =>
-  createSelector(quizSelector, mapping);
+const createquizSelectorMap = <T>(mapping: (state: QuizListState) => T) =>
+  createSelector(quizListSelector, mapping);
 
 const selectQuizList = createquizSelectorMap((state) => state.quizList);
 
