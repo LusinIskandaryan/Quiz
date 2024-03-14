@@ -21,11 +21,13 @@ export const quizReducer = createReducer(
     state.quizId = '';
     state.quiz = null;
     state.loading = true;
+    state.quizTimer = 1;
   }),
 
   immerOn(QuizActions.getQuizSuccess, (state, { data }) => {
     state.quizId = data.id;
     state.quiz = data;
+    state.quizTimer = data.timer;
   }),
 
   immerOn(QuizActions.changePageMode, (state, { mode }) => {
@@ -34,6 +36,15 @@ export const quizReducer = createReducer(
 
   immerOn(QuizActions.updateQuizSuccess, (state) => {
     state.pageMode = PageMode.View;
+  }),
+  immerOn(QuizActions.startTimer, (state) => {
+    state.timerRunning = true;
+  }),
+  immerOn(QuizActions.stopTimer, (state) => {
+    state.timerRunning = false;
+  }),
+  immerOn(QuizActions.tick, (state) => {
+    state.quizTimer = state.quizTimer > 0 ? state.quizTimer - 1 : 0;
   }),
 
   immerOn(

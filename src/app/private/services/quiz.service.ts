@@ -34,18 +34,19 @@ export class QuizService {
     return this.http.delete<Quiz>(url);
   }
 
-  createQuiz(data: Quiz): Observable<RequestResponse<string>> {
+  updateQuiz(data: Quiz): Observable<Quiz> {
+    const url = `${this.baseUrl}/quiz/${data.id}`;
+    return this.http.put<Quiz>(url, data);
+  }
+
+  createQuiz(data: Quiz): Observable<Quiz> {
     const url = `${this.baseUrl}/quiz`;
-    return this.http.post<RequestResponse<string>>(url, data);
+    return this.http.post<Quiz>(url, data);
   }
 
   passQuiz(data: Quiz): Observable<RequestResponse<string>> {
-    const url = `${this.baseUrl}/quiz/${data.id}`;
-    return this.http.put<RequestResponse<string>>(url, data);
-  }
-
-  updateQuiz(data: Quiz): Observable<RequestResponse<string>> {
-    const url = `${this.baseUrl}/quiz/${data.id}`;
+    console.log(data);
+    const url = `${this.baseUrl}/quizs/${data.id}`;
     return this.http.put<RequestResponse<string>>(url, data);
   }
 

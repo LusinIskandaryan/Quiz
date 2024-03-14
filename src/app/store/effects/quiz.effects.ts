@@ -4,7 +4,16 @@ import { Router } from '@angular/router';
 import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 
-import { catchError, exhaustMap, map, of, switchMap, tap } from 'rxjs';
+import {
+  catchError,
+  exhaustMap,
+  interval,
+  map,
+  of,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 
 import { HttpResponseSuccessModel } from 'src/app/shared/models';
 import { UserRole } from 'src/app/private/enums';
@@ -57,6 +66,22 @@ export const getQuiz$ = createEffect(
   { functional: true }
 );
 
+// export const getQuizSuccess$ = createEffect(
+//   (actions = inject(Actions), state = inject(Store)) => {
+//     return actions.pipe(
+//       ofType(QuizActions.getQuiz),
+//       concatLatestFrom(() => state.select(appFeature.selectCurrentUser)),
+//       map(([{ quizId }, user]) => {
+//         if (quizId && user?.role !== UserRole.admin) {
+//           return QuizActions.startTimer();
+//         }
+//         return QuizActions.stopTimer();
+//       })
+//     );
+//   },
+//   { functional: true }
+// );
+
 export const deleteQuiz$ = createEffect(
   (actions = inject(Actions), service = inject(QuizService)) => {
     return actions.pipe(
@@ -64,8 +89,11 @@ export const deleteQuiz$ = createEffect(
       exhaustMap(({ quizId }) =>
         service.deleteQuiz(quizId).pipe(
           map(() => {
-            const resData = new HttpResponseSuccessModel(true, 'Quiz is successfully deleted.');
-            return QuizActions.deleteQuizSuccess(resData)
+            const resData = new HttpResponseSuccessModel(
+              true,
+              'Quiz is successfully deleted.'
+            );
+            return QuizActions.deleteQuizSuccess(resData);
           }),
           catchError((error) => of(QuizActions.deleteQuizError({ error })))
         )
@@ -85,13 +113,52 @@ export const deleteQuizSuccess$ = createEffect(
   { functional: true }
 );
 
+export const createQuiz$ = createEffect(
+  (actions = inject(Actions), service = inject(QuizService)) => {
+    return actions.pipe(
+      ofType(QuizActions.createQuiz),
+      exhaustMap(({ data }) =>
+        service.createQuiz(data).pipe(
+          map((res) => {
+            const resData = new HttpResponseSuccessModel(
+              res,
+              'Quiz is successfully created.'
+            );
+            return QuizActions.createQuizSuccess(resData);
+          }),
+          catchError((error) => of(QuizActions.createQuizError({ error })))
+        )
+      )
+    );
+  },
+  { functional: true }
+);
+
+export const createQuizSuccess$ = createEffect(
+  (actions = inject(Actions), router = inject(Router)) => {
+    return actions.pipe(
+      ofType(QuizActions.createQuizSuccess),
+      tap(() => {
+        router.navigate([`/quiz/list`]);
+      })
+    );
+  },
+  { functional: true, dispatch: false }
+);
+
 export const updateQuiz$ = createEffect(
   (actions = inject(Actions), service = inject(QuizService)) => {
     return actions.pipe(
       ofType(QuizActions.updateQuiz),
       switchMap(({ data }) =>
         service.updateQuiz(data).pipe(
-          map((res) => QuizActions.updateQuizSuccess(res)),
+          map((res) => {
+            const resData = new HttpResponseSuccessModel(
+              res,
+              'Quiz is successfully updated.'
+            );
+            return QuizActions.updateQuizSuccess(resData);
+          }),
           catchError((error) => of(QuizActions.updateQuizError({ error })))
         )
       )
@@ -111,14 +178,15 @@ export const updateQuizSuccess$ = createEffect(
   { functional: true }
 );
 
-export const createQuiz$ = createEffect(
-  (actions = inject(Actions), service = inject(QuizService)) => {
+export const startTimer$ = createEffect(
+  (actions = inject(Actions)) => {
     return actions.pipe(
-      ofType(QuizActions.createQuiz),
-      exhaustMap(({ data }) =>
-        service.createQuiz(data).pipe(
-          map((res) => QuizActions.createQuizSuccess(res)),
-          catchError((error) => of(QuizActions.createQuizError({ error })))
+      ofType(QuizActions.startTimer),
+      switchMap(() =>
+        interval(1000).pipe(
+          tap(() => console.log('intervalWorks')),
+          map(() => QuizActions.tick()),
+          takeUntil(actions.pipe(ofType(QuizActions.stopTimer)))
         )
       )
     );
@@ -126,16 +194,14 @@ export const createQuiz$ = createEffect(
   { functional: true }
 );
 
-export const createQuizSuccess$ = createEffect(
-  (actions = inject(Actions), router = inject(Router)) => {
+export const stopTimer$ = createEffect(
+  (actions = inject(Actions)) => {
     return actions.pipe(
-      ofType(QuizActions.createQuizSuccess),
-      tap(() => {
-        router.navigate([`/quiz/list`]);
-      })
+      ofType(QuizActions.stopTimer, QuizActions.passQuizSuccess, QuizActions.passQuizError),
+      map(() => QuizActions.stopTimer())
     );
   },
-  { functional: true, dispatch: false }
+  { functional: true }
 );
 
 export const passQuiz$ = createEffect(

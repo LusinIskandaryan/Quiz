@@ -63,6 +63,7 @@
             pButton
             pRipple
             class="p-button-rounded p-button-warning"
+            (click)="changePageMode($event, pageMode.Edit)"
             [routerLink]="['/quiz/start', rowData.id]"
           >
             Start quiz

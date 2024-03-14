@@ -16,16 +16,20 @@ export const QuizActions = createActionGroup({
     'Get Quiz Error': httpErrorProps(),
 
     'Create Quiz': props<{ data: Quiz }>(),
-    'Create Quiz Success': httpSuccessProps<string>(),
+    'Create Quiz Success': httpSuccessProps<Quiz>(),
     'Create Quiz Error': httpErrorProps(),
 
     'Update Quiz': props<{ data: Quiz }>(),
-    'Update Quiz Success': httpSuccessProps<string>(),
+    'Update Quiz Success': httpSuccessProps<Quiz>(),
     'Update Quiz Error': httpErrorProps(),
 
     'Delete Quiz': props<{ quizId: string }>(),
     'Delete Quiz Success': httpSuccessProps<boolean>(),
     'Delete Quiz Error': httpErrorProps(),
+
+    'Start Timer': emptyProps(),
+    'Tick': emptyProps(),
+    'Stop Timer': emptyProps(),
 
     'Pass Quiz': props<{ data: Quiz }>(),
     'Pass Quiz Success': httpSuccessProps<string>(),

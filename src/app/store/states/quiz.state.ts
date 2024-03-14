@@ -7,6 +7,8 @@ export type QuizState = {
   quizList: Quiz[];
   loading: boolean,
   pageMode: PageMode;
+  timerRunning: boolean;
+  quizTimer: number
 };
 
 export const initialQuizState: QuizState = {
@@ -15,4 +17,6 @@ export const initialQuizState: QuizState = {
   quizList: [],
   loading: false,
   pageMode: PageMode.View,
+  timerRunning: false,
+  quizTimer: 1,
 };
