@@ -14,8 +14,8 @@ import {
 
 import { HttpResponseSuccessModel } from 'src/app/shared/models';
 import { QuizService } from 'src/app/private/services';
-import { PassQuizActions } from '../actions';
-import { quizFeature } from '../features/quiz.features';
+import { PassQuizActions } from '../../actions';
+import { quizFeature } from '../../features/quiz-features/quiz.features';
 
 export const passQuiz$ = createEffect(
   (actions = inject(Actions), service = inject(QuizService)) => {

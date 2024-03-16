@@ -54,6 +54,7 @@ export class UserDetailComponent implements OnInit {
     multiselectValue?.forEach((item) => quizIds.push(item.id));
     const data = { ...this.vm().user, quizIds } as User;
     this.store.dispatch(UserActions.updateUser({ data }));
+    this.quizList.patchValue([]);
   }
 
   cleare(): void {

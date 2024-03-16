@@ -3,8 +3,8 @@ import { createFeature, createReducer } from '@ngrx/store';
 import { immerOn } from 'ngrx-immer/store';
 
 import { Features } from 'src/app/shared/enums';
-import { initialQuizListState } from '../states';
-import { QuizListActions } from '../actions';
+import { initialQuizListState } from '../../states';
+import { QuizListActions } from '../../actions';
 
 export const quizListReducer = createReducer(
   initialQuizListState,

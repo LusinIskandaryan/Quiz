@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 import { provideEffects } from '@ngrx/effects';
 import { provideState } from '@ngrx/store';
 
-import * as UserEffects from 'src/app/store/effects/user.effects';
+import * as UserEffects from 'src/app/store/effects/user-effects/user.effects';
 import { userFeature } from 'src/app/store/features';
 
 const userList = () => import('../index').then((m) => m.UserListComponent);

@@ -13,8 +13,8 @@ import {
 import { HttpResponseSuccessModel } from 'src/app/shared/models';
 import { UserRole } from 'src/app/private/enums';
 import { QuizService } from 'src/app/private/services';
-import { QuizListActions } from '../actions';
-import { appFeature } from '../features';
+import { QuizListActions } from '../../actions';
+import { appFeature } from '../../features';
 
 export const getQuizList$ = createEffect(
   (

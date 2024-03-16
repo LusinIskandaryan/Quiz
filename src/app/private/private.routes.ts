@@ -3,10 +3,10 @@ import { Routes } from '@angular/router';
 import { provideEffects } from '@ngrx/effects';
 import { provideState } from '@ngrx/store';
 
-import * as UserListEffects from 'src/app/store/effects/user-list.effects';
-import * as QuizEffects from 'src/app/store/effects/quiz.effects';
-import * as QuizListEffects from 'src/app/store/effects/quiz-list.effects';
-import * as PassQuizEffects from 'src/app/store/effects/pass-quiz.effects';
+import * as UserListEffects from 'src/app/store/effects/user-effects/user-list.effects';
+import * as QuizEffects from 'src/app/store/effects/quiz-effects/quiz.effects';
+import * as QuizListEffects from 'src/app/store/effects/quiz-effects/quiz-list.effects';
+import * as PassQuizEffects from 'src/app/store/effects/quiz-effects/pass-quiz.effects';
 import * as LookupsEffects from 'src/app/store/effects/lookups.effects';
 import { PrivateComponent } from './private.component';
 import {

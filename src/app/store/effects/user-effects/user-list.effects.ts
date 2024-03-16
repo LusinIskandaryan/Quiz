@@ -7,8 +7,8 @@ import { catchError, map, of, switchMap } from 'rxjs';
 
 import { UserService } from 'src/app/private/services';
 import { HttpResponseSuccessModel } from 'src/app/shared/models';
-import { UserListActions } from '../actions';
-import { appFeature } from '../features';
+import { UserListActions } from '../../actions';
+import { appFeature } from '../../features';
 
 export const getUserList$ = createEffect(
   (

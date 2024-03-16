@@ -19,9 +19,9 @@ import {
 import { HttpResponseSuccessModel } from 'src/app/shared/models';
 import { UserRole } from 'src/app/private/enums';
 import { QuizService } from 'src/app/private/services';
-import { PassQuizActions, QuizActions, QuizListActions } from '../actions';
-import { quizFeature } from '../features/quiz.features';
-import { appFeature } from '../features';
+import { PassQuizActions, QuizActions, QuizListActions } from '../../actions';
+import { quizFeature } from '../../features/quiz-features/quiz.features';
+import { appFeature } from '../../features';
 
 export const getQuiz$ = createEffect(
   (actions = inject(Actions), service = inject(QuizService)) => {

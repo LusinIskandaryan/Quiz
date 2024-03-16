@@ -7,8 +7,8 @@ import {
 import { immerOn } from 'ngrx-immer/store';
 
 import { Features } from 'src/app/shared/enums';
-import { QuizListState, initialUserState } from '../states';
-import { LookupsActions, UserActions } from '../actions';
+import { QuizListState, initialUserState } from '../../states';
+import { LookupsActions, UserActions } from '../../actions';
 
 export const userReducer = createReducer(
   initialUserState,

@@ -53,9 +53,6 @@ import { Question, Quiz } from 'src/app/private/interfaces';
   styleUrl: './quiz-detail.component.scss',
 })
 export class QuizDetailComponent implements OnInit {
-  // TODO mtacel quiz Type changi, add Answer, removeAnswer, Add Quiz, remove Quiz xndir@ ***
-  // TODO create quiz anelis quizneri lookup@ update anel               ***
-
   @Input() quizId: string = '';
   private readonly store = inject(Store);
   vm = this.store.selectSignal(quizFeature.selectQuizState);
@@ -212,8 +209,14 @@ export class QuizDetailComponent implements OnInit {
   private newAnswers(answerIndex?: string): FormGroup {
     return new FormGroup({
       id: new FormControl<string | null>(answerIndex ?? '1'),
-      answer: new FormControl<string | null>({value: null, disabled: this.viewMode()}, Validators.required),
-      correctAnswer: new FormControl<boolean>({value: false, disabled: this.viewMode()}),
+      answer: new FormControl<string | null>(
+        { value: null, disabled: this.viewMode() },
+        Validators.required
+      ),
+      correctAnswer: new FormControl<boolean>({
+        value: false,
+        disabled: this.viewMode(),
+      }),
     });
   }
 
@@ -227,7 +230,6 @@ export class QuizDetailComponent implements OnInit {
     this.addQuastion(index);
     this.questionsLength.set(this.questions.length);
     this.form.updateValueAndValidity();
-    // this.initialAnswersValue = this.form.value.questions![this.questionIndex()].answers;
   }
 
   removeQuestion(event: MouseEvent): void {
@@ -250,13 +252,11 @@ export class QuizDetailComponent implements OnInit {
       .at(index - 1)
       .markAllAsTouched();
     this.form.updateValueAndValidity();
-    // this.initialAnswersValue = this.form.value.questions![this.questionIndex()].answers;
   }
 
   removeAnswer(event: MouseEvent, answerIndex: number) {
     event.stopPropagation();
     this.answers(this.questionIndex()).removeAt(answerIndex);
-    // this.initialAnswersValue = this.form.value.questions![this.questionIndex()].answers;
   }
 
   changePageMode(event: MouseEvent, mode: PageMode): void {
@@ -274,7 +274,6 @@ export class QuizDetailComponent implements OnInit {
     if (this.questionIndex() > 0) {
       this.questionIndex.update((value) => value - 1);
     }
-    // this.initialAnswersValue = this.initialFormValue.questions![this.questionIndex()].answers;
   }
 
   showNextPage(event: MouseEvent): void {
@@ -282,7 +281,6 @@ export class QuizDetailComponent implements OnInit {
     if (this.questionIndex() < this.questions.length - 1) {
       this.questionIndex.update((value) => value + 1);
     }
-    // this.initialAnswersValue = this.initialFormValue.questions![this.questionIndex()].answers;
   }
 
   changeAnswer(answerIndex: number) {
@@ -316,7 +314,6 @@ export class QuizDetailComponent implements OnInit {
 
   changeType(): void {
     this.answers(this.questionIndex()).patchValue(this.initialAnswersValue);
-    console.log(this.answers(this.questionIndex()).getRawValue());
   }
 
   save(): void {

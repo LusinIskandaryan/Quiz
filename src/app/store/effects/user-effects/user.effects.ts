@@ -7,8 +7,8 @@ import { catchError, exhaustMap, map, of, switchMap } from 'rxjs';
 
 import { LookupsService, UserService } from 'src/app/private/services';
 import { HttpResponseSuccessModel } from 'src/app/shared/models';
-import { LookupsActions, UserActions } from '../actions';
-import { userFeature } from '../features';
+import { LookupsActions, UserActions } from '../../actions';
+import { userFeature } from '../../features';
 
 export const getUser$ = createEffect(
   (actions = inject(Actions), service = inject(UserService)) => {
