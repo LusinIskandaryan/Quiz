@@ -1,4 +1,6 @@
-* {
+body,
+ul,
+ol {
   margin: 0;
 }
 
@@ -23,7 +25,7 @@ app-public,
 app-sign-up,
 app-welcome,
 app-sign-in,
-app-private  {
+app-private {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -40,8 +42,8 @@ a {
 }
 
 .link {
-    margin-left: 5px;
-    color: blue;
+  margin-left: 5px;
+  color: blue;
 }
 
 .centered {
@@ -77,7 +79,7 @@ p-progressspinner {
 }
 
 .container {
-  padding:  0 15px;
+  padding: 0 15px;
   max-width: 1728px;
   width: 100%;
   margin: 0 auto;
@@ -86,10 +88,12 @@ p-progressspinner {
 .p-card {
   background: #fff;
   box-shadow: 0px 1px 4px rgba(8, 22, 42, .15);
+
   .p-card-header {
     padding: 10px 20px;
+  }
 }
-}
+
 main {
   padding: 20px 0;
 }

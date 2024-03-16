@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, computed, inject } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 import { Store } from '@ngrx/store';
 
@@ -14,7 +15,7 @@ import { quizListFeature, userFeature } from 'src/app/store/features';
 @Component({
   selector: 'app-user-detail',
   standalone: true,
-  imports: [ButtonModule, CardModule, MultiSelectModule, ProgressSpinnerModule],
+  imports: [ButtonModule, CardModule, MultiSelectModule, ProgressSpinnerModule, ReactiveFormsModule],
   templateUrl: './user-detail.component.html',
   styleUrl: './user-detail.component.scss',
 })
@@ -25,7 +26,10 @@ export class UserDetailComponent implements OnInit {
   quizIds = computed(() => this.vm().user?.quizIds);
   selectUserQuizList = this.store.selectSignal(userFeature.selectUserQuizList);
   selectQuizList = this.store.selectSignal(quizListFeature.selectQuizList);
-  selectUserQuizLookups = this.store.selectSignal(userFeature.selectUserQuizLookup);
+  selectUserQuizLookups = this.store.selectSignal(
+    userFeature.selectUserQuizLookup
+  );
+  quizList = new FormControl<Lookups[]>([]);
 
   constructor() {
     if (!this.selectQuizList().length) {
@@ -44,10 +48,15 @@ export class UserDetailComponent implements OnInit {
     this.store.dispatch(UserActions.updateUser({ data }));
   }
 
-  assignQuiz(value: Lookups[]): void {
+  assignQuiz(): void {
+    const multiselectValue = this.quizList.value;
     const quizIds = this.quizIds() ? [...this.quizIds()!] : [];
-    value.forEach((item) => quizIds.push(item.id));
+    multiselectValue?.forEach((item) => quizIds.push(item.id));
     const data = { ...this.vm().user, quizIds } as User;
     this.store.dispatch(UserActions.updateUser({ data }));
+  }
+
+  cleare(): void {
+    this.quizList.patchValue([]);
   }
 }

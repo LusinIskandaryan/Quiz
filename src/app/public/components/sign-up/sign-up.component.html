@@ -1,78 +1,58 @@
 <div class="centered">
   <div class="auth-container">
     <form [formGroup]="form" (ngSubmit)="signUp()">
-      <img alt='quiz' src="assets/img/logo.jpg" height="40" />
+      <img alt="quiz" src="assets/img/logo.jpg" height="40" />
       <h3>Sign Up</h3>
       <div class="formgrid">
         <div class="field">
           <label for="name">Full Name</label>
-          <input
-            class="w-full"
-            type="text"
-            pInputText
-            formControlName="name"
-            appValueTrim
-          />
-          @if (formCtrl.name.errors && (formCtrl.name.touched || formCtrl.name.dirty)) {
-            <app-validation-messages [control]="formCtrl.name" [value]="formCtrl.name.value" />
+          <input class="w-full" type="text" pInputText formControlName="name" appValueTrim />
+          @if (formCtrl.name.errors && (formCtrl.name.touched ||
+          formCtrl.name.dirty)) {
+          <app-validation-messages [control]="formCtrl.name" [value]="formCtrl.name.value" />
           }
         </div>
         <div class="field">
           <label for="email">Email</label>
-          <input
-            class="w-full"
-            type="email"
-            pInputText
-            formControlName="email"
-            appValueTrim
-          />
-          @if (formCtrl.email.errors && (formCtrl.email.touched || formCtrl.email.dirty)) {
-            <app-validation-messages [control]="formCtrl.email" [value]="formCtrl.email.value" />
+          <input class="w-full" type="email" pInputText formControlName="email" appValueTrim />
+          @if (formCtrl.email.errors && (formCtrl.email.touched ||
+          formCtrl.email.dirty)) {
+          <app-validation-messages [control]="formCtrl.email" [value]="formCtrl.email.value" />
           }
         </div>
         <div class="field">
           <label for="password">Password</label>
-          <p-password
-            class="w-full"
-            formControlName="password"
-            [toggleMask]="true"
-          />
-          @if (formCtrl.password.errors && (formCtrl.password.touched || formCtrl.password.dirty)) {
-            <app-validation-messages [control]="formCtrl.password" [value]="formCtrl.password.value" />
+          <p-password class="w-full" formControlName="password" [toggleMask]="true" />
+          @if (formCtrl.password.errors && (formCtrl.password.touched ||
+          formCtrl.password.dirty)) {
+          <app-validation-messages [control]="formCtrl.password" [value]="formCtrl.password.value" />
           }
         </div>
         <div class="field">
           <label for="confirmPassword">Confirm Password</label>
-          <p-password
-            class="w-full"
-            formControlName="confirmPassword"
-            [toggleMask]="true"
-          />
-          @if (formCtrl.confirmPassword.errors && (formCtrl.confirmPassword.touched || formCtrl.confirmPassword.dirty)) {
-            <app-validation-messages [control]="formCtrl.confirmPassword" [value]="formCtrl.confirmPassword.value" />
+          <p-password class="w-full" formControlName="confirmPassword" [toggleMask]="true" />
+          @if (formCtrl.confirmPassword.errors &&
+          (formCtrl.confirmPassword.touched || formCtrl.confirmPassword.dirty))
+          {
+          <app-validation-messages [control]="formCtrl.confirmPassword" [value]="formCtrl.confirmPassword.value" />
           }
         </div>
         @if (form.errors) {
-          <app-validation-messages [form]="form" [value]="null"/>
+        <app-validation-messages [form]="form" [value]="null" />
         }
         <div class="field-checkbox">
-          <p-checkbox
-            formControlName="role"
-            [binary]="true"
-            inputId="binary"
-          />
+          <p-checkbox formControlName="role" [binary]="true" inputId="binary" />
           <label for="admin">Sign up as admin</label>
           <div></div>
         </div>
         <div class="field flex justify-content-center">
-          <p-button
-            label="Sign Up"
-            styleClass="p-button-success w-10rem"
-            type="submit"
-          />
+          <p-button label="Sign Up" styleClass="p-button-success w-10rem" type="submit" />
         </div>
       </div>
     </form>
-    <p class="sml-txt">Already have an account? <a class="link" [routerLink]="['/login']">Sign In</a></p>
+    <p class="sml-txt">
+      Already have an account?
+      <a class="link" [routerLink]="['/login']">Sign In</a>
+    </p>
   </div>
 </div>

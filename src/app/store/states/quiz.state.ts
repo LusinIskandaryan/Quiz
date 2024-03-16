@@ -4,9 +4,9 @@ import { PageMode } from "src/app/shared/enums";
 export type QuizState = {
   quizId: string;
   quiz: Quiz | null;
-  loading: boolean,
+  loading: boolean;
   pageMode: PageMode;
-  quizTimer: number
+  quizTimer: number;
 };
 
 export const initialQuizState: QuizState = {

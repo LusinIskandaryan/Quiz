@@ -1,0 +1,169 @@
+@if (vm().loading) {
+<p-progressSpinner ariaLabel="loading" />
+} @else {
+<form [formGroup]="form" (ngSubmit)="save()">
+  <div class="flex justify-content-between mb-3 align-items-center">
+    <h1>{{ title() }}</h1>
+    @if(viewMode() && isAdmin()) {
+    <a pButton icon="pi pi-pencil" class="p-button-rounded p-button-success"
+      (click)="changePageMode($event, pageMode.Edit)">
+    </a>
+    }
+  </div>
+  <div class="formgrid">
+    <div class="field">
+      <label for="name">Quiz Name</label>
+      <input class="w-full" type="text" formControlName="name" pInputText appValueTrim />
+      @if (formCtrl.name.errors && (formCtrl.name.touched ||
+      formCtrl.name.dirty)) {
+      <app-validation-messages [control]="formCtrl.name" [value]="formCtrl.name.value" />
+      }
+    </div>
+    <div class="field">
+      @if (isAdmin()) {
+      <label for="timer">Timer</label>
+      <p-inputNumber mode="decimal" formControlName="timer" [useGrouping]="false"
+        (onInput)="changeNumber($event.value, formCtrl.timer)" />
+      @if (formCtrl.timer.errors && (formCtrl.timer.touched ||
+      formCtrl.timer.dirty)) {
+      <app-validation-messages [control]="formCtrl.timer" [value]="formCtrl.timer.value" />
+      } } @else {
+      <p class="timer-txt"><span>Timer:</span>{{ quizTimer() }}</p>
+      }
+    </div>
+    <div class="field">
+      <label for="passValue">Pass Value</label>
+      <p-inputNumber mode="decimal" formControlName="passValue" [useGrouping]="false"
+        (onInput)="changeNumber($event.value, formCtrl.passValue)" />
+      @if (formCtrl.passValue.errors && (formCtrl.passValue.touched ||
+      formCtrl.passValue.dirty)) {
+      <app-validation-messages [control]="formCtrl.passValue" [value]="formCtrl.passValue.value" />
+      }
+    </div>
+    <p class="text-center m-3">{{ questionCounTitle() }}</p>
+    <div formArrayName="questions">
+      <p-card [formGroupName]="questionIndex()">
+        <div class="field">
+          <div class="flex justify-content-between mb-2 align-items-center">
+            <h2 class="mb-3">Question</h2>
+            @if(questions.controls.length > 1 && showAddRemoveButtons()) {
+            <button pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger"
+              (click)="removeQuestion($event)"></button>
+            }
+          </div>
+          <input class="w-full" type="text" [formControl]="questionControl('question')" appValueTrim pInputText />
+          @if (questions.controls[questionIndex()].get('question')?.errors &&
+          (questions.controls[questionIndex()].get('question')?.touched ||
+          questions.controls[questionIndex()].get('question')?.dirty)) {
+          <app-validation-messages [control]="questionControl('question')"
+            [value]="questions.controls[questionIndex()].get('question')?.value" />
+          }
+        </div>
+        <div>
+          <p class="mb-2">Question Type</p>
+          <div class="flex flex-wrap gap-3 field">
+            @for (questionType of questionTypes; track questionType.key) {
+            <div class="flex align-items-center">
+              <p-radioButton [inputId]="questionType.key" [value]="questionType.value" name="type{{ questionIndex() }}"
+                [formControl]="questionControl('type')" (onClick)="changeType()" />
+              <label [for]="questionType.key" class="ml-2">{{
+                questionType.name
+                }}</label>
+            </div>
+            }
+          </div>
+        </div>
+        <div class="field">
+          <label for="value">Value</label>
+          <p-inputNumber mode="decimal" [formControl]="questionControl('value')" [useGrouping]="false"
+            (onInput)="changeNumber($event.value, questionControl('value'))" />
+          @if (questions.controls[questionIndex()].get('value')?.errors &&
+          (questions.controls[questionIndex()].get('value')?.touched ||
+          questions.controls[questionIndex()].get('value')?.dirty)) {
+          <app-validation-messages [control]="questionControl('value')"
+            [value]="questions.controls[questionIndex()].get('value')?.value" />
+          }
+        </div>
+        <div class="answer-wrapper" formArrayName="answers">
+          <h2 class="mb-3">Answers</h2>
+          @for ( answersItem of answers(questionIndex()).controls; track
+          answersItem; let answerIndex = $index ) {
+          <div class="field" [formGroupName]="answerIndex">
+            @if(isAdmin() && (answers(questionIndex()).controls.length > 1 &&
+            showAddRemoveButtons())) {
+            <div class="justify-content-end flex">
+              <button pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="
+                  removeAnswer($event, answerIndex)
+                "></button>
+            </div>
+            }
+            <div class="flex flex-wrap gap-3 field">
+              <div class="flex align-items-center">
+                @if (questionControl('type').value === type.multiple) {
+                <p-checkbox [label]="
+                    isAdmin()
+                      ? 'Correct Answer'
+                      : answers(questionIndex()).controls[answerIndex].get(
+                          'answer'
+                        )?.value + ''
+                  " name="answer{{ answerIndex }}" [binary]="true" (onChange)="changeAnswer(answerIndex)"
+                  [formControl]="answersControl('correctAnswer', answerIndex)" />
+                } @else {
+                <p-radioButton inputId="value{{ answerIndex }}" name="value{{ questionIndex() }}"
+                  (onClick)="changeAnswer(answerIndex)" [value]="true"
+                  [formControl]="answersControl('correctAnswer', answerIndex)" />
+                <label for="value{{ answerIndex }}" class="ml-2">{{
+                  isAdmin()
+                  ? "Correct Answer"
+                  : answers(questionIndex()).controls[answerIndex].get(
+                  "answer"
+                  )?.value + ""
+                  }}</label>
+                }
+              </div>
+            </div>
+            @if (isAdmin()) {
+            <div>
+              <input class="w-full" type="text" formControlName="answer" appValueTrim pInputText />
+              @if(answers(questionIndex()).controls[answerIndex].get('answer')?.errors
+              &&
+              (answers(questionIndex()).controls[answerIndex].get('answer')?.touched
+              ||
+              answers(questionIndex()).controls[answerIndex].get('answer')?.dirty))
+              {
+              <app-validation-messages [control]="answersControl('answer', answerIndex)" [value]="
+                  answers(questionIndex()).controls[answerIndex].get('answer')
+                    ?.value
+                " />
+              }
+            </div>
+            }
+          </div>
+          } @if (showAddRemoveButtons()) {
+          <button pButton pRipple type="button" class="p-button-rounded p-button-success"
+            (click)="addAnswerGroup($event)">
+            Add Answer
+          </button>
+          }
+        </div>
+        @if (showAddRemoveButtons()) {
+        <button pButton pRipple type="button" class="p-button-rounded p-button-success mt-3"
+          (click)="addQuastionGroup($event)">
+          Add Question
+        </button>
+        }
+      </p-card>
+    </div>
+    <div class="field flex justify-content-center mt-4">
+      @if (!viewMode()) { @if (showPreviousButton()) {
+      <p-button label="previous" styleClass="p-button-rounded  w-10rem" (onClick)="sowPreviousPage($event)" />
+      } @if (showNextButton()) {
+      <p-button class="ml-2" label="next" styleClass="p-button-rounded  w-10rem" (onClick)="showNextPage($event)" />
+      } @else {
+      <p-button class="ml-2" [label]="isAdmin() ? submitButtonTitle() : 'Complet'"
+        styleClass="p-button-rounded p-button-success w-10rem" type="submit" />
+      } }
+    </div>
+  </div>
+</form>
+}

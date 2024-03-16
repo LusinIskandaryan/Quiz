@@ -1,9 +1,11 @@
 @if (quiz()) {
-  <div class="centered">
-    <!-- @if (succeed()) {
-    <h3>You are successfully pass the quiz</h3> -->
-    <!-- } @else { -->
+<div class="centered">
+  @if (succeed()) {
+  <h3>You are successfully pass the quiz</h3>
+  } @else if (!quiz()?.result) {
+  <a [routerLink]="['/quiz/start', quiz()?.id]">Start quiz</a>
+  } @else {
     <a [routerLink]="['/quiz/start', quiz()?.id]">Start quiz again</a>
-    <!-- } -->
-  </div>
+  }
+</div>
 }

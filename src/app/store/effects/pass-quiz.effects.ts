@@ -23,7 +23,7 @@ export const passQuiz$ = createEffect(
       ofType(PassQuizActions.passQuiz),
       exhaustMap(({ data }) =>
         service.passQuiz(data).pipe(
-          map((res) => {
+          map(() => {
             const resData = new HttpResponseSuccessModel(
               true,
               'Quiz is successfully pased.'

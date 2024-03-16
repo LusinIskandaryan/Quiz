@@ -1,9 +1,8 @@
 import { inject } from "@angular/core";
-import { Router } from "@angular/router";
 
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 
-import { catchError, map, of, switchMap, tap } from "rxjs";
+import { catchError, map, of, switchMap } from "rxjs";
 
 import { HttpResponseSuccessModel } from "src/app/shared/models";
 import { UserService } from "src/app/private/services";
@@ -40,16 +39,4 @@ export const getCurrentUser$ = createEffect(
     );
   },
   { functional: true }
-);
-
-export const getCurrentUserSuccess$ = createEffect(
-  (actions = inject(Actions), router = inject(Router)) => {
-    return actions.pipe(
-      ofType(AppActions.getCurrentUserSuccess),
-      tap(() => {
-        router.navigate([`/quiz`]);
-      })
-    );
-  },
-  { functional: true, dispatch: false }
 );

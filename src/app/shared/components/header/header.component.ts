@@ -9,7 +9,7 @@ import { appFeature } from 'src/app/store/features';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [ RouterLink ],
+  imports: [RouterLink],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })

@@ -1,0 +1,14 @@
+.answer-wrapper {
+  border: 1px solid #d1d5db;
+  padding: 20px;
+}
+.timer-txt {
+  display: flex;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #3b82f6;
+  font-weight: bold;
+  span {
+    margin-right: 5px;
+  }
+}

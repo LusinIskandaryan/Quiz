@@ -8,22 +8,18 @@
           <label for="email">Email</label>
           <input class="w-full" type="email" formControlName="email" pInputText appValueTrim />
           @if (formCtrl.email.errors && (formCtrl.email.touched || formCtrl.email.dirty)) {
-            <app-validation-messages [control]="formCtrl.email" [value]="formCtrl.email.value" />
+          <app-validation-messages [control]="formCtrl.email" [value]="formCtrl.email.value" />
           }
         </div>
         <div class="field">
           <label for="password">Password</label>
           <p-password class="w-full" formControlName="password" [toggleMask]="true" />
           @if (formCtrl.password.errors && (formCtrl.password.touched || formCtrl.password.dirty)) {
-            <app-validation-messages [control]="formCtrl.password" [value]="formCtrl.password.value" />
+          <app-validation-messages [control]="formCtrl.password" [value]="formCtrl.password.value" />
           }
         </div>
         <div class="field flex justify-content-center">
-          <p-button
-            label="Sign In"
-            styleClass="p-button-success w-10rem"
-            type="submit"
-          />
+          <p-button label="Sign In" styleClass="p-button-success w-10rem" type="submit" />
         </div>
       </div>
     </form>

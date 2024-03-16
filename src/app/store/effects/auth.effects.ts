@@ -44,6 +44,18 @@ export const loginSuccess$ = createEffect(
   { functional: true }
 );
 
+export const loginSuccessNavigation$ = createEffect(
+  (actions = inject(Actions), router = inject(Router)) => {
+    return actions.pipe(
+      ofType(AuthActions.loginSuccess),
+      tap(() => {
+        router.navigate(['/quiz']);
+      })
+    );
+  },
+  { functional: true, dispatch: false }
+);
+
 export const logout$ = createEffect(
   (actions = inject(Actions), service = inject(AuthService)) => {
     return actions.pipe(

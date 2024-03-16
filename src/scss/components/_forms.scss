@@ -7,15 +7,24 @@ p-password  {
   }
 }
 
+p-inputnumber {
+  display: block;
+  .p-inputnumber {
+    width: 100%;
+    input {
+      width: 100%;
+    }
+  }
+}
+
 .field {
   label {
     font-size: 14px;
   }
 }
 
-
-p-password ,
-.p-inputtext {
+p-password,
+p-inputnumber {
   &.ng-invalid.ng-dirty ,
   &.ng-invalid.ng-touched  {
     .p-inputtext {
@@ -23,4 +32,16 @@ p-password ,
     }
    }
 }
-  
+
+.p-inputtext {
+  &.ng-invalid.ng-dirty,
+  &.ng-invalid.ng-touched  {
+    border-color: red;
+  }
+}
+
+p-multiselect {
+  .p-multiselect {
+   width: 100%;
+  }
+}

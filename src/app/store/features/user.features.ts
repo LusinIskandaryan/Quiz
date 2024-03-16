@@ -8,7 +8,7 @@ import { immerOn } from 'ngrx-immer/store';
 
 import { Features } from 'src/app/shared/enums';
 import { QuizListState, initialUserState } from '../states';
-import { UserActions } from '../actions';
+import { LookupsActions, UserActions } from '../actions';
 
 export const userReducer = createReducer(
   initialUserState,
@@ -27,11 +27,11 @@ export const userReducer = createReducer(
     state.loading = true;
   }),
 
-  immerOn(UserActions.getLookups, (state) => {
+  immerOn(LookupsActions.getQuizLookups, (state) => {
     state.loading = true;
   }),
 
-  immerOn(UserActions.getLookupsSuccess, (state, { data }) => {
+  immerOn(LookupsActions.getQuizLookupsSuccess, (state, { data }) => {
     state.lookups = data;
   }),
 
@@ -40,8 +40,8 @@ export const userReducer = createReducer(
     UserActions.getUserError,
     UserActions.updateUserSuccess,
     UserActions.updateUserError,
-    UserActions.getLookupsSuccess,
-    UserActions.getLookupsError,
+    LookupsActions.getQuizLookupsSuccess,
+    LookupsActions.getQuizLookupsError,
     (state) => {
       state.loading = false;
     }

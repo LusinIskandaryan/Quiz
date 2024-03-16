@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 
-import { PageNotFoundComponent } from 'src/app/shared/components';
 import { publicGuard } from 'src/app/public/guards';
 import { authGuard } from 'src/app/private/guards';
 
@@ -17,7 +16,5 @@ export const routes: Routes = [
     path: '',
     loadChildren: privateRoutes,
     canActivate: [ authGuard ],
-  },
-  { path: 'non-found', component: PageNotFoundComponent },
-  { path: '**', redirectTo: 'non-found' },
+  }
 ];

@@ -5,7 +5,7 @@ export type UserState = {
   user: User | null;
   userList:  User[];
   lookups: Lookups[];
-  loading: boolean,
+  loading: boolean;
 };
 
 export const initialUserState: UserState = {

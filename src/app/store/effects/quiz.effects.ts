@@ -59,9 +59,9 @@ export const deleteQuiz$ = createEffect(
       ofType(QuizActions.deleteQuiz),
       exhaustMap(({ quizId }) =>
         service.deleteQuiz(quizId).pipe(
-          map(() => {
+          map((res) => {
             const resData = new HttpResponseSuccessModel(
-              true,
+              res,
               'Quiz is successfully deleted.'
             );
             return QuizActions.deleteQuizSuccess(resData);
@@ -121,7 +121,7 @@ export const updateQuiz$ = createEffect(
   (actions = inject(Actions), service = inject(QuizService)) => {
     return actions.pipe(
       ofType(QuizActions.updateQuiz),
-      switchMap(({ data }) =>
+      exhaustMap(({ data }) =>
         service.updateQuiz(data).pipe(
           map((res) => {
             const resData = new HttpResponseSuccessModel(
@@ -155,7 +155,6 @@ export const startTimer$ = createEffect(
       ofType(QuizActions.startTimer),
       switchMap(() =>
         interval(1000).pipe(
-          tap(() => console.log('intervalWorks')),
           map(() => QuizActions.tick()),
           takeUntil(actions.pipe(ofType(QuizActions.stopTimer)))
         )
@@ -174,4 +173,3 @@ export const stopTimer$ = createEffect(
   },
   { functional: true }
 );
-

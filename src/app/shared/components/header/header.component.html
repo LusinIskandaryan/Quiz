@@ -2,16 +2,16 @@
   <div class="container">
     <nav>
       <a class="logo" [routerLink]="['/quiz']">
-        <img alt='quiz' src="assets/img/logo.jpg" height="40" class="mr-2" />
+        <img alt="quiz" src="assets/img/logo.jpg" height="40" class="mr-2" />
       </a>
       <ul>
         <li>
-          <p><span>user:</span>{{currentUser()?.name}}</p>
+          <p><span>user:</span>{{ currentUser()?.name }}</p>
         </li>
         <li>
-          <p><span>email:</span> {{currentUser()?.email}}</p>
+          <p><span>email:</span> {{ currentUser()?.email }}</p>
         </li>
-        <li> <em class="pi pi-sign-out" (click)="logOut()"></em></li>
+        <li><em class="pi pi-sign-out" (click)="logOut()"></em></li>
       </ul>
     </nav>
   </div>

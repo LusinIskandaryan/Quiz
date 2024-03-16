@@ -7,3 +7,4 @@ export * from './user-list.effects';
 export * from './quiz.effects';
 export * from './quiz-list.effects';
 export * from './pass-quiz.effects';
+export * from './lookups.effects';

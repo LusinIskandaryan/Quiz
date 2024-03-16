@@ -6,3 +6,4 @@ export * from './user-list.actions';
 export * from './quiz.actions';
 export * from './quiz-list.actions';
 export * from './pass-quiz.actions';
+export * from './lookups.actions';

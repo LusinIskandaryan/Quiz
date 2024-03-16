@@ -1,27 +1,16 @@
 <app-tab-menu />
 <div class="card">
-  <p-table
-    [value]="vm().quizList"
-    [totalRecords]="vm().quizList.length"
-    [columns]="quizListColumns()"
-    [lazy]="true"
-    [rowHover]="true"
-    [tableStyle]="{ 'min-width': '50rem' }"
-    [loading]="vm().loading"
-  >
+  <p-table [value]="vm().quizList" [totalRecords]="vm().quizList.length" [columns]="quizListColumns()" [lazy]="true"
+    [rowHover]="true" [tableStyle]="{ 'min-width': '50rem' }" [loading]="vm().loading">
     <ng-template pTemplate="caption">
       <div class="flex">
         <div class="align-items-center justify-content-between title">
           <h4 class="m-0">Quiz List</h4>
         </div>
         @if (isUserAdmin()) {
-          <a
-            pButton
-            class="p-button-rounded p-button-success"
-            (click)="changePageMode($event, pageMode.Create)"
-            [routerLink]="['/quiz/create']"
-          >
-            Create Quiz
+        <a pButton class="p-button-rounded p-button-success" (click)="changePageMode($event, pageMode.Create)"
+          [routerLink]="['/quiz/create']">
+          Create Quiz
         </a>
         }
       </div>
@@ -29,7 +18,7 @@
     <ng-template pTemplate="header" let-columns>
       <tr>
         @for (col of columns; track col) {
-          <th scope="col">{{ col.header }}</th>
+        <th scope="col">{{ col.header }}</th>
         }
       </tr>
     </ng-template>
@@ -38,34 +27,18 @@
         @for (col of quizListColumns(); track col; let i = $index){
         <td>
           @switch (col.field) { @case (tableFieldType.Edit) {
-          <a
-            pButton
-            pRipple
-            icon="pi pi-pencil"
-            class="p-button-rounded p-button-success mr-2"
-            (click)="changePageMode($event, pageMode.Edit)"
-            [routerLink]="['/quiz', rowData.id]"
-          ></a>
+          <a pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
+            (click)="changePageMode($event, pageMode.Edit)" [routerLink]="['/quiz', rowData.id]"></a>
           } @case (tableFieldType.Delete) {
-          <button
-            pButton
-            pRipple
-            icon="pi pi-trash"
-            class="p-button-rounded p-button-danger"
-            (click)="deleteQuiz($event, rowData)"
-          ></button>
+          <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+            (click)="deleteQuiz($event, rowData)"></button>
           } @case (tableFieldType.Status) { @if (rowData.result ===
           rowData.passValue) {
 
           <i class="pi pi-check"></i>
           } @else {
-          <a
-            pButton
-            pRipple
-            class="p-button-rounded p-button-warning"
-            (click)="changePageMode($event, pageMode.Edit)"
-            [routerLink]="['/quiz/start', rowData.id]"
-          >
+          <a pButton pRipple class="p-button-rounded p-button-warning" (click)="changePageMode($event, pageMode.Edit)"
+            [routerLink]="['/quiz/start', rowData.id]">
             Start quiz
           </a>
           } } @default {
@@ -77,10 +50,7 @@
     </ng-template>
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td
-          [attr.colspan]="quizListColumns().length"
-          class="text-center empty-message"
-        >
+        <td [attr.colspan]="quizListColumns().length" class="text-center empty-message">
           There are no data to show.
         </td>
       </tr>

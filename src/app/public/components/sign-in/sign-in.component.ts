@@ -17,8 +17,8 @@ import { ButtonModule } from 'primeng/button';
 import { emailValidator } from 'src/app/public/validators';
 import { ValidationMessagesComponent } from 'src/app/shared/components';
 import { AuthActions } from 'src/app/store/actions/auth.actions';
-import { UserLogin } from '../../interfaces';
 import { ValueTrimDirective } from 'src/app/shared/directives';
+import { UserLogin } from '../../interfaces';
 @Component({
   selector: 'app-sign-in',
   standalone: true,

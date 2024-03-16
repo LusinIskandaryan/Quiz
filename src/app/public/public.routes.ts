@@ -21,10 +21,10 @@ export const publicRoutes: Routes = [
     path: '',
     component: PublicComponent,
     children: [
-      { path: '', pathMatch: 'full', redirectTo: 'welcome' },
       { path: 'welcome', loadComponent: welcome },
       { path: 'register', loadComponent: signUp },
       { path: 'login', loadComponent: signIn },
+      { path: '', pathMatch: 'full', redirectTo: 'welcome' },
     ],
     providers: [
       provideEffects([RegisterEffects, LoginEffects]),

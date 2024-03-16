@@ -3,11 +3,11 @@ import { inject } from '@angular/core';
 import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 
-import { catchError, map, of, switchMap } from 'rxjs';
+import { catchError, exhaustMap, map, of, switchMap } from 'rxjs';
 
-import { QuizService, UserService } from 'src/app/private/services';
+import { LookupsService, UserService } from 'src/app/private/services';
 import { HttpResponseSuccessModel } from 'src/app/shared/models';
-import { UserActions } from '../actions';
+import { LookupsActions, UserActions } from '../actions';
 import { userFeature } from '../features';
 
 export const getUser$ = createEffect(
@@ -32,26 +32,23 @@ export const getLookUps$ = createEffect(
   (actions = inject(Actions)) => {
     return actions.pipe(
       ofType(UserActions.getUserSuccess),
-      map(() => UserActions.getLookups())
+      map(() => LookupsActions.getQuizLookups())
     );
   },
   { functional: true }
 );
 
 export const getLookupsSuccess$ = createEffect(
-  (
-    actions = inject(Actions),
-    service = inject(QuizService)
-  ) => {
+  (actions = inject(Actions), service = inject(LookupsService)) => {
     return actions.pipe(
-      ofType(UserActions.getLookups),
+      ofType(LookupsActions.getQuizLookups),
       switchMap(() =>
         service.getQuizLookups().pipe(
           map((res) => {
             const resData = new HttpResponseSuccessModel(res, '');
-            return UserActions.getLookupsSuccess(resData);
+            return LookupsActions.getQuizLookupsSuccess(resData);
           }),
-          catchError((error) => of(UserActions.getLookupsError({ error })))
+          catchError((error) => of(LookupsActions.getQuizLookupsError({ error })))
         )
       )
     );
@@ -63,11 +60,14 @@ export const updateUser$ = createEffect(
   (actions = inject(Actions), service = inject(UserService)) => {
     return actions.pipe(
       ofType(UserActions.updateUser),
-      switchMap(({ data }) =>
+      exhaustMap(({ data }) =>
         service.updateUser(data).pipe(
           map((res) => {
-            const resData = new HttpResponseSuccessModel(res, 'User successfully updated');
-            return UserActions.updateUserSuccess(resData)
+            const resData = new HttpResponseSuccessModel(
+              res,
+              'User successfully updated'
+            );
+            return UserActions.updateUserSuccess(resData);
           }),
           catchError((error) => of(UserActions.updateUserError({ error })))
         )

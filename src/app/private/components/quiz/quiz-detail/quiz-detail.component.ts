@@ -15,6 +15,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+
 import { Store } from '@ngrx/store';
 
 import { ButtonModule } from 'primeng/button';
@@ -23,6 +24,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { CardModule } from 'primeng/card';
 import { CheckboxModule } from 'primeng/checkbox';
+import { InputTextModule } from 'primeng/inputtext';
 
 import { QuestionType, UserRole } from 'src/app/private/enums';
 import { ValidationMessagesComponent } from 'src/app/shared/components';
@@ -30,7 +32,7 @@ import { PageMode } from 'src/app/shared/enums';
 import { PassQuizActions, QuizActions } from 'src/app/store/actions';
 import { appFeature, quizFeature } from 'src/app/store/features';
 import { ValueTrimDirective } from 'src/app/shared/directives';
-import { Quiz } from 'src/app/private/interfaces';
+import { Question, Quiz } from 'src/app/private/interfaces';
 
 @Component({
   selector: 'app-quiz',
@@ -45,19 +47,14 @@ import { Quiz } from 'src/app/private/interfaces';
     RadioButtonModule,
     CardModule,
     CheckboxModule,
+    InputTextModule,
   ],
-  templateUrl: './quiz.component.html',
-  styleUrl: './quiz.component.scss',
+  templateUrl: './quiz-detail.component.html',
+  styleUrl: './quiz-detail.component.scss',
 })
-export class QuizComponent implements OnInit {
-  // TODO form error class
-  // TODO add view mode class, for disable imputs, for hide icons
-  // TODO refresh page navigate to quiz  list                         ***
-  // TODO mtacel quiz Type changi, add Answer, removeAnswer, Add Quiz, remove Quiz xndir@
-  // TODO create quizi zamanak id-ner@ set anel, hima null a           ***
+export class QuizDetailComponent implements OnInit {
+  // TODO mtacel quiz Type changi, add Answer, removeAnswer, Add Quiz, remove Quiz xndir@ ***
   // TODO create quiz anelis quizneri lookup@ update anel               ***
-  // TODO change all components to OnPush
-   // TODO discard changes
 
   @Input() quizId: string = '';
   private readonly store = inject(Store);
@@ -77,9 +74,13 @@ export class QuizComponent implements OnInit {
   title = computed(() =>
     this.vm().pageMode === PageMode.Create ? 'Create Quiz' : 'Quiz Detail'
   );
+  questionCounTitle = computed(
+    () =>
+      `Question   ${this.questionIndex() + 1}  of  ${this.questionsLength()}`
+  );
   viewMode = computed(() => this.vm().pageMode === PageMode.View);
   pageMode = PageMode;
-  quizResult = {};
+  result = {};
   questionTypes = [
     { name: 'Single', key: 'single', value: QuestionType.single },
     { name: 'Multiple', key: 'multiple', value: QuestionType.multiple },
@@ -96,88 +97,66 @@ export class QuizComponent implements OnInit {
     passValue: new FormControl<number | null>(null, {
       validators: [Validators.required, Validators.min(1)],
     }),
-    questions: new FormArray([this.newQuestion()], Validators.required),
+    questions: new FormArray([this.newQuestion('1')], Validators.required),
   };
   form = new FormGroup(this.formCtrl);
-  initialFormValue = this.form.value;
-  initialAnswersValue = this.initialFormValue.questions![0].answers;
+  initialFormValue = this.form.getRawValue();
+  initialAnswersValue = this.initialFormValue.questions[0]['answers'];
 
   get questions(): FormArray {
     return this.form.get('questions') as FormArray;
   }
 
-  questionGroup(questionIndex: number): FormGroup {
-    return this.questions.at(questionIndex) as FormGroup;
+  questionGroup(index: number): FormGroup {
+    return this.questions.at(index) as FormGroup;
   }
 
-  questionGroupControl(
-    questionIndex: number,
-    controlName: string
-  ): FormControl {
-    return this.questionGroup(questionIndex).get(controlName) as FormControl;
+  questionControl(controlName: string): FormControl {
+    return this.questionGroup(this.questionIndex()).get(
+      controlName
+    ) as FormControl;
   }
 
-  questionAnswers(questionIndex: number): FormArray {
-    return this.questionGroup(questionIndex).get('answers') as FormArray;
+  answers(index: number): FormArray {
+    return this.questionGroup(index).get('answers') as FormArray;
   }
 
-  questionAnswersControl(
-    questionIndex: number,
+  answersControl(
+    controlName: string,
     answerIndex: number,
-    controlName: string
+    questionIndex?: number
   ): FormControl {
-    return this.questionAnswers(questionIndex)
-      .at(answerIndex)
-      .get(controlName) as FormControl;
+    const index = questionIndex ?? this.questionIndex();
+    return this.answers(index).at(answerIndex).get(controlName) as FormControl;
   }
 
   constructor() {
     effect(
       () => {
-        console.log('asdsadsa');
         const quiz = this.quiz();
         const questions = quiz?.questions || [];
         if (quiz && this.quizId) {
           this.form.patchValue(quiz);
-          questions.forEach((question, i: number) => {
-            if (i > this.questions.length - 1) {
-              this.addQuastion();
-            }
-            this.questionGroup(i).patchValue(question);
-            const answers = question.answers || [];
-            answers.forEach((answerItem, j: number) => {
-              if (j > this.questionAnswers(i).length - 1) {
-                this.addAnswer(i);
-              }
-              this.questionAnswers(i).at(j).patchValue(answerItem);
-              if (!this.isAdmin()) {
-                const control = this.questionAnswersControl(
-                  i,
-                  j,
-                  'correctAnswer'
-                );
-                const newvalue = this.isAdmin()
-                  ? answerItem.correctAnswer
-                  : null;
-                control.patchValue(newvalue);
-              }
-            });
-          });
-          this.questionsLength.set(this.questions.length);
-          this.initialFormValue = this.form.value;
-          this.initialAnswersValue = this.initialFormValue.questions![0].answers;
+          this.initForm(questions);
+          this.setInitialValues();
         }
       },
       { allowSignalWrites: true }
     );
 
-    effect(
-      () => {
-        if (!this.quizTimer()) {
-          console.log(this.quizTimer());
-          this.save();
-        }
-      })
+    effect(() => {
+      if (this.viewMode()) {
+        this.form.disable();
+      } else {
+        this.form.enable();
+      }
+    });
+
+    effect(() => {
+      if (!this.quizTimer()) {
+        this.save();
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -186,9 +165,36 @@ export class QuizComponent implements OnInit {
     }
   }
 
-  newQuestion(questionIndex?: string): FormGroup {
+  private initForm(questions: Question[]): void {
+    questions.forEach((question, i: number) => {
+      if (i > this.questions.length - 1) {
+        this.addQuastion();
+      }
+      this.questionGroup(i).patchValue(question);
+      const answers = question.answers || [];
+      answers.forEach((answerItem, j: number) => {
+        if (j > this.answers(i).length - 1) {
+          this.addAnswer(i);
+        }
+        this.answers(i).at(j).patchValue(answerItem);
+        if (!this.isAdmin()) {
+          const control = this.answersControl('correctAnswer', j, i);
+          const newvalue = this.isAdmin() ? answerItem.correctAnswer : null;
+          control.patchValue(newvalue);
+        }
+      });
+    });
+  }
+
+  private setInitialValues(): void {
+    this.questionsLength.set(this.questions.length);
+    this.initialFormValue = this.form.getRawValue();
+    this.initialAnswersValue = this.initialFormValue.questions[0]['answers'];
+  }
+
+  private newQuestion(index?: string): FormGroup {
     return new FormGroup({
-      id: new FormControl<string | null>(questionIndex ?? null),
+      id: new FormControl<string | null>(index ?? null),
       question: new FormControl<string | null>(null, {
         validators: [Validators.required],
       }),
@@ -199,12 +205,29 @@ export class QuizComponent implements OnInit {
         value: QuestionType.single,
         disabled: !this.isAdmin(),
       }),
-      answers: new FormArray([this.newAnswers()], Validators.required),
+      answers: new FormArray([this.newAnswers('1')], Validators.required),
     });
   }
 
-  addQuastion(questionIndex?: string): void {
-    this.questions.push(this.newQuestion(questionIndex));
+  private newAnswers(answerIndex?: string): FormGroup {
+    return new FormGroup({
+      id: new FormControl<string | null>(answerIndex ?? '1'),
+      answer: new FormControl<string | null>({value: null, disabled: this.viewMode()}, Validators.required),
+      correctAnswer: new FormControl<boolean>({value: false, disabled: this.viewMode()}),
+    });
+  }
+
+  private addQuastion(index?: string): void {
+    this.questions.push(this.newQuestion(index));
+  }
+
+  addQuastionGroup(event: MouseEvent): void {
+    event.stopPropagation();
+    const index = (this.questions.length + 1).toString();
+    this.addQuastion(index);
+    this.questionsLength.set(this.questions.length);
+    this.form.updateValueAndValidity();
+    // this.initialAnswersValue = this.form.value.questions![this.questionIndex()].answers;
   }
 
   removeQuestion(event: MouseEvent): void {
@@ -215,47 +238,24 @@ export class QuizComponent implements OnInit {
     this.form.updateValueAndValidity();
   }
 
-  addNewQuastion(event: MouseEvent): void {
-    event.stopPropagation();
-    const questionIndex = (this.questions.length + 1).toString();
-    this.addQuastion(questionIndex);
-    this.questionsLength.set(this.questions.length);
-    this.form.updateValueAndValidity();
-    // this.initialAnswersValue = this.form.value.questions![this.questionIndex()].answers;
+  private addAnswer(questionIndex: number, answerIndex?: string): void {
+    this.answers(questionIndex).push(this.newAnswers(answerIndex));
   }
 
-  newAnswers(answerIndex?: string): FormGroup {
-    return new FormGroup({
-      id: new FormControl<string | null>(answerIndex ?? null),
-      answer: new FormControl<string | null>(null, Validators.required),
-      correctAnswer: new FormControl<boolean>(false),
-    });
-  }
-
-  addAnswer(questionIndex: number, answerIndex?: string): void {
-    this.questionAnswers(questionIndex).push(this.newAnswers(answerIndex));
-  }
-
-  removeQuestionAnswer(
-    event: MouseEvent,
-    questionIndex: number,
-    answerIndex: number
-  ) {
-    event.stopPropagation();
-    this.questionAnswers(questionIndex).removeAt(answerIndex);
-    // this.initialAnswersValue = this.form.value.questions![this.questionIndex()].answers;
-  }
-
-  addNewAnswer(event: MouseEvent): void {
+  addAnswerGroup(event: MouseEvent): void {
     event?.stopPropagation();
-    const answerIndex = (
-      this.questionAnswers(this.questionIndex()).length + 1
-    ).toString();
-    this.addAnswer(this.questionIndex(), answerIndex);
-    this.questionAnswers(this.questionIndex())
-      .at(+answerIndex - 1)
+    const index = this.answers(this.questionIndex()).length + 1;
+    this.addAnswer(this.questionIndex(), index.toString());
+    this.answers(this.questionIndex())
+      .at(index - 1)
       .markAllAsTouched();
     this.form.updateValueAndValidity();
+    // this.initialAnswersValue = this.form.value.questions![this.questionIndex()].answers;
+  }
+
+  removeAnswer(event: MouseEvent, answerIndex: number) {
+    event.stopPropagation();
+    this.answers(this.questionIndex()).removeAt(answerIndex);
     // this.initialAnswersValue = this.form.value.questions![this.questionIndex()].answers;
   }
 
@@ -285,46 +285,42 @@ export class QuizComponent implements OnInit {
     // this.initialAnswersValue = this.initialFormValue.questions![this.questionIndex()].answers;
   }
 
-  changeQuestionAnswer(answerIndex: number) {
-    const questionType = this.questionGroupControl(
-      this.questionIndex(),
-      'type'
-    ).value;
+  changeAnswer(answerIndex: number) {
+    const type = this.questionControl('type').getRawValue();
+    this.generateQuizResult(answerIndex);
+    if (type === QuestionType.single) {
+      const answers = this.answers(this.questionIndex())
+        .getRawValue()
+        .map((el: any, index: number) =>
+          answerIndex === index
+            ? { ...el, correctAnswer: true }
+            : { ...el, correctAnswer: false }
+        );
+      this.answers(this.questionIndex()).setValue(answers);
+    }
+  }
+
+  private generateQuizResult(answerIndex: number): void {
     if (!this.isAdmin()) {
       const correctAnswer =
         this.quiz()?.questions[this.questionIndex()].answers[answerIndex]
           .correctAnswer;
       if (correctAnswer) {
-        const value = this.questionGroupControl(
-          this.questionIndex(),
-          'value'
-        ).value;
-        this.quizResult = { ...this.quizResult, [this.questionIndex()]: value };
+        const value = this.questionControl('value').getRawValue();
+        this.result = { ...this.result, [this.questionIndex()]: value };
       } else {
-        this.quizResult = { ...this.quizResult, [this.questionIndex()]: 0 };
+        this.result = { ...this.result, [this.questionIndex()]: 0 };
       }
-    }
-    if (questionType === QuestionType.single) {
-      const answers = this.questionAnswers(this.questionIndex()).value.map(
-        (el: any, index: number) =>
-          answerIndex === index
-            ? { ...el, correctAnswer: true }
-            : { ...el, correctAnswer: false }
-      );
-      this.questionAnswers(this.questionIndex()).setValue(answers);
     }
   }
 
-  changeQuestionType(): void {
-    this.questionAnswers(this.questionIndex()).patchValue(
-      this.initialAnswersValue
-    );
-    console.log(this.questionAnswers(this.questionIndex()).value);
+  changeType(): void {
+    this.answers(this.questionIndex()).patchValue(this.initialAnswersValue);
+    console.log(this.answers(this.questionIndex()).getRawValue());
   }
 
   save(): void {
     this.form.markAllAsTouched();
-    console.log(this.form.value);
     if (this.form.valid) {
       const data = { ...this.form.getRawValue() } as Quiz;
       if (this.isAdmin()) {
@@ -336,14 +332,18 @@ export class QuizComponent implements OnInit {
         }
         this.questionIndex.set(0);
       } else {
-        const data = { ...this.quiz() } as Quiz;
-        const quizResult = Object.values(this.quizResult).reduce(
-          (a: number, b: any) => a + b,
-          0
-        );
-        data.result = quizResult;
-        this.store.dispatch(PassQuizActions.passQuiz({ data }));
+        this.passQuiz();
       }
     }
+  }
+
+  private passQuiz(): void {
+    const data = { ...this.quiz() } as Quiz;
+    const result = Object.values(this.result).reduce(
+      (a: number, b: any) => a + b,
+      0
+    );
+    data.result = result;
+    this.store.dispatch(PassQuizActions.passQuiz({ data }));
   }
 }

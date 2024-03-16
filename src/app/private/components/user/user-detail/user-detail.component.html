@@ -1,5 +1,5 @@
 @if (vm().loading) {
-  <p-progressSpinner ariaLabel="loading" />
+<p-progressSpinner ariaLabel="loading" />
 } @else {
 <p-card subheader="Quiz list">
   <ng-template pTemplate="header">
@@ -16,23 +16,15 @@
     @for (quiz of selectUserQuizList(); track quiz.id) {
     <li>
       <span>{{ quiz.name }}</span>
-      <button
-        pButton
-        pRipple
-        icon="pi pi-trash"
-        class="p-button-rounded p-button-danger"
-        (click)="deleteQuiz($event, quiz)"
-      ></button>
+      <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+        (click)="deleteQuiz($event, quiz)"></button>
     </li>
     }
   </ul>
-  <p-multiSelect
-    #multiSelect
-    [options]="selectUserQuizLookups()"
-    placeholder="Assign Quiz"
-    [showClear]="true"
-    (onPanelHide)="assignQuiz(multiSelect.value)"
-    [resetFilterOnHide]="true"
-  />
+  <div class="w-300">
+    <p-multiSelect [formControl]="quizList" [options]="selectUserQuizLookups()" placeholder="Assign Quiz"
+      [showClear]="true" (onChange)="assignQuiz()" (onPanelHide)="cleare()" [resetFilterOnHide]="true" />
+  </div>
+
 </p-card>
 }

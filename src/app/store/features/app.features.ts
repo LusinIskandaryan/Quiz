@@ -9,8 +9,6 @@ export const appReducer = createReducer(
   initialAppState,
   immerOn(AppActions.getCurrentUser, (state) => {
     state.loading = true;
-    state.currentUser = null;
-    localStorage.removeItem('currentUser');
   }),
 
   immerOn(AppActions.getCurrentUserSuccess, (state, payload) => {
