@@ -7,13 +7,15 @@ import { AuthActions } from "../actions/auth.actions";
 
 export const loginReducer = createReducer(
   initialAppState,
-  immerOn(AuthActions.login, (state) => {
+  immerOn(AuthActions.login, AuthActions.registerUser, (state) => {
     state.loading = true;
   }),
 
   immerOn(
     AuthActions.loginSuccess,
     AuthActions.loginError,
+    AuthActions.registerUserSuccess,
+    AuthActions.registerUserError,
     (state) => {
       state.loading = false;
     }

@@ -90,3 +90,35 @@ export const logoutSuccess$ = createEffect(
   },
   { functional: true, dispatch: false }
 );
+
+export const registerUser$ = createEffect(
+  (actions = inject(Actions), service = inject(AuthService)) => {
+    return actions.pipe(
+      ofType(AuthActions.registerUser),
+      exhaustMap(({ data }) =>
+      service.registerUser(data).pipe(
+          map((res) => {
+            const resData = new HttpResponseSuccessModel(res, 'You are successfully registered');
+            return AuthActions.registerUserSuccess(resData)
+          }),
+          catchError((error) =>
+            of(AuthActions.registerUserError({ error }))
+          )
+        )
+      )
+    );
+  },
+  { functional: true }
+);
+
+export const registerUserSuccess$ = createEffect(
+  (actions = inject(Actions), router = inject(Router)) => {
+    return actions.pipe(
+      ofType(AuthActions.registerUserSuccess),
+      tap(() => {
+        router.navigate([`/login`]);
+      })
+    );
+  },
+  { functional: true, dispatch: false }
+);

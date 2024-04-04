@@ -18,10 +18,10 @@ import {
   emailValidator,
 } from 'src/app/public/validators';
 import { ValidationMessagesComponent } from 'src/app/shared/components';
-import { RegisterActions } from 'src/app/store/actions';
 import { UserRole } from 'src/app/private/enums';
 import { ValueTrimDirective } from 'src/app/shared/directives';
 import { UserRegister } from '../../interfaces';
+import { AuthActions } from 'src/app/store/actions';
 
 @Component({
   selector: 'app-sign-up',
@@ -78,7 +78,7 @@ export class SignUpComponent {
         ...this.form.value,
         role: this.form.value.role ? UserRole.admin : UserRole.user,
       } as UserRegister;
-      this.store.dispatch(RegisterActions.registerUser({ data }));
+      this.store.dispatch(AuthActions.registerUser({ data }));
     }
   }
 }
