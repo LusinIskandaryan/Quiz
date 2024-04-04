@@ -6,7 +6,7 @@
       <div class="formgrid">
         <div class="field">
           <label for="name">Full Name</label>
-          <input class="w-full" type="text" pInputText formControlName="name" appValueTrim />
+          <input class="w-full" type="text" id="name" pInputText formControlName="name" appValueTrim />
           @if (formCtrl.name.errors && (formCtrl.name.touched ||
           formCtrl.name.dirty)) {
           <app-validation-messages [control]="formCtrl.name" [value]="formCtrl.name.value" />
@@ -14,7 +14,7 @@
         </div>
         <div class="field">
           <label for="email">Email</label>
-          <input class="w-full" type="email" pInputText formControlName="email" appValueTrim />
+          <input class="w-full" type="email" id="email" pInputText formControlName="email" appValueTrim />
           @if (formCtrl.email.errors && (formCtrl.email.touched ||
           formCtrl.email.dirty)) {
           <app-validation-messages [control]="formCtrl.email" [value]="formCtrl.email.value" />
@@ -22,7 +22,7 @@
         </div>
         <div class="field">
           <label for="password">Password</label>
-          <p-password class="w-full" formControlName="password" [toggleMask]="true" />
+          <p-password class="w-full" formControlName="password" [toggleMask]="true" id="password" />
           @if (formCtrl.password.errors && (formCtrl.password.touched ||
           formCtrl.password.dirty)) {
           <app-validation-messages [control]="formCtrl.password" [value]="formCtrl.password.value" />
@@ -30,7 +30,7 @@
         </div>
         <div class="field">
           <label for="confirmPassword">Confirm Password</label>
-          <p-password class="w-full" formControlName="confirmPassword" [toggleMask]="true" />
+          <p-password class="w-full" formControlName="confirmPassword" [toggleMask]="true" id="confirmPassword" />
           @if (formCtrl.confirmPassword.errors &&
           (formCtrl.confirmPassword.touched || formCtrl.confirmPassword.dirty))
           {
@@ -41,8 +41,8 @@
         <app-validation-messages [form]="form" [value]="null" />
         }
         <div class="field-checkbox">
-          <p-checkbox formControlName="role" [binary]="true" inputId="binary" />
-          <label for="admin">Sign up as admin</label>
+          <p-checkbox formControlName="role" [binary]="true" inputId="role" />
+          <label for="role">Sign up as admin</label>
           <div></div>
         </div>
         <div class="field flex justify-content-center">
