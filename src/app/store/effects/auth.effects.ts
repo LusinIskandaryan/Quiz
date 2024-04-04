@@ -2,7 +2,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 
-
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
 import { catchError, exhaustMap, map, of, tap } from 'rxjs';
@@ -20,11 +19,16 @@ export const login$ = createEffect(
         service.login(data).pipe(
           map((res) => {
             if (res?.[0]) {
-              const resData = new HttpResponseSuccessModel(res[0], 'You are successfully logIn');
+              const resData = new HttpResponseSuccessModel(
+                res[0],
+                'You are successfully logIn'
+              );
               return AuthActions.loginSuccess(resData);
             }
-            const errData = {message: 'Username or password are incorrect'};
-            return AuthActions.loginError(new HttpErrorResponse({error: errData}));
+            const errData = { message: 'Username or password are incorrect' };
+            return AuthActions.loginError(
+              new HttpErrorResponse({ error: errData })
+            );
           }),
           catchError((error) => of(AuthActions.loginError(error)))
         )
@@ -38,7 +42,10 @@ export const loginSuccess$ = createEffect(
   (actions = inject(Actions)) => {
     return actions.pipe(
       ofType(AuthActions.loginSuccess),
-      map(() => AppActions.aplicationInit())
+      map(({ data }) => {
+        localStorage.setItem('currentUserId', data.id);
+        return AppActions.aplicationInit();
+      })
     );
   },
   { functional: true }
@@ -76,6 +83,7 @@ export const logoutSuccess$ = createEffect(
     return actions.pipe(
       ofType(AuthActions.logoutSuccess),
       tap(() => {
+        localStorage.clear();
         router.navigate([`/welcome`]);
       })
     );

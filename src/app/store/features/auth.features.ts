@@ -21,7 +21,6 @@ export const loginReducer = createReducer(
 
   immerOn(AuthActions.logoutSuccess, (state) => {
     state.currentUser = null;
-    localStorage.clear();
   }),
 );
 

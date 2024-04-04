@@ -3,8 +3,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import {
   provideRouter,
   withComponentInputBinding,
-  withInMemoryScrolling,
-  withRouterConfig,
+  withInMemoryScrolling
 } from '@angular/router';
 import {
   provideHttpClient,
@@ -32,7 +31,8 @@ export const appConfig: ApplicationConfig = {
           strictStateImmutability: true,
           strictActionImmutability: true,
           strictActionTypeUniqueness: true,
-          strictActionWithinNgZone: true,
+          strictStateSerializability: true,
+          strictActionSerializability: true,
         },
       }
     ),
@@ -46,10 +46,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(
       routes,
       withComponentInputBinding(),
-      withInMemoryScrolling({ scrollPositionRestoration: 'enabled' }),
-      withRouterConfig({
-        onSameUrlNavigation: 'reload',
-      })
+      withInMemoryScrolling({ scrollPositionRestoration: 'enabled' })
     ),
     provideZoneChangeDetection({ eventCoalescing: true }),
     {
