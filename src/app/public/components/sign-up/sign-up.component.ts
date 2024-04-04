@@ -1,8 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
-  FormControl,
-  FormGroup,
+  NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -42,39 +41,40 @@ import { UserRegister } from '../../interfaces';
 })
 export class SignUpComponent {
   private readonly store = inject(Store);
-  formCtrl = {
-    name: new FormControl<string | null>(null, {
+  private readonly fb = inject(NonNullableFormBuilder);
+  form = this.fb.group({
+    name: ['', {
       validators: [
         Validators.required,
         Validators.minLength(2),
         Validators.maxLength(15),
       ],
-    }),
-    email: new FormControl<string | null>(null, {
+    }],
+    email: ['', {
       validators: [Validators.required, emailValidator],
-    }),
-    password: new FormControl<string | null>(null, {
+    }],
+    password: ['', {
       validators: [
         Validators.required,
         Validators.minLength(5),
         Validators.maxLength(10),
       ],
-    }),
-    confirmPassword: new FormControl<string | null>(null, {
+    }],
+    confirmPassword: ['', {
       validators: [
         Validators.required,
         Validators.minLength(5),
         Validators.maxLength(10),
       ],
-    }),
-    role: new FormControl<boolean>(false),
-  };
-  form = new FormGroup(this.formCtrl, { validators: confirmPasswordValidator });
+    }],
+    role: false,
+  }, { validators: confirmPasswordValidator });
+  formCtrl = this.form.controls;
 
   signUp(): void {
     this.form.markAllAsTouched();
     if (this.form.valid) {
-      const data = {
+      const data: UserRegister = {
         ...this.form.value,
         role: this.form.value.role ? UserRole.admin : UserRole.user,
       } as UserRegister;

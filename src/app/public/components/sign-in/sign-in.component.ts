@@ -1,8 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
-  FormControl,
-  FormGroup,
+  NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -19,6 +18,7 @@ import { ValidationMessagesComponent } from 'src/app/shared/components';
 import { AuthActions } from 'src/app/store/actions/auth.actions';
 import { ValueTrimDirective } from 'src/app/shared/directives';
 import { UserLogin } from '../../interfaces';
+
 @Component({
   selector: 'app-sign-in',
   standalone: true,
@@ -30,27 +30,25 @@ import { UserLogin } from '../../interfaces';
     CheckboxModule,
     ButtonModule,
     ValidationMessagesComponent,
-    ValueTrimDirective
+    ValueTrimDirective,
   ],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.scss',
 })
 export class SignInComponent {
   private readonly store = inject(Store);
-  formCtrl = {
-    email: new FormControl<string | null>(null, { validators: [Validators.required, emailValidator] }),
-    password: new FormControl<string | null>(null, { validators: [Validators.required] }),
-  };
-  form = new FormGroup(this.formCtrl);
+  private readonly fb = inject(NonNullableFormBuilder);
+  form = this.fb.group({
+    email: ['', { validators: [Validators.required, emailValidator] }],
+    password: ['', { validators: [Validators.required] }],
+  });
+  formCtrl = this.form.controls;
 
   signIn(event: MouseEvent): void {
     event.stopPropagation();
     this.form.markAllAsTouched();
     if (this.form.valid) {
-      const data = this.form.value as UserLogin;
-      this.store.dispatch(
-        AuthActions.login({ data })
-      );
+      this.store.dispatch(AuthActions.login({ data: this.form.value as UserLogin }));
     }
   }
 }
