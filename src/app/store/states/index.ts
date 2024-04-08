@@ -1,4 +1,4 @@
-export * from './app.state';
+export * from './auth.state';
 export * from './user-state/user.state';
 export * from './user-state/user-list.state';
 export * from './quiz-state/quiz.state';

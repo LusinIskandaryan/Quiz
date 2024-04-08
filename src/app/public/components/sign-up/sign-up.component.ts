@@ -1,8 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
-  FormControl,
-  FormGroup,
+  NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -13,15 +12,18 @@ import { PasswordModule } from 'primeng/password';
 import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import {
   confirmPasswordValidator,
   emailValidator,
 } from 'src/app/public/validators';
 import { ValidationMessagesComponent } from 'src/app/shared/components';
-import { RegisterActions } from 'src/app/store/actions';
 import { UserRole } from 'src/app/private/enums';
 import { ValueTrimDirective } from 'src/app/shared/directives';
+import { AuthActions } from 'src/app/store/actions';
+import { authFeature } from 'src/app/store/features';
+
 import { UserRegister } from '../../interfaces';
 
 @Component({
@@ -32,6 +34,7 @@ import { UserRegister } from '../../interfaces';
     ReactiveFormsModule,
     PasswordModule,
     InputTextModule,
+    ProgressSpinnerModule,
     ButtonModule,
     CheckboxModule,
     ValidationMessagesComponent,
@@ -42,43 +45,47 @@ import { UserRegister } from '../../interfaces';
 })
 export class SignUpComponent {
   private readonly store = inject(Store);
-  formCtrl = {
-    name: new FormControl<string | null>(null, {
+  private readonly fb = inject(NonNullableFormBuilder);
+  loading = this.store.selectSignal(
+    authFeature.selectAuthLoading
+  );
+  form = this.fb.group({
+    name: ['', {
       validators: [
         Validators.required,
         Validators.minLength(2),
         Validators.maxLength(15),
       ],
-    }),
-    email: new FormControl<string | null>(null, {
+    }],
+    email: ['', {
       validators: [Validators.required, emailValidator],
-    }),
-    password: new FormControl<string | null>(null, {
+    }],
+    password: ['', {
       validators: [
         Validators.required,
         Validators.minLength(5),
         Validators.maxLength(10),
       ],
-    }),
-    confirmPassword: new FormControl<string | null>(null, {
+    }],
+    confirmPassword: ['', {
       validators: [
         Validators.required,
         Validators.minLength(5),
         Validators.maxLength(10),
       ],
-    }),
-    role: new FormControl<boolean>(false),
-  };
-  form = new FormGroup(this.formCtrl, { validators: confirmPasswordValidator });
+    }],
+    role: false,
+  }, { validators: confirmPasswordValidator });
+  formCtrl = this.form.controls;
 
   signUp(): void {
     this.form.markAllAsTouched();
     if (this.form.valid) {
-      const data = {
+      const data: UserRegister = {
         ...this.form.value,
         role: this.form.value.role ? UserRole.admin : UserRole.user,
       } as UserRegister;
-      this.store.dispatch(RegisterActions.registerUser({ data }));
+      this.store.dispatch(AuthActions.registerUser({ data }));
     }
   }
 }

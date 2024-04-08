@@ -6,7 +6,7 @@ import { Observable, of } from 'rxjs';
 import { BASE_URL } from 'src/app/shared/api';
 import { RequestResponse } from 'src/app/shared/interfaces';
 import { User } from 'src/app/private/interfaces';
-import { UserLogin } from '../interfaces';
+import { UserLogin, UserRegister } from '../interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -22,5 +22,10 @@ export class AuthService {
 
   logout(): Observable<RequestResponse<string>> {
     return of({data: 'true', message: ''});
+  }
+
+  registerUser(data: UserRegister): Observable<UserRegister> {
+    const url = `${this.baseUrl}/users`;
+    return this.http.post<UserRegister>(url, data);
   }
 }
