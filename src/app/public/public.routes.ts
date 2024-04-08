@@ -3,9 +3,9 @@ import { Routes } from '@angular/router';
 import { provideEffects } from '@ngrx/effects';
 import { provideState } from '@ngrx/store';
 
-import * as LoginEffects from 'src/app/store/effects/auth.effects';
+import * as AuthEffects from 'src/app/store/effects/auth.effects';
 import { PublicComponent } from './public.component';
-import { loginFeature } from '../store/features/auth.features';
+import { authFeature } from '../store/features/auth.feature';
 
 const signUp = () =>
   import('./components/index').then((m) => m.SignUpComponent);
@@ -25,8 +25,8 @@ export const publicRoutes: Routes = [
       { path: '', pathMatch: 'full', redirectTo: 'welcome' },
     ],
     providers: [
-      provideEffects([LoginEffects]),
-      provideState(loginFeature),
+      provideEffects([AuthEffects]),
+      provideState(authFeature),
     ],
   },
 ];

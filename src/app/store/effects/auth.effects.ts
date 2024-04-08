@@ -9,7 +9,7 @@ import { catchError, exhaustMap, map, of, tap } from 'rxjs';
 import { AuthService } from 'src/app/public/services';
 import { HttpResponseSuccessModel } from 'src/app/shared/models';
 import { AuthActions } from '../actions/auth.actions';
-import { AppActions } from '../actions';
+import { UserActions } from '../actions';
 
 export const login$ = createEffect(
   (actions = inject(Actions), service = inject(AuthService)) => {
@@ -44,7 +44,7 @@ export const loginSuccess$ = createEffect(
       ofType(AuthActions.loginSuccess),
       map(({ data }) => {
         localStorage.setItem('currentUserId', data.id);
-        return AppActions.aplicationInit();
+        return UserActions.getCurrentUser({id: data.id});
       })
     );
   },

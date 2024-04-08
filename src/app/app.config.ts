@@ -3,7 +3,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import {
   provideRouter,
   withComponentInputBinding,
-  withInMemoryScrolling
+  withInMemoryScrolling,
 } from '@angular/router';
 import {
   provideHttpClient,
@@ -15,12 +15,10 @@ import { provideEffects } from '@ngrx/effects';
 
 import { ConfirmationService, MessageService } from 'primeng/api';
 
-import * as AppEffects from 'src/app/store/effects/app.effects';
 import { environment } from 'src/environments/environment';
 import { routes } from './app.routes';
 import { BASE_URL } from './shared/api/tokens';
 import { GlobalEffects } from './store/effects/global.effects';
-import { appFeature } from './store/features/app.features';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -36,11 +34,7 @@ export const appConfig: ApplicationConfig = {
         },
       }
     ),
-    provideEffects([
-      GlobalEffects,
-      AppEffects
-    ]),
-    provideState(appFeature),
+    provideEffects([GlobalEffects]),
     provideAnimations(),
     provideHttpClient(withInterceptorsFromDi()),
     provideRouter(

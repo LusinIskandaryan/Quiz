@@ -12,6 +12,7 @@ import { PasswordModule } from 'primeng/password';
 import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import {
   confirmPasswordValidator,
@@ -20,8 +21,10 @@ import {
 import { ValidationMessagesComponent } from 'src/app/shared/components';
 import { UserRole } from 'src/app/private/enums';
 import { ValueTrimDirective } from 'src/app/shared/directives';
-import { UserRegister } from '../../interfaces';
 import { AuthActions } from 'src/app/store/actions';
+import { authFeature } from 'src/app/store/features';
+
+import { UserRegister } from '../../interfaces';
 
 @Component({
   selector: 'app-sign-up',
@@ -31,6 +34,7 @@ import { AuthActions } from 'src/app/store/actions';
     ReactiveFormsModule,
     PasswordModule,
     InputTextModule,
+    ProgressSpinnerModule,
     ButtonModule,
     CheckboxModule,
     ValidationMessagesComponent,
@@ -42,6 +46,9 @@ import { AuthActions } from 'src/app/store/actions';
 export class SignUpComponent {
   private readonly store = inject(Store);
   private readonly fb = inject(NonNullableFormBuilder);
+  loading = this.store.selectSignal(
+    authFeature.selectAuthLoading
+  );
   form = this.fb.group({
     name: ['', {
       validators: [

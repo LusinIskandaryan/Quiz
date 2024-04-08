@@ -1,14 +1,14 @@
 import { createFeature, createReducer } from "@ngrx/store";
 import { immerOn } from "ngrx-immer/store";
 
-import { Features } from "src/app/shared/enums";
-import { initialAppState } from "../states";
+import { initialAuthState } from "../states";
 import { AuthActions } from "../actions/auth.actions";
+import { Features } from "../features.enum";
 
-export const loginReducer = createReducer(
-  initialAppState,
+export const authReducer = createReducer(
+  initialAuthState,
   immerOn(AuthActions.login, AuthActions.registerUser, (state) => {
-    state.loading = true;
+    state.authLoading = true;
   }),
 
   immerOn(
@@ -17,16 +17,12 @@ export const loginReducer = createReducer(
     AuthActions.registerUserSuccess,
     AuthActions.registerUserError,
     (state) => {
-      state.loading = false;
+      state.authLoading = false;
     }
   ),
-
-  immerOn(AuthActions.logoutSuccess, (state) => {
-    state.currentUser = null;
-  }),
 );
 
-export const loginFeature = createFeature({
-  name: Features.Register,
-  reducer: loginReducer,
+export const authFeature = createFeature({
+  name: Features.Auth,
+  reducer: authReducer,
 });
