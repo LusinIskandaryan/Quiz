@@ -6,7 +6,7 @@ import { Observable, of } from 'rxjs';
 import { BASE_URL } from 'src/app/shared/api';
 import { RequestResponse } from 'src/app/shared/interfaces';
 import { User } from 'src/app/private/interfaces';
-import { UserLogin, UserRegister } from '../interfaces';
+import { UserLogin, UserRegister } from '../../../public/interfaces';
 
 @Injectable({
   providedIn: 'root'

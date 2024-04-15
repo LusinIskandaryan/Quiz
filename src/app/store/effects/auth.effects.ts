@@ -6,17 +6,17 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 
 import { catchError, exhaustMap, map, of, tap } from 'rxjs';
 
-import { AuthService } from 'src/app/public/services';
+import { AuthService } from 'src/app/core/services/auth';
 import { HttpResponseSuccessModel } from 'src/app/shared/models';
 import { AuthActions } from '../actions/auth.actions';
 import { UserActions } from '../actions';
 
 export const login$ = createEffect(
-  (actions = inject(Actions), service = inject(AuthService)) => {
+  (actions = inject(Actions), authService = inject(AuthService)) => {
     return actions.pipe(
       ofType(AuthActions.login),
       exhaustMap(({ data }) =>
-        service.login(data).pipe(
+      authService.login(data).pipe(
           map((res) => {
             if (res?.[0]) {
               const resData = new HttpResponseSuccessModel(
@@ -64,11 +64,11 @@ export const loginSuccessNavigation$ = createEffect(
 );
 
 export const logout$ = createEffect(
-  (actions = inject(Actions), service = inject(AuthService)) => {
+  (actions = inject(Actions), authService = inject(AuthService)) => {
     return actions.pipe(
       ofType(AuthActions.logout),
       exhaustMap(() =>
-        service.logout().pipe(
+      authService.logout().pipe(
           map((res) => AuthActions.logoutSuccess(res)),
           catchError((error) => of(AuthActions.logoutError({ error })))
         )
@@ -92,11 +92,11 @@ export const logoutSuccess$ = createEffect(
 );
 
 export const registerUser$ = createEffect(
-  (actions = inject(Actions), service = inject(AuthService)) => {
+  (actions = inject(Actions), authService = inject(AuthService)) => {
     return actions.pipe(
       ofType(AuthActions.registerUser),
       exhaustMap(({ data }) =>
-      service.registerUser(data).pipe(
+      authService.registerUser(data).pipe(
           map((res) => {
             const resData = new HttpResponseSuccessModel(res, 'You are successfully registered');
             return AuthActions.registerUserSuccess(resData)

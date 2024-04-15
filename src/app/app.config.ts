@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, ErrorHandler, provideZoneChangeDetection } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import {
   provideRouter,
@@ -10,7 +10,7 @@ import {
   withInterceptorsFromDi,
 } from '@angular/common/http';
 
-import { provideState, provideStore } from '@ngrx/store';
+import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -49,5 +49,6 @@ export const appConfig: ApplicationConfig = {
     },
     MessageService,
     ConfirmationService,
+    ErrorHandler
   ],
 };

@@ -4,7 +4,7 @@ import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { AuthActions } from 'src/app/store/actions';
-import { appFeature } from 'src/app/store/features';
+import { userFeature } from 'src/app/store/features';
 
 @Component({
   selector: 'app-header',
@@ -15,7 +15,7 @@ import { appFeature } from 'src/app/store/features';
 })
 export class HeaderComponent {
   private readonly store = inject(Store);
-  currentUser = this.store.selectSignal(appFeature.selectCurrentUser);
+  currentUser = this.store.selectSignal(userFeature.selectCurrentUser);
 
   logOut(): void {
     this.store.dispatch(AuthActions.logout());

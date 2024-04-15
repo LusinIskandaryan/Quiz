@@ -11,7 +11,7 @@ export class GlobalEffects {
   private readonly toastService = inject(ToastService);
   private readonly errorHandlerService = inject(ErrorHandlerService);
 
-  $successMessage = createEffect(
+  successMessage$ = createEffect(
     (actions = inject(Actions)) => {
       return actions.pipe(
         tap(
@@ -31,7 +31,7 @@ export class GlobalEffects {
     { dispatch: false }
   );
 
-  $errorMessage = createEffect(
+  errorMessage$ = createEffect(
     (actions = inject(Actions)) => {
       return actions.pipe(
         tap(
