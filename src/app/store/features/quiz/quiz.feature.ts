@@ -2,12 +2,29 @@ import { createFeature, createReducer } from '@ngrx/store';
 
 import { immerOn } from 'ngrx-immer/store';
 
-import { Features, PageMode } from 'src/app/shared/enums';
+import { PageMode } from 'src/app/shared/enums';
 import { initialQuizState } from '../../states';
 import { PassQuizActions, QuizActions } from '../../actions';
+import { Features } from '../../features.enum';
 
 export const quizReducer = createReducer(
   initialQuizState,
+  immerOn(QuizActions.getQuizList, (state) => {
+    state.loading = true;
+    state.quizList = [];
+  }),
+
+  immerOn(QuizActions.getQuizListSuccess, (state, { data }) => {
+    state.quizList = data;
+  }),
+
+  immerOn(
+    QuizActions.getQuizListSuccess,
+    QuizActions.getQuizListError,
+    (state) => {
+      state.loading = false;
+    }
+  ),
 
   immerOn(QuizActions.getQuiz, (state) => {
     state.quizId = '';

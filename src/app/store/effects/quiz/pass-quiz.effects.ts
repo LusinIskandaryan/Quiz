@@ -15,14 +15,14 @@ import {
 import { HttpResponseSuccessModel } from 'src/app/shared/models';
 import { QuizService } from 'src/app/private/services';
 import { PassQuizActions } from '../../actions';
-import { quizFeature } from '../../features/quiz-features/quiz.features';
+import { quizFeature } from '../../features/quiz/quiz.feature';
 
 export const passQuiz$ = createEffect(
-  (actions = inject(Actions), service = inject(QuizService)) => {
+  (actions = inject(Actions), quizService = inject(QuizService)) => {
     return actions.pipe(
       ofType(PassQuizActions.passQuiz),
       exhaustMap(({ data }) =>
-        service.passQuiz(data).pipe(
+      quizService.passQuiz(data).pipe(
           map(() => {
             const resData = new HttpResponseSuccessModel(
               true,

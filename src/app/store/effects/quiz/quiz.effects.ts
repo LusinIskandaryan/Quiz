@@ -19,16 +19,42 @@ import {
 import { HttpResponseSuccessModel } from 'src/app/shared/models';
 import { UserRole } from 'src/app/private/enums';
 import { QuizService } from 'src/app/private/services';
-import { PassQuizActions, QuizActions, QuizListActions } from '../../actions';
-import { quizFeature } from '../../features/quiz-features/quiz.features';
-import { appFeature } from '../../features';
+import { PassQuizActions, QuizActions } from '../../actions';
+import { quizFeature } from '../../features/quiz/quiz.feature';
+import { userFeature } from '../../features';
+
+export const getQuizList$ = createEffect(
+  (
+    actions = inject(Actions),
+    store = inject(Store),
+    quizService = inject(QuizService)
+  ) => {
+    return actions.pipe(
+      ofType(QuizActions.getQuizList),
+      concatLatestFrom(() => store.select(userFeature.selectCurrentUser)),
+      switchMap(([, currentUser]) =>
+      quizService.getQuizList().pipe(
+          map((res) => {
+            if (currentUser?.role === UserRole.user) {
+              res = res.filter((quiz) => currentUser.quizIds.includes(quiz.id));
+            }
+            const resData = new HttpResponseSuccessModel(res, '');
+            return QuizActions.getQuizListSuccess(resData);
+          }),
+          catchError((error) => of(QuizActions.getQuizListError({ error })))
+        )
+      )
+    );
+  },
+  { functional: true }
+);
 
 export const getQuiz$ = createEffect(
-  (actions = inject(Actions), service = inject(QuizService)) => {
+  (actions = inject(Actions), quizService = inject(QuizService)) => {
     return actions.pipe(
       ofType(QuizActions.getQuiz),
       switchMap(({ quizId }) =>
-        service.getQuiz(quizId).pipe(
+      quizService.getQuiz(quizId).pipe(
           map((res) => {
             const resData = new HttpResponseSuccessModel(res, '');
             return QuizActions.getQuizSuccess(resData);
@@ -45,7 +71,7 @@ export const getQuizSuccess$ = createEffect(
   (actions = inject(Actions), state = inject(Store)) => {
     return actions.pipe(
       ofType(QuizActions.getQuizSuccess),
-      concatLatestFrom(() => state.select(appFeature.selectCurrentUser)),
+      concatLatestFrom(() => state.select(userFeature.selectCurrentUser)),
       filter(([, currentUser]) => currentUser?.role === UserRole.user),
       map(() => QuizActions.startTimer())
     );
@@ -54,11 +80,11 @@ export const getQuizSuccess$ = createEffect(
 );
 
 export const deleteQuiz$ = createEffect(
-  (actions = inject(Actions), service = inject(QuizService)) => {
+  (actions = inject(Actions), quizService = inject(QuizService)) => {
     return actions.pipe(
       ofType(QuizActions.deleteQuiz),
       exhaustMap(({ quizId }) =>
-        service.deleteQuiz(quizId).pipe(
+      quizService.deleteQuiz(quizId).pipe(
           map((res) => {
             const resData = new HttpResponseSuccessModel(
               res,
@@ -78,18 +104,18 @@ export const deleteQuizSuccess$ = createEffect(
   (actions = inject(Actions)) => {
     return actions.pipe(
       ofType(QuizActions.deleteQuizSuccess),
-      map(() => QuizListActions.getQuizList())
+      map(() => QuizActions.getQuizList())
     );
   },
   { functional: true }
 );
 
 export const createQuiz$ = createEffect(
-  (actions = inject(Actions), service = inject(QuizService)) => {
+  (actions = inject(Actions), quizService = inject(QuizService)) => {
     return actions.pipe(
       ofType(QuizActions.createQuiz),
       exhaustMap(({ data }) =>
-        service.createQuiz(data).pipe(
+      quizService.createQuiz(data).pipe(
           map((res) => {
             const resData = new HttpResponseSuccessModel(
               res,
@@ -118,11 +144,11 @@ export const createQuizSuccess$ = createEffect(
 );
 
 export const updateQuiz$ = createEffect(
-  (actions = inject(Actions), service = inject(QuizService)) => {
+  (actions = inject(Actions), quizService = inject(QuizService)) => {
     return actions.pipe(
       ofType(QuizActions.updateQuiz),
       exhaustMap(({ data }) =>
-        service.updateQuiz(data).pipe(
+      quizService.updateQuiz(data).pipe(
           map((res) => {
             const resData = new HttpResponseSuccessModel(
               res,
