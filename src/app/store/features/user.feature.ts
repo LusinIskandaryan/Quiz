@@ -1,17 +1,34 @@
 import {
   createFeature,
-  createFeatureSelector,
   createReducer,
   createSelector,
 } from '@ngrx/store';
 import { immerOn } from 'ngrx-immer/store';
 
-import { Features } from 'src/app/shared/enums';
-import { QuizListState, initialUserState } from '../../states';
-import { LookupsActions, UserActions } from '../../actions';
+import { initialUserState } from '../states';
+import { AuthActions, UserActions } from '../actions';
+import { Features } from '../features.enum';
+import { quizFeature } from './quiz/quiz.feature';
 
 export const userReducer = createReducer(
   initialUserState,
+  immerOn(UserActions.getUserList, (state) => {
+    state.loading = true;
+    state.userList = [];
+  }),
+
+  immerOn(UserActions.getUserListSuccess, (state, { data }) => {
+    state.userList = data;
+  }),
+
+  immerOn(
+    UserActions.getUserListSuccess,
+    UserActions.getUserListError,
+    (state) => {
+      state.loading = false;
+    }
+  ),
+
   immerOn(UserActions.getUser, (state) => {
     state.userId = '';
     state.user = null;
@@ -27,33 +44,30 @@ export const userReducer = createReducer(
     state.loading = true;
   }),
 
-  immerOn(LookupsActions.getQuizLookups, (state) => {
+  immerOn(UserActions.getCurrentUser, (state) => {
     state.loading = true;
   }),
 
-  immerOn(LookupsActions.getQuizLookupsSuccess, (state, { data }) => {
-    state.lookups = data;
+  immerOn(UserActions.getCurrentUserSuccess, (state, { data }) => {
+    state.currentUser = data;
   }),
 
   immerOn(
+    UserActions.getCurrentUserSuccess,
+    UserActions.getCurrentUserError,
     UserActions.getUserSuccess,
     UserActions.getUserError,
     UserActions.updateUserSuccess,
     UserActions.updateUserError,
-    LookupsActions.getQuizLookupsSuccess,
-    LookupsActions.getQuizLookupsError,
     (state) => {
       state.loading = false;
     }
-  )
+  ),
+
+  immerOn(AuthActions.logoutSuccess, (state) => {
+    state.currentUser = null;
+  }),
 );
-
-const quizListSelector = createFeatureSelector<QuizListState>(Features.QuizList);
-
-const createquizSelectorMap = <T>(mapping: (state: QuizListState) => T) =>
-  createSelector(quizListSelector, mapping);
-
-const selectQuizList = createquizSelectorMap((state) => state.quizList);
 
 export const userFeature = createFeature({
   name: Features.User,
@@ -61,19 +75,19 @@ export const userFeature = createFeature({
   extraSelectors: ({ selectUser, selectLookups }) => ({
     selectUserQuizList: createSelector(
       selectUser,
-      selectQuizList,
+      quizFeature.selectQuizList,
       (user, quizList) =>
         user?.quizIds
           ? quizList.filter((quiz) => user?.quizIds.includes(quiz.id))
           : []
     ),
-    selectUserQuizLookup: createSelector(
+    selectQuizLookup: createSelector(
       selectUser,
-      selectLookups,
-      (user, lookups) =>
+      quizFeature.selectQuizList,
+      (user, quizList) =>
         user?.quizIds
-          ? lookups.filter((item) => !user?.quizIds.includes(item.id))
-          : lookups
+          ? quizList.filter((item) => !user?.quizIds.includes(item.id))
+          : quizList
     ),
   }),
 });
