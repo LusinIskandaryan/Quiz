@@ -6,7 +6,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 
 import { catchError, exhaustMap, map, of, tap } from 'rxjs';
 
-import { AuthService } from 'src/app/core/services/auth';
+import { AuthService } from 'src/app/core/auth/services';
 import { HttpResponseSuccessModel } from 'src/app/shared/models';
 import { AuthActions } from '../actions/auth.actions';
 import { UserActions } from '../actions';

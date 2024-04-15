@@ -1,4 +1,4 @@
-import { Component, effect, input, signal } from '@angular/core';
+import { Component, Input, OnChanges, signal } from '@angular/core';
 import { FormControl, FormGroup, ValidationErrors } from '@angular/forms';
 
 import { ErrorType } from 'src/app/shared/enums';
@@ -7,41 +7,28 @@ import { ErrorMessages } from 'src/app/shared/consts';
 @Component({
   selector: 'app-validation-messages',
   standalone: true,
-  imports: [],
   templateUrl: './validation-messages.component.html',
   styleUrl: './validation-messages.component.scss',
 })
-export class ValidationMessagesComponent {
-  control = input<FormControl | null>(null);
-  form = input<FormGroup | null>(null);
-  value = input<any>(null);
-  errorMessage = signal<string | null>(null);
+export class ValidationMessagesComponent implements OnChanges {
+  @Input() control: FormControl | null = null;
+  @Input() form: FormGroup | null = null;
+  @Input() value: any = null;
+  errorMessage = signal<string>('');
 
-  constructor() {
-    effect(
-      () => {
-        const control = this.control() ?? this.form();
-        if (this.value() && control) {
-          this.setValidationMessage(control);
-        }
-        if (!this.value() && control) {
-          this.setValidationMessage(control);
-        }
-      },
-      { allowSignalWrites: true }
-    );
+  ngOnChanges(): void {
+    this.errorMessage.set('');
+    const control = this.control || this.form;
+    if (control?.errors) {
+      this.getErrorMessage(control.errors);
+    }
   }
 
-  setValidationMessage(control: FormControl | FormGroup): void {
-    let errorMessage = null;
-    if (this.value() || this.form()) {
-      const error = control.errors as ValidationErrors;
-      const key: ErrorType = Object.keys(error)[0] as ErrorType;
-      const requiredLength = error[key]['requiredLength'] || null;
-      errorMessage = ErrorMessages.get(key)?.getMessage(requiredLength);
-    } else if (!this.value() && this.control()) {
-      errorMessage = ErrorMessages.get(ErrorType.required)?.getMessage();
-    }
+  getErrorMessage(errors: ValidationErrors): void {
+    let errorMessage = '';
+    const key = Object.keys(errors)[0] as ErrorType;
+    const requiredLength = errors[key]['requiredLength'] || null;
+    errorMessage = ErrorMessages.get(key)?.getMessage(requiredLength);
     this.errorMessage.set(errorMessage);
   }
 }

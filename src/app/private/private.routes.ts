@@ -3,16 +3,11 @@ import { Routes } from '@angular/router';
 import { provideEffects } from '@ngrx/effects';
 import { provideState } from '@ngrx/store';
 
-import * as UserListEffects from 'src/app/store/effects/user-effects/user-list.effects';
-import * as QuizEffects from 'src/app/store/effects/quiz-effects/quiz.effects';
-import * as QuizListEffects from 'src/app/store/effects/quiz-effects/quiz-list.effects';
-import * as PassQuizEffects from 'src/app/store/effects/quiz-effects/pass-quiz.effects';
-import * as LookupsEffects from 'src/app/store/effects/lookups.effects';
+import * as QuizEffects from 'src/app/store/effects/quiz/quiz.effects';
+import * as PassQuizEffects from 'src/app/store/effects/quiz/pass-quiz.effects';
 import { PrivateComponent } from './private.component';
 import {
   quizFeature,
-  userListFeature,
-  quizListFeature,
   passQuizFeature,
 } from '../store/features';
 import { isAdminGuard } from './guards';
@@ -39,15 +34,10 @@ export const privateRoutes: Routes = [
     ],
     providers: [
       provideEffects([
-        UserListEffects,
         QuizEffects,
-        QuizListEffects,
         PassQuizEffects,
-        LookupsEffects
       ]),
-      provideState(userListFeature),
       provideState(quizFeature),
-      provideState(quizListFeature),
       provideState(passQuizFeature),
     ],
   },
