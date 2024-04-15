@@ -13,7 +13,7 @@
   <div class="formgrid">
     <div class="field">
       <label for="name">Quiz Name</label>
-      <input class="w-full" type="text" formControlName="name" pInputText appValueTrim />
+      <input class="w-full" type="text" formControlName="name" pInputText appValueTrim id="name" />
       @if (formCtrl.name.errors && (formCtrl.name.touched ||
       formCtrl.name.dirty)) {
       <app-validation-messages [control]="formCtrl.name" [value]="formCtrl.name.value" />
@@ -23,7 +23,7 @@
       @if (isAdmin()) {
       <label for="timer">Timer</label>
       <p-inputNumber mode="decimal" formControlName="timer" [useGrouping]="false"
-        (onInput)="changeNumber($event.value, formCtrl.timer)" />
+        (onInput)="changeNumber($event.value, formCtrl.timer)" id="timer" />
       @if (formCtrl.timer.errors && (formCtrl.timer.touched ||
       formCtrl.timer.dirty)) {
       <app-validation-messages [control]="formCtrl.timer" [value]="formCtrl.timer.value" />
@@ -34,7 +34,7 @@
     <div class="field">
       <label for="passValue">Pass Value</label>
       <p-inputNumber mode="decimal" formControlName="passValue" [useGrouping]="false"
-        (onInput)="changeNumber($event.value, formCtrl.passValue)" />
+        (onInput)="changeNumber($event.value, formCtrl.passValue)" id="passValue" />
       @if (formCtrl.passValue.errors && (formCtrl.passValue.touched ||
       formCtrl.passValue.dirty)) {
       <app-validation-messages [control]="formCtrl.passValue" [value]="formCtrl.passValue.value" />
@@ -76,7 +76,7 @@
         <div class="field">
           <label for="value">Value</label>
           <p-inputNumber mode="decimal" [formControl]="questionControl('value')" [useGrouping]="false"
-            (onInput)="changeNumber($event.value, questionControl('value'))" />
+            (onInput)="changeNumber($event.value, questionControl('value'))" id="value" />
           @if (questions.controls[questionIndex()].get('value')?.errors &&
           (questions.controls[questionIndex()].get('value')?.touched ||
           questions.controls[questionIndex()].get('value')?.dirty)) {

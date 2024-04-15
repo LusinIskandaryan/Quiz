@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
 import { TabMenuModule } from 'primeng/tabmenu';
 
-import { appFeature } from 'src/app/store/features';
+import { userFeature } from 'src/app/store/features';
 import { UserRole } from '../../enums';
 
 @Component({
@@ -18,7 +18,7 @@ import { UserRole } from '../../enums';
 export class TabMenuComponent {
   private readonly store = inject(Store);
 
-  currentUser = this.store.selectSignal(appFeature.selectCurrentUser);
+  currentUser = this.store.selectSignal(userFeature.selectCurrentUser);
   isUserAdmin = computed(() => this.currentUser()?.role === UserRole.admin);
 
   items: MenuItem[] = [
@@ -30,7 +30,7 @@ export class TabMenuComponent {
     },
   ];
 
-  activeItem = signal<MenuItem>(this.items[0].visible ? this.items[0] : this.items[1]);
+  activeItem = signal<MenuItem>(this.items[0]);
 
   onActiveItemChange(event: MenuItem): void {
     this.activeItem.set(event);

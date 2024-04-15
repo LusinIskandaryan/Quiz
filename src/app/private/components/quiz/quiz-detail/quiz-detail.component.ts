@@ -30,7 +30,7 @@ import { QuestionType, UserRole } from 'src/app/private/enums';
 import { ValidationMessagesComponent } from 'src/app/shared/components';
 import { PageMode } from 'src/app/shared/enums';
 import { PassQuizActions, QuizActions } from 'src/app/store/actions';
-import { appFeature, quizFeature } from 'src/app/store/features';
+import { quizFeature, userFeature } from 'src/app/store/features';
 import { ValueTrimDirective } from 'src/app/shared/directives';
 import { Question, Quiz } from 'src/app/private/interfaces';
 
@@ -57,7 +57,7 @@ export class QuizDetailComponent implements OnInit {
   private readonly store = inject(Store);
   vm = this.store.selectSignal(quizFeature.selectQuizState);
   quizTimer = this.store.selectSignal(quizFeature.selectQuizTimer);
-  currentUser = this.store.selectSignal(appFeature.selectCurrentUser);
+  currentUser = this.store.selectSignal(userFeature.selectCurrentUser);
   questionIndex: WritableSignal<number> = signal(0);
   questionsLength: WritableSignal<number> = signal(1);
   isAdmin = computed(() => this.currentUser()?.role === UserRole.admin);
@@ -137,8 +137,7 @@ export class QuizDetailComponent implements OnInit {
           this.initForm(questions);
           this.setInitialValues();
         }
-      },
-      { allowSignalWrites: true }
+      }
     );
 
     effect(() => {
